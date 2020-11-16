@@ -139,3 +139,8 @@ cython_debug/
 
 # Pycharm
 .idea/
+
+
+# miniprogram
+miniprogram_npm/
+node_modules/
