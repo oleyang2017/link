@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+from utils.field_extend import ShortUUIDField
 from utils.default_chart_style import get_default_chart_style
 
 
@@ -8,6 +9,7 @@ class Chart(models.Model):
     """
     历史数据图表
     """
+    id = ShortUUIDField(db_index=True, primary_key=True)
     device = models.ForeignKey('device.Device', related_name='charts', on_delete=models.CASCADE)
     streams = models.ManyToManyField('device.Stream', related_name='charts')
     title = models.CharField(max_length=16, verbose_name='标题')

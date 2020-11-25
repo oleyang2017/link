@@ -8,10 +8,10 @@ from .serializers import *
 class DeviceViewSet(viewsets.ModelViewSet):
 
     serializer_class = DeviceSerializer
-    lookup_field = 'device_id'
+    lookup_field = 'id'
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     filter_fields = ('category',)
-    ordering_fields = ('sequence', 'id')
+    ordering_fields = ('sequence',)
 
     def get_queryset(self):
         return self.request.user.devices
@@ -21,7 +21,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
     serializer_class = DeviceCategorySerializer
     lookup_field = 'id'
-    queryset = DeviceCategory.objects.all()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering_fields = ('sequence', 'id')
 

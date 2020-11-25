@@ -22,12 +22,11 @@ class DeviceCategory(models.Model):
 
 class Device(models.Model):
     """ 设备 """
-
+    id = ShortUUIDField(verbose_name='设备ID', db_index=True, primary_key=True)
     create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='devices', verbose_name='创建人',
                                     on_delete=models.CASCADE)
     category = models.ForeignKey(DeviceCategory, null=True, blank=True, related_name='devices', verbose_name='所属分类',
                                  on_delete=models.SET_NULL)
-    device_id = ShortUUIDField(verbose_name='设备ID', db_index=True)
     client_id = ShortUUIDField(verbose_name='客户端ID')
     name = models.CharField(max_length=8, verbose_name='设备名称')
     desc = models.TextField(blank=True, default='', verbose_name='说明')
@@ -42,7 +41,7 @@ class Device(models.Model):
     class Meta:
         verbose_name = '设备'
         verbose_name_plural = verbose_name
-        ordering = ('sequence', 'id')
+        ordering = ('sequence',)
 
     def __str__(self):
         return self.name
