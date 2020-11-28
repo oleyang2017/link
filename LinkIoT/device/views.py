@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from rest_framework import viewsets
 from rest_framework.filters import OrderingFilter
 from rest_framework.decorators import action
@@ -49,3 +51,22 @@ class StreamViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.request.user.streams
+
+
+class ChartViewSet(viewsets.ModelViewSet):
+    serializer_class = ChartSerializer
+    lookup_field = 'id'
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
+
+    def get_queryset(self):
+        return self.request.user.charts
+
+    @action(methods=['get'], detail=True)
+    def data(self, request, *args, **kwargs):
+        """
+        获取图表数据
+        """
+        start_time = self.request.query_params.get('start_time', datetime.now() + timedelta(days=7))
+        end_time = self.request.query_params.get('end_time', datetime.now())
+        # TODO: 从数据模型中取出前端所需要的dataset
+
