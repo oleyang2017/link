@@ -31,6 +31,9 @@ class DeviceViewSet(viewsets.ModelViewSet):
         serializer = DeviceDetailSerializer(instance)
         return Response(serializer.data)
 
+    def perform_create(self, serializer):
+        serializer.save(create_user=self.request.user)
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
 
@@ -42,6 +45,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.user.device_categories
 
+    def perform_create(self, serializer):
+        serializer.save(create_user=self.request.user)
+
 
 class StreamViewSet(viewsets.ModelViewSet):
     serializer_class = StreamSerializer
@@ -52,6 +58,9 @@ class StreamViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.user.streams
 
+    def perform_create(self, serializer):
+        serializer.save(create_user=self.request.user)
+
 
 class ChartViewSet(viewsets.ModelViewSet):
     serializer_class = ChartSerializer
@@ -60,6 +69,9 @@ class ChartViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.request.user.charts
+
+    def perform_create(self, serializer):
+        serializer.save(create_user=self.request.user)
 
     @action(methods=['get'], detail=True)
     def data(self, request, *args, **kwargs):
