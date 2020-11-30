@@ -15,8 +15,7 @@ class Chart(models.Model):
     title = models.CharField(max_length=16, verbose_name='标题')
     is_half = models.BooleanField(default=False, verbose_name='半屏显示')
     style = models.JSONField(default=get_default_chart_style, verbose_name='图表样式')
-    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='charts', verbose_name='用户',
-                                    on_delete=models.CASCADE)
+    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='charts', verbose_name='用户', on_delete=models.CASCADE)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
     class Meta:
