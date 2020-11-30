@@ -1,14 +1,17 @@
 from django.db import models
 from django.conf import settings
 
+from utils.field_extend import ShortUUIDField
+
 
 class Action(models.Model):
     """
     动作
     """
-    device = models.ForeignKey('device.Device', related_name='actions', verbose_name='所属设备', blank=True, null=True, on_delete=models.SET_NULL)
+    id = ShortUUIDField(db_index=True, primary_key=True)
     show = models.BooleanField(default=True, verbose_name='首页显示')
     name = models.CharField(max_length=8, verbose_name='动作名称')
+    device = models.ForeignKey('device.Device', related_name='actions', verbose_name='所属设备', blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = '动作'
@@ -52,6 +55,7 @@ class ActionItem(models.Model):
         ('default', '默认'),
         ('lager', '大号')
     )
+    id = ShortUUIDField(db_index=True, primary_key=True)
     action = models.ForeignKey(Action, related_name='items', on_delete=models.CASCADE)
     device = models.ForeignKey('device.Device', related_name='action_items', verbose_name='所属设备', blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=8, blank=True, verbose_name='指令名称')
