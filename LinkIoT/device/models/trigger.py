@@ -31,7 +31,7 @@ class Trigger(models.Model):
     url = models.URLField(verbose_name='URL', blank=True, default='')
     condition = models.CharField(max_length=8, verbose_name='触发条件', choices=CONDITION_CHOICE, default='==')
     threshold_value = models.FloatField(verbose_name='阈值', default=0)
-    trigger_type = models.CharField(max_length=8, verbose_name='触发类型', choices=TRIGGER_CHOICE, default='action_item')
+    trigger_type = models.CharField(max_length=12, verbose_name='触发类型', choices=TRIGGER_CHOICE, default='action_item')
     start_time = models.DateTimeField(verbose_name='开始时间', null=True, blank=True)
     end_time = models.DateTimeField(verbose_name='结束时间', null=True, blank=True)
     active = models.BooleanField(default=True, verbose_name='启用')
