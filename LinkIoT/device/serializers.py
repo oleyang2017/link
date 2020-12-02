@@ -1,4 +1,7 @@
+from django.conf import settings
 from rest_framework import serializers
+from rest_framework.exceptions import NotAcceptable
+
 from .models import DeviceCategory, Device, Stream, Chart
 
 
@@ -10,12 +13,20 @@ class DeviceCategorySerializer(serializers.ModelSerializer):
         extra_kwargs = {'create_user': {'write_only': True}}
 
 
-class DeviceSerializer(serializers.ModelSerializer):
+class DeviceSerializer(serializers.Serializer):
+    id = serializers.CharField(read_only=True)
+    category = DeviceCategorySerializer(read_only=True)
+    name = serializers.CharField(max_length=8)
+    status = serializers.BooleanField(read_only=True)
+    image = serializers.ImageField(allow_null=True)
+    sequence = serializers.IntegerField(default=0)
 
-    class Meta:
-        model = Device
-        fields = '__all__'
-        extra_kwargs = {'desc': {'write_only': True}, 'create_user': {'write_only': True}}
+    def create(self, validated_data):
+        if settings.MAX_DEVICE_NUM:
+            if self.context.get('user').devices.count() >= settings.MAX_DEVICE_NUM:
+                raise NotAcceptable('超过最大创建数')
+        validated_data['create_user'] = self.context.get('user')
+        return Device.objects.create(**validated_data)
 
 
 class StreamSerializer(serializers.ModelSerializer):
