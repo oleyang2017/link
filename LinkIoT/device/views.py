@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 
 from rest_framework import viewsets
-from rest_framework import status
 from rest_framework.filters import OrderingFilter
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -32,20 +31,13 @@ class DeviceViewSet(viewsets.ModelViewSet):
         serializer = DeviceDetailSerializer(instance)
         return Response(serializer.data)
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data, context={'user': self.request.user})
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
 
 class CategoryViewSet(viewsets.ModelViewSet):
 
     serializer_class = DeviceCategorySerializer
     lookup_field = 'id'
     filter_backends = (DjangoFilterBackend, OrderingFilter)
-    ordering_fields = ('sequence', 'id')
+    ordering_fields = ('sequence',)
 
     def get_queryset(self):
         return self.request.user.device_categories
