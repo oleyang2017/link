@@ -20,6 +20,17 @@ class DeviceViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.user.devices
 
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return DeviceSerializer
+        else:
+            return DeviceDetailSerializer
+
+    def get_serializer_context(self):
+        ret = super(DeviceViewSet, self).get_serializer_context()
+        ret['user'] = self.request.user
+        return ret
+
     @action(methods=['get'], detail=True)
     def streams(self, request, *args, **kwargs):
         device = self.get_object()
