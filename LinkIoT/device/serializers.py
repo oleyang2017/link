@@ -12,39 +12,12 @@ class DeviceCategorySerializer(serializers.ModelSerializer):
         extra_kwargs = {'create_user': {'write_only': True}}
 
 
-class DeviceSerializer(serializers.Serializer):
-    id = serializers.CharField(read_only=True)
-    category_name = serializers.CharField(source='category.name', read_only=True, required=False)
-    category = serializers.CharField(source='category.id', write_only=True, required=False)
-    name = serializers.CharField(max_length=8)
-    status = serializers.BooleanField(read_only=True)
-    image = serializers.ImageField(allow_null=True, required=False)
-    sequence = serializers.IntegerField(default=0, required=False)
+class DeviceSerializer(serializers.ModelSerializer):
 
-    def validate_category(self, category):
-        if not self.context.get('user'):
-            raise serializers.ValidationError('缺少用户！')
-        category_obj = DeviceCategory.objects.filter(id=category, create_user=self.context.get('user'))
-        if not category_obj:
-            raise serializers.ValidationError('设备分类不存在！')
-        else:
-            return category_obj[0]
-
-    def create(self, validated_data):
-        if not self.context.get('user'):
-            raise serializers.ValidationError('缺少用户！')
-        if settings.MAX_DEVICE_NUM:
-            if self.context.get('user').devices.count() >= settings.MAX_DEVICE_NUM:
-                raise serializers.ValidationError('超过最大创建数！')
-        validated_data['create_user'] = self.context.get('user')
-        return Device.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        for field, value in validated_data.items():
-            if hasattr(instance, field):
-                setattr(instance, field, value)
-        instance.save()
-        return instance
+    class Meta:
+        model = Device
+        fields = ('id', 'category', 'name', 'status', 'image', 'sequence')
+        read_only_fields = ('id', 'category', 'name', 'status', 'image', 'sequence')
 
 
 class StreamSerializer(serializers.ModelSerializer):
@@ -63,11 +36,27 @@ class ChartSerializer(serializers.ModelSerializer):
 
 
 class DeviceDetailSerializer(serializers.ModelSerializer):
-
-    streams = StreamSerializer(many=True)
-    charts = ChartSerializer(many=True)
+    streams = StreamSerializer(many=True, required=False)
+    charts = ChartSerializer(many=True, required=False)
 
     class Meta:
         model = Device
-        fields = '__all__'
+        fields = ('id', 'client_id', 'category', 'name', 'desc', 'status', 'image', 'sequence', 'create_time',
+                  'update_time', 'last_connect_time', 'streams', 'charts')
+        read_only_fields = ('id', 'client_id', 'status', 'create_time', 'update_time', 'last_connect_time',)
 
+    def is_valid(self, raise_exception=False):
+        if self.initial_data.get("category"):
+            category = DeviceCategory.objects.filter(id=self.initial_data["category"], create_user=self.context.get('user'))
+            if not category:
+                raise serializers.ValidationError('设备分类不存在！')
+        return super(DeviceDetailSerializer, self).is_valid(raise_exception)
+
+    def create(self, validated_data):
+        if not self.context.get('user'):
+            raise serializers.ValidationError('缺少用户！')
+        if settings.MAX_DEVICE_NUM:
+            if self.context.get('user').devices.count() >= settings.MAX_DEVICE_NUM:
+                raise serializers.ValidationError('超过最大创建数！')
+        validated_data['create_user'] = self.context.get('user')
+        return Device.objects.create(**validated_data)
