@@ -66,6 +66,11 @@ class StreamViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.user.streams
 
+    def get_serializer_context(self):
+        ret = super(StreamViewSet, self).get_serializer_context()
+        ret['user'] = self.request.user
+        return ret
+
     def perform_create(self, serializer):
         serializer.save(create_user=self.request.user)
 

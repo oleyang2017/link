@@ -25,7 +25,22 @@ class StreamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stream
         fields = '__all__'
-        extra_kwargs = {'create_user': {'write_only': True}, 'device_id': {'write_only': True}}
+
+    def create(self, validated_data):
+        if settings.MAX_STREAM_NUM:
+            device = Device.objects.filter(id=self.initial_data["device"], create_user=self.context.get('user'))
+            if not device:
+                raise serializers.ValidationError('设备不存在！')
+            if device[0].streams.count() >= settings.MAX_STREAM_NUM:
+                raise serializers.ValidationError('超过每个设备最多可绑定数量！')
+        validated_data['create_user'] = self.context.get('user')
+        print(validated_data)
+        return Stream.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        if 'device' in validated_data:
+            raise serializers.ValidationError('不可更改绑定设备')
+        return super(StreamSerializer, self).update(instance, validated_data)
 
 
 class ChartSerializer(serializers.ModelSerializer):
