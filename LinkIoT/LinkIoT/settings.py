@@ -157,6 +157,8 @@ WX_SECRET = 'your wechat miniprogram secret'
 
 # 每个用户注册设备数量限制，为None时无数量限制
 MAX_DEVICE_NUM = None
+# 每个设备数量最多可绑定的数据流限制
+MAX_STREAM_NUM = None
 
 # debug模式下开启debug_toolbar显示
 if DEBUG:
