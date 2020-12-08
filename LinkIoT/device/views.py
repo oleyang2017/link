@@ -9,7 +9,21 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import *
 
 
-class DeviceViewSet(viewsets.ModelViewSet):
+class BaseModelViewSet(viewsets.ModelViewSet):
+
+    def get_serializer_context(self):
+        ret = super(BaseModelViewSet, self).get_serializer_context()
+        ret['user'] = self.request.user
+        return ret
+
+    # 由于微信小程序不支持patch方法，所以这里默认部分更新
+    def get_serializer(self, *args, **kwargs):
+        kwargs['partial'] = True
+        print('faf')
+        return super(BaseModelViewSet, self).get_serializer(*args, **kwargs)
+
+
+class DeviceViewSet(BaseModelViewSet):
 
     serializer_class = DeviceSerializer
     lookup_field = 'id'
@@ -26,11 +40,6 @@ class DeviceViewSet(viewsets.ModelViewSet):
         else:
             return DeviceDetailSerializer
 
-    def get_serializer_context(self):
-        ret = super(DeviceViewSet, self).get_serializer_context()
-        ret['user'] = self.request.user
-        return ret
-
     @action(methods=['get'], detail=True)
     def streams(self, request, *args, **kwargs):
         device = self.get_object()
@@ -43,7 +52,7 @@ class DeviceViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(BaseModelViewSet):
 
     serializer_class = DeviceCategorySerializer
     lookup_field = 'id'
@@ -57,7 +66,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         serializer.save(create_user=self.request.user)
 
 
-class StreamViewSet(viewsets.ModelViewSet):
+class StreamViewSet(BaseModelViewSet):
     serializer_class = StreamSerializer
     lookup_field = 'id'
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -75,7 +84,7 @@ class StreamViewSet(viewsets.ModelViewSet):
         serializer.save(create_user=self.request.user)
 
 
-class ChartViewSet(viewsets.ModelViewSet):
+class ChartViewSet(BaseModelViewSet):
     serializer_class = ChartSerializer
     lookup_field = 'id'
     filter_backends = (DjangoFilterBackend, OrderingFilter)
