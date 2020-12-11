@@ -24,13 +24,22 @@ class MQTTAcl(models.Model):
 
 
 @receiver(post_save, sender=Device, dispatch_uid='add_acl_device')
-def add_acl(sender, instance, **kwargs):
-    # 设备注册的数据流topic
-    MQTTAcl.objects.create(allow=1, clientid=instance.device.client_id,
-                           access=2, topic='{client_id}/#'.format(client_id=instance.client_id))
+def add_acl_device(sender, instance, **kwargs):
+    MQTTAcl.objects.create(allow=1, clientid=instance.client_id,
+                           access=1, topic='{client_id}/#'.format(client_id=instance.client_id))
 
 
 @receiver(post_delete, sender=Device, dispatch_uid='remove_acl_device')
-def remove_acl(sender, instance, **kwargs):
-    # 设备删除的数据流topic
+def remove_acl_device(sender, instance, **kwargs):
     MQTTAcl.objects.filter(topic='{client_id}/#'.format(client_id=instance.client_id)).delete()
+
+
+@receiver(post_save, sender=Stream, dispatch_uid='add_acl_stream')
+def add_acl_stream(sender, instance, **kwargs):
+    MQTTAcl.objects.create(allow=1, clientid=instance.device.client_id,
+                           access=3, topic=instance.id)
+
+
+@receiver(post_delete, sender=Stream, dispatch_uid='remove_acl_stream')
+def remove_acl_stream(sender, instance, **kwargs):
+    MQTTAcl.objects.filter(topic=instance.id).delete()
