@@ -19,7 +19,6 @@ class BaseModelViewSet(viewsets.ModelViewSet):
     # 由于微信小程序不支持patch方法，所以这里默认部分更新
     def get_serializer(self, *args, **kwargs):
         kwargs['partial'] = True
-        print('faf')
         return super(BaseModelViewSet, self).get_serializer(*args, **kwargs)
 
 
@@ -88,6 +87,7 @@ class ChartViewSet(BaseModelViewSet):
     serializer_class = ChartSerializer
     lookup_field = 'id'
     filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_fields = ('device',)
 
     def get_queryset(self):
         return self.request.user.charts

@@ -34,7 +34,6 @@ class StreamSerializer(serializers.ModelSerializer):
             if device[0].streams.count() >= settings.MAX_STREAM_NUM:
                 raise serializers.ValidationError('超过每个设备最多可绑定数量！')
         validated_data['create_user'] = self.context.get('user')
-        print(validated_data)
         return Stream.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
@@ -44,10 +43,44 @@ class StreamSerializer(serializers.ModelSerializer):
 
 
 class ChartSerializer(serializers.ModelSerializer):
+    stream_list = serializers.SerializerMethodField(read_only=True)
+
+    def get_stream_list(self, obj):
+        """
+        自定义数据流显示格式
+        :param obj: chart object
+        :return: List[dict]
+        """
+        streams = obj.streams.all()
+        return [{'id': stream.id, 'name': stream.name} for stream in streams]
 
     class Meta:
         model = Chart
-        fields = '__all__'
+        exclude = ('style', 'is_half',)
+        extra_kwargs = {'device': {'write_only': True, 'error_messages': {'does_not_exist': '设备不存在！'}},
+                        'create_user': {'write_only': True},
+                        'streams': {'write_only': True, 'required': False, 'error_messages': {'does_not_exist': '数据流不存在！'}}}
+        
+    def create(self, validated_data):
+        if 'device' not in validated_data:
+            raise serializers.ValidationError('创建图表时必须绑定设备！')
+        if validated_data['device'].create_user != self.context.get('user'):
+            raise serializers.ValidationError('设备不存在！')
+        if 'streams' not in validated_data:
+            raise serializers.ValidationError('创建图表时必须选取一个数据流！')
+        for stream in validated_data.get('streams'):
+            if stream.device != validated_data.get('device'):
+                raise serializers.ValidationError("不可绑定非'{}'下的数据流！".format(validated_data.get('device').name))
+        return super(ChartSerializer, self).create(validated_data)
+
+    def update(self, instance, validated_data):
+        if 'device' in validated_data:
+            raise serializers.ValidationError('不可更改绑定设备！')
+        if 'streams' in validated_data:
+            for stream in validated_data['streams']:
+                if stream.device != instance.device:
+                    raise serializers.ValidationError("不可绑定非'{}'下的数据流！".format(instance.device.name))
+        return super(ChartSerializer, self).update(instance, validated_data)
 
 
 class DeviceDetailSerializer(serializers.ModelSerializer):
