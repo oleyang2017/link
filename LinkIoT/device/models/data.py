@@ -9,7 +9,6 @@ class DataSet(models.Model):
     time = models.DateTimeField(auto_now_add=True, verbose_name='数据上传时间')
 
     float_data = models.FloatField(null=True, blank=True)
-    json_data = models.JSONField(null=True, blank=True)
     int_data = models.IntegerField(null=True, blank=True)
     bool_data = models.BooleanField(null=True, blank=True)
     char_data = models.CharField(max_length=64, null=True, blank=True)

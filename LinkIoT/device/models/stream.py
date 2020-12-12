@@ -15,7 +15,6 @@ class Stream(models.Model):
     )
     DATA_TYPE_CHOICE = (
         ('int', '整型（int）'),
-        ('json', 'JSON（json）'),
         ('float', '浮点型（float）'),
         ('bool', '布尔型（bool）'),
         ('char', '字符型（char）'),
