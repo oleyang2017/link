@@ -1,6 +1,9 @@
 from django.db import models
 from django.conf import settings
+from django.dispatch import receiver
+from django.db.models.signals import post_save, pre_delete
 
+from .stream import Stream
 from utils.field_extend import ShortUUIDField
 
 
@@ -22,3 +25,17 @@ class Chart(models.Model):
 
     def __str__(self):
         return self.title
+
+
+@receiver(post_save, sender=Stream, dispatch_uid='add_chart_stream')
+def add_chart_stream(sender, instance, **kwargs):
+    chart = Chart.objects.create(device=instance.device, title=instance.name, create_user=instance.create_user)
+    chart.streams.add(instance)
+
+
+@receiver(pre_delete, sender=Stream, dispatch_uid='remove_chart_stream')
+def remove_chart_stream(sender, instance, **kwargs):
+    # 如果某个图表只绑定了即将删除的数据流，则同时删除该图表
+    for chart in instance.charts.all():
+        if chart.streams.count() == 1:
+            chart.delete()

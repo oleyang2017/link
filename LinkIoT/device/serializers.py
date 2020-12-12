@@ -39,6 +39,8 @@ class StreamSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if 'device' in validated_data:
             raise serializers.ValidationError('不可更改绑定设备')
+        if 'data_type' in validated_data:
+            raise serializers.ValidationError('不可更改数据类型')
         return super(StreamSerializer, self).update(instance, validated_data)
 
 
@@ -56,7 +58,7 @@ class ChartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Chart
-        exclude = ('style', 'is_half',)
+        exclude = ('create_time',)
         extra_kwargs = {'device': {'write_only': True, 'error_messages': {'does_not_exist': '设备不存在！'}},
                         'create_user': {'write_only': True},
                         'streams': {'write_only': True, 'required': False, 'error_messages': {'does_not_exist': '数据流不存在！'}}}
@@ -71,6 +73,8 @@ class ChartSerializer(serializers.ModelSerializer):
         for stream in validated_data.get('streams'):
             if stream.device != validated_data.get('device'):
                 raise serializers.ValidationError("不可绑定非'{}'下的数据流！".format(validated_data.get('device').name))
+            if stream.data_type == 'char_data':
+                raise serializers.ValidationError("字符型的数据流不可以用于图表显示")
         return super(ChartSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
@@ -80,6 +84,8 @@ class ChartSerializer(serializers.ModelSerializer):
             for stream in validated_data['streams']:
                 if stream.device != instance.device:
                     raise serializers.ValidationError("不可绑定非'{}'下的数据流！".format(instance.device.name))
+                if stream.data_type == 'char_data':
+                    raise serializers.ValidationError("字符型的数据流不可以用于图表显示")
         return super(ChartSerializer, self).update(instance, validated_data)
 
 
