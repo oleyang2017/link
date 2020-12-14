@@ -6,7 +6,11 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .serializers import *
+from .models import Trigger
+from .serializers import (
+    DeviceSerializer, DeviceDetailSerializer, DeviceCategorySerializer,
+    StreamSerializer, ChartSerializer, TriggerSerializer
+)
 
 
 class BaseModelViewSet(viewsets.ModelViewSet):
@@ -104,3 +108,12 @@ class ChartViewSet(BaseModelViewSet):
         end_time = self.request.query_params.get('end_time', datetime.now())
         # TODO: 从数据模型中取出前端所需要的dataset
 
+
+class TriggerViewSet(BaseModelViewSet):
+    serializer_class = TriggerSerializer
+    lookup_field = 'id'
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_fields = ('device', 'stream')
+
+    def get_queryset(self):
+        return self.request.user.triggers
