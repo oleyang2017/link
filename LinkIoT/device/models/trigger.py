@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 from utils.field_extend import ShortUUIDField
 
@@ -6,10 +7,10 @@ from utils.field_extend import ShortUUIDField
 class Trigger(models.Model):
     # TODO: 要支持设备间的联动， 邮件通知， http请求
     TRIGGER_CHOICE = (
-        ('email', '邮箱'),
-        ('http', 'HTTP请求'),
-        ('action', '动作'),
-        ('action_item', '指令'),
+        ('email', '邮件通知'),
+        ('url', '发送HTTP请求'),
+        ('action', '执行动作'),
+        ('action_item', '执行指令'),
     )
     CONDITION_CHOICE = (
         # 仅对数据流类型为int，float类型开放，符合对应运算符计算时触发
@@ -20,7 +21,7 @@ class Trigger(models.Model):
         ('>=', '>='),
         # 仅对数据流为boolean类型开放
         ('true', 'true'),
-        # 对非char,json的数据流开放，当数值发生变化时触发
+        # 对非char的数据流开放，当数值发生变化时触发
         ('change', 'change'),
     )
     id = ShortUUIDField(db_index=True, primary_key=True)
@@ -35,6 +36,8 @@ class Trigger(models.Model):
     start_time = models.DateTimeField(verbose_name='开始时间', null=True, blank=True)
     end_time = models.DateTimeField(verbose_name='结束时间', null=True, blank=True)
     active = models.BooleanField(default=True, verbose_name='启用')
+    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='triggers', verbose_name='创建人', on_delete=models.CASCADE)
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
     class Meta:
         verbose_name = '触发器'
