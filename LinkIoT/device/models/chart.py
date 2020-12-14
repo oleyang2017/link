@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.dispatch import receiver
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_save, pre_delete, post_init
 
 from .stream import Stream
 from utils.field_extend import ShortUUIDField
@@ -29,8 +29,9 @@ class Chart(models.Model):
 
 @receiver(post_save, sender=Stream, dispatch_uid='add_chart_stream')
 def add_chart_stream(sender, instance, **kwargs):
-    chart = Chart.objects.create(device=instance.device, title=instance.name, create_user=instance.create_user)
-    chart.streams.add(instance)
+    if kwargs.get('create'):
+        chart = Chart.objects.create(device=instance.device, title=instance.name, create_user=instance.create_user)
+        chart.streams.add(instance)
 
 
 @receiver(pre_delete, sender=Stream, dispatch_uid='remove_chart_stream')
