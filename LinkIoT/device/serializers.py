@@ -4,15 +4,25 @@ from rest_framework import serializers
 from .models import DeviceCategory, Device, Stream, Chart, Trigger, TriggerLog
 
 
-class DeviceCategorySerializer(serializers.ModelSerializer):
+class BaseModelSerializer(serializers.ModelSerializer):
+    create_user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    def update(self, instance, validated_data):
+        # create_user信息仅在create方法中使用
+        if 'create_user' in validated_data:
+            validated_data.pop('create_user')
+        return super(BaseModelSerializer, self).update(instance, validated_data)
+
+
+class DeviceCategorySerializer(BaseModelSerializer):
+    create_user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = DeviceCategory
         fields = '__all__'
-        extra_kwargs = {'create_user': {'write_only': True}}
 
 
-class DeviceSerializer(serializers.ModelSerializer):
+class DeviceSerializer(BaseModelSerializer):
 
     class Meta:
         model = Device
@@ -20,7 +30,8 @@ class DeviceSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'category', 'name', 'status', 'image', 'sequence')
 
 
-class StreamSerializer(serializers.ModelSerializer):
+class StreamSerializer(BaseModelSerializer):
+    create_user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Stream
@@ -33,19 +44,19 @@ class StreamSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('设备不存在！')
             if device[0].streams.count() >= settings.MAX_STREAM_NUM:
                 raise serializers.ValidationError('超过每个设备最多可绑定数量！')
-        validated_data['create_user'] = self.context.get('user')
         return Stream.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        if 'device' in validated_data:
+        if 'device' in validated_data and instance.device != validated_data['device']:
             raise serializers.ValidationError('不可更改绑定设备')
-        if 'data_type' in validated_data:
+        if 'data_type' in validated_data and instance.data_type != validated_data['data_type']:
             raise serializers.ValidationError('不可更改数据类型')
         return super(StreamSerializer, self).update(instance, validated_data)
 
 
-class ChartSerializer(serializers.ModelSerializer):
+class ChartSerializer(BaseModelSerializer):
     stream_list = serializers.SerializerMethodField(read_only=True)
+    create_user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     def get_stream_list(self, obj):
         """
@@ -60,25 +71,24 @@ class ChartSerializer(serializers.ModelSerializer):
         model = Chart
         exclude = ('create_time',)
         extra_kwargs = {'device': {'write_only': True, 'error_messages': {'does_not_exist': '设备不存在！'}},
-                        'create_user': {'write_only': True},
                         'streams': {'write_only': True, 'required': False, 'error_messages': {'does_not_exist': '数据流不存在！'}}}
         
     def create(self, validated_data):
         if 'device' not in validated_data:
             raise serializers.ValidationError('创建图表时必须绑定设备！')
-        if validated_data['device'].create_user != self.context.get('user'):
+        if validated_data['device'].create_user != validated_data['user']:
             raise serializers.ValidationError('设备不存在！')
         if 'streams' not in validated_data:
             raise serializers.ValidationError('创建图表时必须选取一个数据流！')
-        for stream in validated_data.get('streams'):
-            if stream.device != validated_data.get('device'):
-                raise serializers.ValidationError("不可绑定非'{}'下的数据流！".format(validated_data.get('device').name))
+        for stream in validated_data['streams']:
+            if stream.device != validated_data['device']:
+                raise serializers.ValidationError("不可绑定非'{}'下的数据流！".format(validated_data['device'].name))
             if stream.data_type == 'char_data':
                 raise serializers.ValidationError("字符型的数据流不可以用于图表显示")
         return super(ChartSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
-        if 'device' in validated_data:
+        if 'device' in validated_data and instance.device != validated_data['device']:
             raise serializers.ValidationError('不可更改绑定设备！')
         if 'streams' in validated_data:
             for stream in validated_data['streams']:
@@ -89,14 +99,15 @@ class ChartSerializer(serializers.ModelSerializer):
         return super(ChartSerializer, self).update(instance, validated_data)
 
 
-class DeviceDetailSerializer(serializers.ModelSerializer):
+class DeviceDetailSerializer(BaseModelSerializer):
     streams = StreamSerializer(many=True, required=False)
     charts = ChartSerializer(many=True, required=False)
+    create_user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Device
         fields = ('id', 'client_id', 'category', 'name', 'desc', 'status', 'image', 'sequence', 'create_time',
-                  'update_time', 'last_connect_time', 'streams', 'charts')
+                  'update_time', 'last_connect_time', 'streams', 'charts', 'create_user')
         read_only_fields = ('id', 'client_id', 'status', 'create_time', 'update_time', 'last_connect_time',)
 
     def is_valid(self, raise_exception=False):
@@ -107,16 +118,13 @@ class DeviceDetailSerializer(serializers.ModelSerializer):
         return super(DeviceDetailSerializer, self).is_valid(raise_exception)
 
     def create(self, validated_data):
-        if not self.context.get('user'):
-            raise serializers.ValidationError('缺少用户！')
         if settings.MAX_DEVICE_NUM:
-            if self.context.get('user').devices.count() >= settings.MAX_DEVICE_NUM:
+            if validated_data['create_user'].devices.count() >= settings.MAX_DEVICE_NUM:
                 raise serializers.ValidationError('超过最大创建数！')
-        validated_data['create_user'] = self.context.get('user')
         return Device.objects.create(**validated_data)
 
 
-class TriggerSerializer(serializers.ModelSerializer):
+class TriggerSerializer(BaseModelSerializer):
 
     class Meta:
         model = Trigger

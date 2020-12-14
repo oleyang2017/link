@@ -15,11 +15,6 @@ from .serializers import (
 
 class BaseModelViewSet(viewsets.ModelViewSet):
 
-    def get_serializer_context(self):
-        ret = super(BaseModelViewSet, self).get_serializer_context()
-        ret['user'] = self.request.user
-        return ret
-
     # 由于微信小程序不支持patch方法，所以这里默认部分更新
     def get_serializer(self, *args, **kwargs):
         kwargs['partial'] = True
