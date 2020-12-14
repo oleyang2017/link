@@ -29,7 +29,7 @@ class Chart(models.Model):
 
 @receiver(post_save, sender=Stream, dispatch_uid='add_chart_stream')
 def add_chart_stream(sender, instance, **kwargs):
-    if kwargs.get('create'):
+    if kwargs.get('created'):
         chart = Chart.objects.create(device=instance.device, title=instance.name, create_user=instance.create_user)
         chart.streams.add(instance)
 
