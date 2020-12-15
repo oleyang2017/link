@@ -1,4 +1,9 @@
 /**app.wxss**/
+@import "static/main.wxss";
+@import "static/icon.wxss";
+@import "static/animation.wxss";
+@import "static/fontAwesome.wxss";
+
 .container {
   height: 100%;
   display: flex;
