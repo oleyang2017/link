@@ -13,7 +13,7 @@ class UserProfile(AbstractUser):
     )
     mobile = models.CharField(verbose_name="手机号", max_length=20, unique=True, blank=True, null=True)
     wx_open_id = models.CharField(verbose_name="wx_openid", max_length=64, default='', blank=True, db_index=True)
-    gender = models.CharField(verbose_name='性别', max_length=6, choices=GENDER_CHOICES, default='1')
+    gender = models.CharField(verbose_name='性别', max_length=1, choices=GENDER_CHOICES, default='1')
     desc = models.TextField(verbose_name='个人介绍', blank=True, default='这个人很懒，什么都没写！')
     avatar = models.ImageField(verbose_name='头像', upload_to='avatar/', blank=True, null=True)
     avatar_url = models.URLField(verbose_name=' 微信头像', blank=True, null=True)
