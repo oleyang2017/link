@@ -15,7 +15,16 @@ class BaseModelSerializer(serializers.ModelSerializer):
 
 
 class DeviceCategorySerializer(BaseModelSerializer):
-    create_user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    device_num = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_device_num(obj):
+        """
+        获取该分类下面设备数量
+        :param obj: DeviceCategory
+        :return: int
+        """
+        return obj.devices.count()
 
     class Meta:
         model = DeviceCategory
@@ -31,7 +40,6 @@ class DeviceSerializer(BaseModelSerializer):
 
 
 class StreamSerializer(BaseModelSerializer):
-    create_user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Stream
@@ -39,7 +47,7 @@ class StreamSerializer(BaseModelSerializer):
 
     def create(self, validated_data):
         if settings.MAX_STREAM_NUM:
-            device = Device.objects.filter(id=self.initial_data["device"], create_user=self.context.get('user'))
+            device = Device.objects.filter(id=self.initial_data["device"], create_user=serializers.CurrentUserDefault())
             if not device:
                 raise serializers.ValidationError('设备不存在！')
             if device[0].streams.count() >= settings.MAX_STREAM_NUM:
@@ -56,9 +64,9 @@ class StreamSerializer(BaseModelSerializer):
 
 class ChartSerializer(BaseModelSerializer):
     stream_list = serializers.SerializerMethodField(read_only=True)
-    create_user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
-    def get_stream_list(self, obj):
+    @staticmethod
+    def get_stream_list(obj):
         """
         自定义数据流显示格式
         :param obj: chart object
@@ -102,17 +110,29 @@ class ChartSerializer(BaseModelSerializer):
 class DeviceDetailSerializer(BaseModelSerializer):
     streams = StreamSerializer(many=True, required=False)
     charts = ChartSerializer(many=True, required=False)
-    create_user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    category_name = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_category_name(obj):
+        """
+        获取设备分类名称
+        :param obj: device object
+        :return: List[dict]
+        """
+        if obj.category:
+            return obj.category.name
+        else:
+            return None
 
     class Meta:
         model = Device
-        fields = ('id', 'client_id', 'category', 'name', 'desc', 'status', 'image', 'sequence', 'create_time',
+        fields = ('id', 'client_id', 'category', 'category_name', 'name', 'desc', 'status', 'image', 'sequence', 'create_time',
                   'update_time', 'last_connect_time', 'streams', 'charts', 'create_user')
         read_only_fields = ('id', 'client_id', 'status', 'create_time', 'update_time', 'last_connect_time',)
 
     def is_valid(self, raise_exception=False):
         if self.initial_data.get("category"):
-            category = DeviceCategory.objects.filter(id=self.initial_data["category"], create_user=self.context.get('user'))
+            category = DeviceCategory.objects.filter(id=self.initial_data["category"], create_user=self.context.get('request').user)
             if not category:
                 raise serializers.ValidationError('设备分类不存在！')
         return super(DeviceDetailSerializer, self).is_valid(raise_exception)
@@ -138,7 +158,7 @@ class TriggerSerializer(BaseModelSerializer):
                 raise serializers.ValidationError("'指令'为必填项")
             if self.initial_data.get('trigger_type') == 'http' and not self.initial_data.get('url'):
                 raise serializers.ValidationError("'url'为必填项")
-            if self.initial_data.get('trigger_type') == 'email' and not self.context.get('user').email:
+            if self.initial_data.get('trigger_type') == 'email' and not self.context.get('request').user.email:
                 raise serializers.ValidationError("请先绑定邮箱")
         return super(TriggerSerializer, self).is_valid(raise_exception)
 
