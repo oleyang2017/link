@@ -1,6 +1,6 @@
 import { request } from './request';
 
-export default{ 
+export default { 
   verify: (params) => {
     return request('api/auth/token/verify/', params, 'POST')
   },
