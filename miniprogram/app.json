@@ -1,11 +1,36 @@
 {
   "pages":[
+    "pages/device/index",
+    "pages/login/index",
+    
+    "pages/index/index"
+   
   ],
   "window":{
     "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "Weixin",
+    "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTextStyle":"black"
+  },
+  "tabBar": {
+    "color": "#000000",
+    "selectedColor": "#494949",
+    "list": [
+     {
+       "pagePath": "pages/device/index",
+       "text": "设备"
+     },
+     {
+      "pagePath": "pages/index/index",
+      "text": "设备"
+    },
+    {
+      "pagePath": "pages/login/index",
+      "text": "设备"
+    }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"
