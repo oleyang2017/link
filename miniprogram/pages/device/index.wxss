@@ -4,5 +4,15 @@
 }
 .category-container{
   width: 90%;
-  background-color: #f6f7f8;
+  padding-right: 10rpx;
+}
+.active-tab{
+  font-size: 40rpx !important;
+  font-weight: 500;
+  color: #222222;
+  vertical-align: bottom !important;
+  translate: font-size 0.2s;
+}
+.inactive-tab{
+  font-size: 34rpx !important;
 }

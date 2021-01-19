@@ -1,10 +1,12 @@
 <view class="container">
   <view class="category-container">
-    <l-tabs equal-width="{{false}}" scrollable animated animatedForLine="{{true}}" active-color='#3863bc'>
-      <l-tabpanel wx:for="{{category}}" wx:key="id" tab="{{item.name}}">
-        <view class="tab-content"></view>
+    <l-tabs equal-width="{{false}}" has-line="{{false}}" l-class-active="active-tab" l-class-inactive="inactive-tab" scrollable >
+      <l-tabpanel wx:for="{{category}}" wx:key="id" tab="{{item.name}}" key="{{item.id}}" slot="{{item.id}}"> 
+        <view>{{item.name}}</view>
       </l-tabpanel>
     </l-tabs>
   </view>
+  <block>
+  </block>
 </view>
 
