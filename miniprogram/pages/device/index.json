@@ -1,6 +1,8 @@
 {
   "usingComponents": {
     "l-tabs": "../../miniprogram_npm/lin-ui/tabs",
-    "l-tabpanel": "../../miniprogram_npm/lin-ui/tabpanel"
-  }
+    "l-tabpanel": "../../miniprogram_npm/lin-ui/tabpanel",
+    "l-mask": "../../miniprogram_npm/lin-ui/mask"
+  },
+  "navigationBarTitleText": "我的设备"
 }

@@ -1,12 +1,16 @@
 <view class="container">
   <view class="category-container">
-    <l-tabs equal-width="{{false}}" has-line="{{false}}" l-class-active="active-tab" l-class-inactive="inactive-tab" scrollable >
-      <l-tabpanel wx:for="{{category}}" wx:key="id" tab="{{item.name}}" key="{{item.id}}" slot="{{item.id}}"> 
+    <l-tabs equal-width="{{false}}" has-line="{{false}}" l-class-active="active-tab" l-class-inactive="inactive-tab"
+      scrollable>
+      <l-tabpanel wx:for="{{category}}" wx:key="id" tab="{{item.name}}" key="{{item.id}}" slot="{{item.id}}">
         <view>{{item.name}}</view>
       </l-tabpanel>
     </l-tabs>
   </view>
+  <view class="icon-container">
+    <view class="fa fa-bars" style="color: #98999a"></view>
+  </view>
+
   <block>
   </block>
 </view>
-

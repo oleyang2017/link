@@ -1,18 +1,20 @@
-/* pages/device/index.wxss */
-.tabs{
-  color: #3863bc;
-}
 .category-container{
   width: 90%;
-  padding-right: 10rpx;
+  display: inline-block;
 }
 .active-tab{
-  font-size: 40rpx !important;
+  font-size: 36rpx !important;
   font-weight: 500;
-  color: #222222;
   vertical-align: bottom !important;
-  translate: font-size 0.2s;
 }
 .inactive-tab{
-  font-size: 34rpx !important;
+  color: #98999a;
+  font-size: 36rpx !important;
+}
+.icon-container{
+  display: inline-block;
+  background-color: #d8d9da;
+  border-radius: 16rpx;
+  padding: 2rpx 14rpx;
+  margin-left: 10rpx;
 }
