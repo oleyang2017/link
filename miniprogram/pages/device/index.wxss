@@ -2,6 +2,11 @@
   width: 90%;
   display: inline-block;
 }
+.category-header{
+  width: 90%;
+  display: inline-block;
+  position: fixed;
+}
 .active-tab{
   font-size: 36rpx !important;
   font-weight: 500;
@@ -11,10 +16,35 @@
   color: #98999a;
   font-size: 36rpx !important;
 }
-.icon-container{
+.bars-icon{
   display: inline-block;
   background-color: #d8d9da;
   border-radius: 16rpx;
   padding: 2rpx 14rpx;
   margin-left: 10rpx;
+  top: 22rpx;
+  position: fixed;
+}
+.category-popup{
+  background-color: #f6f7f8;
+  width: 350rpx;
+  max-height: 600rpx;
+  border-radius: 18rpx;
+  padding: 20rpx;
+  position: absolute;
+  top: 20rpx;
+  right: 10rpx;
+}
+.category-popup .category-item{
+  padding: 16rpx 10rpx;
+  position: relative;
+}
+.category-popup .category-item .name{
+  display: inline-block;
+}
+.category-popup .category-item .count{
+  display: inline-block;
+  color: #98999a;
+  right: 10rpx;
+  position: absolute;
 }

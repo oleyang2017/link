@@ -1,16 +1,26 @@
 <view class="container">
   <view class="category-container">
-    <l-tabs equal-width="{{false}}" has-line="{{false}}" l-class-active="active-tab" l-class-inactive="inactive-tab"
-      scrollable>
+    <l-tabs equal-width="{{false}}" has-line="{{false}}" l-header-class="category-header" l-active-class="active-tab"
+      l-inactive-class="inactive-tab" scrollable>
       <l-tabpanel wx:for="{{category}}" wx:key="id" tab="{{item.name}}" key="{{item.id}}" slot="{{item.id}}">
+        <view>{{item.name}}</view>
         <view>{{item.name}}</view>
       </l-tabpanel>
     </l-tabs>
   </view>
-  <view class="icon-container">
+  <view class="bars-icon" bindtap="showMask">
     <view class="fa fa-bars" style="color: #98999a"></view>
   </view>
-
-  <block>
+  <block wx:if="{{showMask}}">
+    <l-mask show="{{showMask}}" bind:lintap='showMask'>
+      <view class="category-popup">
+        <scroll-view wx:for="{{category}}" wx:key="id" scroll-y>
+          <view class="category-item">
+            <view class="name">{{item.name}}</view>
+            <view class="count">{{item.device_count}}</view>
+          </view>
+        </scroll-view>
+      </view>
+    </l-mask>
   </block>
 </view>
