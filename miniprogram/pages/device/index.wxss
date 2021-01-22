@@ -7,6 +7,10 @@
   display: inline-block;
   position: fixed;
 }
+.device-container{
+  margin-top: 80rpx;
+  padding: 0 20rpx;
+}
 .active-tab{
   font-size: 36rpx !important;
   font-weight: 500;
@@ -27,8 +31,8 @@
 }
 .category-popup{
   background-color: #f6f7f8;
-  width: 350rpx;
-  max-height: 600rpx;
+  width: 300rpx;
+  max-height: 800rpx;
   border-radius: 18rpx;
   padding: 20rpx;
   position: absolute;
@@ -46,5 +50,8 @@
   display: inline-block;
   color: #98999a;
   right: 10rpx;
+  text-align: center;
+  line-height: 20px;
   position: absolute;
 }
+

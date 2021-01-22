@@ -1,22 +1,17 @@
 import category from '../../api/category'
 
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-    category: []
+    category: [],
+    showMask: false,
+    popupHeight: 400
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
     category.list({}).then((res)=>{
-      console.log(res)
       this.setData({
-        category: res
+        category: res,
+        popupHeight: res.length * 36  > 260 ? '260px' : res.length * 36 + 'px'
       })
     })
   },
@@ -68,5 +63,11 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  showMask:function(){
+    console.log(!this.data.showMask)
+    this.setData({
+      showMask: !this.data.showMask
+    })
   }
 })

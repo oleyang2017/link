@@ -1,9 +1,8 @@
 <view class="container">
   <view class="category-container">
     <l-tabs equal-width="{{false}}" has-line="{{false}}" l-header-class="category-header" l-active-class="active-tab"
-      l-inactive-class="inactive-tab" scrollable>
+      l-inactive-class="inactive-tab" l-tabpanel-class="device-container" scrollable>
       <l-tabpanel wx:for="{{category}}" wx:key="id" tab="{{item.name}}" key="{{item.id}}" slot="{{item.id}}">
-        <view>{{item.name}}</view>
         <view>{{item.name}}</view>
       </l-tabpanel>
     </l-tabs>
@@ -14,12 +13,21 @@
   <block wx:if="{{showMask}}">
     <l-mask show="{{showMask}}" bind:lintap='showMask'>
       <view class="category-popup">
-        <scroll-view wx:for="{{category}}" wx:key="id" scroll-y>
-          <view class="category-item">
+        <scroll-view scroll-y style="height: {{popupHeight}}">
+          <view class="category-item" wx:for="{{category}}" wx:key="id">
             <view class="name">{{item.name}}</view>
             <view class="count">{{item.device_count}}</view>
           </view>
         </scroll-view>
+        <view style="height: 1px; background-color: #e6e6e6;" />
+        <view class="category-item">
+          <view class="name">全部设备</view>
+          <view class="count fa fa-th-large"></view>
+        </view>
+        <view class="category-item">
+          <view class="name">分类管理</view>
+          <view class="count fa fa-cog"></view>
+        </view>
       </view>
     </l-mask>
   </block>
