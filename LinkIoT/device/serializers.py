@@ -15,10 +15,10 @@ class BaseModelSerializer(serializers.ModelSerializer):
 
 
 class DeviceCategorySerializer(BaseModelSerializer):
-    device_num = serializers.SerializerMethodField(read_only=True)
+    device_count = serializers.SerializerMethodField(read_only=True)
 
     @staticmethod
-    def get_device_num(obj):
+    def get_device_count(obj):
         """
         获取该分类下面设备数量
         :param obj: DeviceCategory
