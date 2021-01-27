@@ -1,8 +1,10 @@
 {
   "usingComponents": {
-    "l-tabs": "../../miniprogram_npm/lin-ui/tabs",
-    "l-tabpanel": "../../miniprogram_npm/lin-ui/tabpanel",
-    "l-mask": "../../miniprogram_npm/lin-ui/mask"
+    "van-tab": "../../external_components/tab/index",
+    "van-tabs": "../../external_components/tabs/index",
+    "van-overlay": "../../external_components/overlay/index",
+    "van-panel": "../../external_components/panel/index",
+    "van-button": "../../external_components/button/index"
   },
-  "navigationBarTitleText": "我的设备"
+  "disableScroll": true
 }

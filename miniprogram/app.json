@@ -7,8 +7,9 @@
    
   ],
   "window":{
+    "backgroundColor": "#f6f8fa",
     "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarBackgroundColor": "#f6f8fa",
     "navigationBarTextStyle":"black"
   },
   "tabBar": {
@@ -32,6 +33,6 @@
   "networkTimeout": {
     "request": 10000
   },
-  "style": "v2",
+  
   "sitemapLocation": "sitemap.json"
 }
