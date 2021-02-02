@@ -1,0 +1,2 @@
+<!--pages/category/detail/index.wxml-->
+<text>{{id}}</text>
