@@ -1,73 +1,44 @@
-import category from '../../api/category'
+import categoryApi from '../../api/category'
+import deviceApi from '../../api/device'
 
 Page({
   data: {
     category: [],
     showMask: false,
-    popupHeight: 400
+    active: '',
+    popupHeight: '100px',
   },
 
   onLoad: function (options) {
-    category.list({}).then((res)=>{
-      this.setData({
-        category: res,
-        popupHeight: res.length * 36  > 260 ? '260px' : res.length * 36 + 'px'
-      })
-    })
+    this.getCategory()
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  },
-  showMask:function(){
-    console.log(!this.data.showMask)
+  showMask: function () {
     this.setData({
       showMask: !this.data.showMask
     })
-  }
+  },
+  async getCategory() {
+    let category = await categoryApi.list()
+    let device = await deviceApi.list()
+    for (let i = 0; i < device.length; i++) {
+      for (let m = 0; m < category.length; m++) {
+        if (!category[m].device) {
+          category[m].device = []
+        }
+        if (device[i].category == category[m].id) {
+          category[m].device = [device[i]]
+        }
+      }
+    }
+    this.setData({
+      category,
+      popupHeight: category.length * 36 > 260 ? '260px' : category.length * 36 + 'px'
+    })
+  },
+  changeCategory(e) {
+    this.setData({
+      active: e.detail.name ? e.detail.name : e.currentTarget.dataset.id
+    })
+  },
 })

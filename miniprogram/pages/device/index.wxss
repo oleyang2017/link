@@ -75,7 +75,7 @@
 }
 .device-scroll-container .card-container {
   width: 48%;
-  /* display: inline-block; */
+  display: inline-block;
   vertical-align: top;
   margin-bottom: 40rpx;
   padding: 20rpx;
@@ -88,7 +88,7 @@
   display: inline-block;
   font-size: 30rpx;
   padding-bottom: 10rpx;
-  max-width: 200rpx;
+  width: 80%;
   overflow: hidden;
   text-overflow:ellipsis;
   white-space: nowrap;
@@ -108,8 +108,8 @@
 }
 .device-scroll-container .card-container .status{
   font-size: 20rpx;
-  /* color: #aeaeae; */
   padding-bottom: 10rpx;
+  display: inline-block;
 }
 .device-scroll-container .card-container .pic{
   height: 48rpx;
