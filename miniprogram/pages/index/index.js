@@ -71,7 +71,11 @@ Page({
         console.log(res)
         if (res.code) {
           userInfo.code = res.code
-          auth.login(userInfo)
+          auth.login(userInfo).then((res)=>{
+            wx.setStorageSync('token', res.access)
+            wx.setStorageSync('refresh', res.refresh)
+            // wx.setStorageSync('token', res.access)
+          })
         } else {
           console.log('登录失败！' + res.errMsg)
         }

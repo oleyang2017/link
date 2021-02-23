@@ -1,7 +1,4 @@
 <view class="category-list-container">
   <view class="text-gray text-sm margin-sm margin-left">可左滑删除，长按拖拽调整顺序</view>
-  <van-swipe-cell right-width="{{ 40 }}"  wx:for="{{category}}" wx:key="id" data-id="{{item.id}}" >
-      <view class="padding text-black solid-bottom" data-id="{{item.id}}" bindtap="toDetail"> {{item.name}}  <text class="fa fa-angle-right fr text-center" style="line-height:23px"/></view>
-      <view slot="right" class="bg-red text-white  delete" bindtap="deleteCategory" data-id="{{item.id}}">删除</view>
-  </van-swipe-cell>
+  <drag list-data="{{category}}" 	generic:item="list-item" itemHeight="{{ 50 }}" scrollTop="{{600}}"></drag>
 </view>

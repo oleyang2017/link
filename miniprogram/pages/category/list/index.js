@@ -12,6 +12,17 @@ Page({
         ,{id: "Myfs1eZiE6X11V4Y4dpDhh", device_count: 0, name: "保姆间", sequence: 1, create_time: "2021-01-12 23:32:45"}
         ,{id: "Myfs1eZiE6X11V4Y4d1Dhh", device_count: 0, name: "餐厅", sequence: 1, create_time: "2021-01-12 23:32:45"}
         ,{id: "Myfs1eZiE6X1174Y4d1Dhh", device_count: 0, name: "餐厅1", sequence: 1, create_time: "2021-01-12 23:32:45"}
+        ,{id: "Myfs1e4ZiE6X1174Y4d1Dhh", device_count: 0, name: "餐厅1", sequence: 1, create_time: "2021-01-12 23:32:45"}
+        ,{id: "Myfs1eZiE56X1174Y4d1Dhh", device_count: 0, name: "餐厅1", sequence: 1, create_time: "2021-01-12 23:32:45"}
+        ,{id: "Myfs1eZiE6X1174Y74d1Dhh", device_count: 0, name: "餐厅1", sequence: 1, create_time: "2021-01-12 23:32:45"}
+        ,{id: "Myfs1eZiE6X1174Yy4d1Dhh", device_count: 0, name: "餐厅1", sequence: 1, create_time: "2021-01-12 23:32:45"}
+        ,{id: "Myfs1eZiEw6X1174Yy4d1Dhh", device_count: 0, name: "餐厅1", sequence: 1, create_time: "2021-01-12 23:32:45"}
+        ,{id: "Myfs1eZiEe6X1174Yy4d1Dhh", device_count: 0, name: "餐厅1", sequence: 1, create_time: "2021-01-12 23:32:45"}
+        ,{id: "Myfs1eZiqE6X1174Yy4d1Dhh", device_count: 0, name: "餐厅2", sequence: 1, create_time: "2021-01-12 23:32:45"}
+        ,{id: "Myfs1eZiqE6X1174Yy4d1Dhh", device_count: 0, name: "餐厅2", sequence: 1, create_time: "2021-01-12 23:32:45"}
+        ,{id: "Myfs1eZiqE6X1174Ysy4d1Dhh", device_count: 0, name: "餐厅2", sequence: 1, create_time: "2021-01-12 23:32:45"}
+        ,{id: "Myfs1eZiqE6X1174Ydy4d1Dhh", device_count: 0, name: "餐厅2", sequence: 1, create_time: "2021-01-12 23:32:45"}
+        ,{id: "Myfs1eZiqE6X1174Yyf4d1Dhh", device_count: 0, name: "餐厅2", sequence: 1, create_time: "2021-01-12 23:32:45"}
       ]
   },
   onLoad: function (options) {
@@ -21,13 +32,5 @@ Page({
     //   })
     // })
   },
-  toDetail(e){
-    console.log(e)
-    wx.navigateTo({
-      url: "/pages/category/detail/index?id=" + e.currentTarget.dataset.id,
-    })
-  },
-  deleteCategory(e) {
-    console.log(e)
-  },
+
 })
