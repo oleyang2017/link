@@ -1,7 +1,8 @@
-<van-swipe-cell async-close bind:close="onClose" right-width="{{ 60 }}" data-id="{{itemData.id}}">
-  <view class="item-container" data-id="{{itemData.id}}" bindtap="toDetail"> 
+<van-swipe-cell id="{{itemData.id}}" right-width="{{ 60 }}" data-id="{{itemData.id}}">
+  <view class="item-container" data-id="{{itemData.id}}" bindtap="toDetail" bindtouchstart="closeSwipe" > 
     {{itemData.name}}
     <van-icon name="arrow" class="icon" />
   </view>
   <view slot="right" class="bg-red text-white  delete" bindtap="deleteCategory" data-id="{{itemData.id}}">删除</view>
 </van-swipe-cell>
+

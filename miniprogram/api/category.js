@@ -8,9 +8,15 @@ export default {
     return request('api/categories/', params, "POST") 
   },
   detail:(id, needJWT=true, needLoading=false) => { 
-    return request('api/devices/'+id+'', {}, "GET") 
+    return request('api/categories/'+id, {}, "GET") 
   },
   update:(params, needJWT=true, needLoading=false) => { 
-    return request('pi/charts/'+params.id+'', params, "PUT") 
+    return request('api/categories/'+params.id+'', params, "PUT") 
+  },
+  delete:(id, needJWT=true, needLoading=false) => { 
+    return request('api/categories/'+id, {}, "DELETE") 
+  },
+  sort:(params, needJWT=true, needLoading=false) => { 
+    return request('api/categories/sort/', params, "PUT") 
   },
 }

@@ -1,4 +1,4 @@
 <view class="category-list-container">
   <view class="text-gray text-sm margin-sm margin-left">可左滑删除，长按拖拽调整顺序</view>
-  <drag list-data="{{category}}" 	generic:item="list-item" itemHeight="{{ 50 }}" scrollTop="{{600}}"></drag>
+  <drag id="drag-el" list-data="{{categoryData}}" generic:item="list-item" item-height="{{50}}" bind:sortend="sortEnd"></drag>
 </view>
