@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import Trigger
+from .models import Trigger, DeviceCategory
 from .serializers import (
     DeviceSerializer, DeviceDetailSerializer, DeviceCategorySerializer,
     StreamSerializer, ChartSerializer, TriggerSerializer
@@ -62,6 +62,15 @@ class CategoryViewSet(BaseModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(create_user=self.request.user)
+
+    @action(methods=['put'], detail=False)
+    def sort(self, request, *args, **kwargs):
+        for cid in request.data:
+            category = DeviceCategory.objects.filter(id=cid, create_user=request.user).first()
+            if category:
+                category.sequence = request.data[cid]
+                category.save()
+        return Response({})
 
 
 class StreamViewSet(BaseModelViewSet):

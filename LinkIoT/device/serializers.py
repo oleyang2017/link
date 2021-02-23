@@ -26,6 +26,13 @@ class DeviceCategorySerializer(BaseModelSerializer):
         """
         return obj.devices.count()
 
+    def create(self, validated_data):
+        if not validated_data.get('sequence'):
+            last_category = DeviceCategory.objects.filter(create_user=self.context.get('request').user).last()
+            if last_category:
+                validated_data['sequence'] = last_category.sequence + 1
+        return super(DeviceCategorySerializer, self).create(validated_data)
+
     class Meta:
         model = DeviceCategory
         fields = '__all__'
