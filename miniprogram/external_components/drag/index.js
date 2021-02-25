@@ -109,6 +109,9 @@ Component({
 				extra: e.detail
 			});
 		},
+		refreshData(e) {
+			this.triggerEvent('refresh');
+		},
 		/**
 		 *  初始化获取 dom 信息
 		 */
