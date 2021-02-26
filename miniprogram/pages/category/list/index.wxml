@@ -1,4 +1,14 @@
 <view class="category-list-container">
-  <view class="text-gray text-sm margin-sm margin-left">可左滑删除，长按拖拽调整顺序</view>
-  <drag id="drag-el" list-data="{{categoryData}}" generic:item="list-item" item-height="{{50}}" bind:sortend="sortEnd"></drag>
+  <view class="text-gray text-sm margin-sm margin-left">
+    <text>在编辑状态下可左滑删除，长按拖拽调整顺序</text>
+    <view class="fr text-blue text-df" bindtap="edit">{{edit ? '完成'  : '编辑'}}</view>
+  </view>
+  <drag id="drag-el" list-data="{{categoryData}}" generic:item="list-item" item-height="{{50}}" bind:sortend="sortEnd"
+    bind:refresh="getCategory"></drag>
+  <van-dialog close-on-click-overlay use-slot show="{{ showDialog }}" show-cancel-button width="{{ 300 }}" bind:confirm="addCategory">
+    <view class="dialog-title">{{dialogTitle}}</view>
+    <input class="dialog-input" value="{{inputValue}}" maxlength="8" bindinput="bindKeyInput" placeholder="分类名称" />
+  </van-dialog>
+  <van-icon name="add" color="#0081ff" size="40px" style="position: fixed; bottom: 60px; right:40px"
+    bindtap="openDialog" />
 </view>

@@ -1,5 +1,5 @@
-<van-swipe-cell id="{{itemData.id}}" right-width="{{ 60 }}" data-id="{{itemData.id}}">
-  <view class="item-container" data-id="{{itemData.id}}" bindtap="toDetail" bindtouchstart="closeSwipe" > 
+<van-swipe-cell id="{{itemData.id}}" right-width="{{ 60 }}" data-id="{{itemData.id}}" bind:refresh="getCategory" disabled="{{itemData.fixed}}">
+  <view class="item-container" data-id="{{itemData.id}}" data-edit="{{itemData.fixed}}" bindtouchstart="closeSwipe" bindtap="toDetail"> 
     {{itemData.name}}
     <van-icon name="arrow" class="icon" />
   </view>

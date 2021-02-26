@@ -21,12 +21,16 @@ Component({
       this.selectComponent('#' + e.currentTarget.dataset.id).close()
     },
     toDetail(e) {
-      wx.navigateTo({
-        url: "/pages/category/detail/index?id=" + e.currentTarget.dataset.id,
-      })
+      if(e.currentTarget.dataset.edit){
+        wx.navigateTo({
+          url: "/pages/category/detail/index?id=" + e.currentTarget.dataset.id,
+        })
+      }
     },
     deleteCategory(e) {
-      categoryApi.delete(e.currentTarget.dataset.id)
+      categoryApi.delete(e.currentTarget.dataset.id).then(()=>{
+        this.triggerEvent('refresh')
+      })
     },
   }
 })

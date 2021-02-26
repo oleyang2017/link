@@ -5,6 +5,7 @@ export default {
     return request('api/categories/', params, "GET")
   },
   create:(params, needJWT=true, needLoading=false) => { 
+    console.log(params)
     return request('api/categories/', params, "POST") 
   },
   detail:(id, needJWT=true, needLoading=false) => { 
