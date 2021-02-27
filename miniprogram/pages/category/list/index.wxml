@@ -5,7 +5,7 @@
   </view>
   <drag id="drag-el" list-data="{{categoryData}}" generic:item="list-item" item-height="{{50}}" bind:sortend="sortEnd"
     bind:refresh="getCategory"></drag>
-  <van-dialog close-on-click-overlay use-slot show="{{ showDialog }}" show-cancel-button width="{{ 300 }}" bind:confirm="addCategory">
+  <van-dialog close-on-click-overlay use-slot show="{{ showDialog }}" show-cancel-button width="{{ 300 }}" bind:confirm="createCategory">
     <view class="dialog-title">{{dialogTitle}}</view>
     <input class="dialog-input" value="{{inputValue}}" maxlength="8" bindinput="bindKeyInput" placeholder="分类名称" />
   </van-dialog>

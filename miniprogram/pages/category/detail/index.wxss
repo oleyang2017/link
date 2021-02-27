@@ -1,1 +1,16 @@
-/* pages/category/detail/index.wxss */
+.dialog-title {
+  font-size: 16px;
+  margin: 20px 0;
+  text-align: center;
+}
+.dialog-input{
+  border: 1px solid #f1f1f1;
+  font-size: 12px;
+  padding-left: 5px;
+  margin: 10px;
+  height: 30px;
+  border-radius: 5px;
+}
+.del-btn{
+  
+}

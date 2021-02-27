@@ -10,7 +10,10 @@ Page({
     sortValue: {}
   },
 
-  onLoad: function (options) {
+  onLoad() {
+  },
+
+  onShow() {
     this.getCategory()
   },
 
@@ -49,13 +52,13 @@ Page({
     })
   },
 
-  bindKeyInput: function (e) {
+  bindKeyInput(e) {
     this.setData({
       inputValue: e.detail.value
     })
   },
 
-  addCategory() {
+  createCategory() {
     categoryApi.create({
       name: this.data.inputValue
     }).then((res) => {
@@ -69,6 +72,7 @@ Page({
       })
     })
   },
+  
   edit() {
     let categoryData = this.data.categoryData
     let edit = !this.data.edit
@@ -80,10 +84,9 @@ Page({
     }
     // 退出编辑模式后将新的排序上传并刷新页面
     if (!edit){
-      console.log(111)
       categoryApi.sort(this.data.sortValue).then(()=>{
         this.setData({edit})
-        this.onLoad()
+        this.getCategory()
       })
     }
     else{

@@ -1,3 +1,7 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "van-cell": "../../../../external_components/cell/index",
+    "van-button": "../../../../external_components/button/index",
+    "van-dialog": "../../../../external_components/dialog/index"
+  }
 }
