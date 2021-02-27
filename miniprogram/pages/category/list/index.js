@@ -6,7 +6,8 @@ Page({
     showDialog: false,
     dialogTitle: '新增分类',
     edit: false,
-    inputValue: ''
+    inputValue: '',
+    sortValue: {}
   },
 
   onLoad: function (options) {
@@ -16,7 +17,7 @@ Page({
   getCategory() {
     categoryApi.list({}).then((res) => {
       for (let i = 0; i < res.length; i++) {
-        res[i].fixed = true
+        res[i].fixed = !this.data.edit
       }
       this.setData({
         categoryData: res,
@@ -27,18 +28,18 @@ Page({
   },
 
   sortEnd(e) {
-    let newSort = {}
+    let sortValue = {}
     for (let i = 0; i < this.data.categoryData.length; i++) {
       let beforItem = this.data.categoryData[i]
       for (let n = 0; n < e.detail.listData.length; n++) {
         if (beforItem.id == e.detail.listData[n].id && beforItem.sequence != n) {
-          newSort[beforItem.id] = n
+          sortValue[beforItem.id] = n
         }
       }
     }
-    categoryApi.sort(newSort)
     this.setData({
-      listData: e.detail.listData
+      sortValue,
+      categoryData: e.detail.listData
     });
   },
 
@@ -73,20 +74,26 @@ Page({
     let edit = !this.data.edit
     for (let i = 0; i < categoryData.length; i++) {
       categoryData[i].fixed = !edit
-      // 关闭所有已经打开的滑动单元格
       if (!edit){
-        console.log('#' +categoryData[i].id)
-        console.log(this.selectComponent('#drag-el'))
-        console.log(this.selectComponent('#' + categoryData[i].id))
-        this.selectComponent('#drag-el').selectComponent('#' + categoryData[i].id).close()
+        this.selectComponent('#drag-el').initComponent(categoryData[i].id)
       }
-      
     }
-    this.setData({
-      edit,
-      categoryData
-    }, () => {
-      this.selectComponent('#drag-el').init()
-    })
+    // 退出编辑模式后将新的排序上传并刷新页面
+    if (!edit){
+      console.log(111)
+      categoryApi.sort(this.data.sortValue).then(()=>{
+        this.setData({edit})
+        this.onLoad()
+      })
+    }
+    else{
+      this.setData({
+        edit,
+        categoryData
+      }, () => {
+        this.selectComponent('#drag-el').init()
+      })
+    }
+    
   }
 })

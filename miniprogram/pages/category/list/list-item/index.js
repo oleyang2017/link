@@ -20,6 +20,12 @@ Component({
     closeSwipe(e) {
       this.selectComponent('#' + e.currentTarget.dataset.id).close()
     },
+    init(id){
+      let _el = this.selectComponent('#' + id)
+      if (_el) {
+        _el.close()
+      }
+    },
     toDetail(e) {
       if(e.currentTarget.dataset.edit){
         wx.navigateTo({

@@ -112,6 +112,9 @@ Component({
 		refreshData(e) {
 			this.triggerEvent('refresh');
 		},
+		initComponent(id) {
+			this.selectComponent('#_' + id).init(id)
+		},
 		/**
 		 *  初始化获取 dom 信息
 		 */
