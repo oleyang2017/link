@@ -4,6 +4,7 @@
     "van-swipe-cell": "../../../../external_components/swipe-cell/index",
     "van-icon": "../../../../external_components/icon/index",
     "van-dialog": "../../../../external_components/dialog/index",
+    "van-empty": "../../../../external_components/empty/index",
     "drag": "../../../external_components/drag/index"
   }
 }
