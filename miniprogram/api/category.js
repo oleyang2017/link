@@ -1,23 +1,24 @@
-import { request } from './request';
+import {
+  request
+} from './request';
 
 export default {
   list: (params) => {
     return request('api/categories/', params, "GET")
   },
-  create:(params, needJWT=true, needLoading=false) => { 
-    console.log(params)
-    return request('api/categories/', params, "POST") 
+  create: (data, needJWT = true, needLoading = false) => {
+    return request('api/categories/', data, "POST")
   },
-  detail:(id, needJWT=true, needLoading=false) => { 
-    return request('api/categories/'+id, {}, "GET") 
+  detail: (id, needJWT = true, needLoading = false) => {
+    return request('api/categories/' + id + '/', {}, "GET")
   },
-  update:(params, needJWT=true, needLoading=false) => { 
-    return request('api/categories/'+params.id+'', params, "PUT") 
+  update: (data, needJWT = true, needLoading = false) => {
+    return request('api/categories/' + data.id + '/', data, "PUT")
   },
-  delete:(id, needJWT=true, needLoading=false) => { 
-    return request('api/categories/'+id, {}, "DELETE") 
+  delete: (id, needJWT = true, needLoading = false) => {
+    return request('api/categories/' + id + '/', {}, "DELETE")
   },
-  sort:(params, needJWT=true, needLoading=false) => { 
-    return request('api/categories/sort/', params, "PUT") 
+  sort: (params, needJWT = true, needLoading = false) => {
+    return request('api/categories/sort/', params, "PUT")
   },
 }

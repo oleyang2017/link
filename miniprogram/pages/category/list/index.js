@@ -6,12 +6,13 @@ Page({
     showDialog: false,
     dialogTitle: '新增分类',
     edit: false,
+    scrollTop: 0,
+    pageMetaScrollTop: 0,
     inputValue: '',
     sortValue: {}
   },
 
-  onLoad() {
-  },
+  onLoad() {},
 
   onShow() {
     this.getCategory()
@@ -46,10 +47,23 @@ Page({
     });
   },
 
-  openDialog(e) {
+  openDialog() {
     this.setData({
       showDialog: true,
+      inputValue: ''
     })
+  },
+
+  scroll(e) {
+    this.setData({
+      pageMetaScrollTop: e.detail.scrollTop
+    })
+  },
+
+  onPageScroll(e) {
+    this.setData({
+      scrollTop: e.scrollTop
+    });
   },
 
   bindKeyInput(e) {
@@ -72,24 +86,25 @@ Page({
       })
     })
   },
-  
+
   edit() {
     let categoryData = this.data.categoryData
     let edit = !this.data.edit
     for (let i = 0; i < categoryData.length; i++) {
       categoryData[i].fixed = !edit
-      if (!edit){
+      if (!edit) {
         this.selectComponent('#drag-el').initComponent(categoryData[i].id)
       }
     }
     // 退出编辑模式后将新的排序上传并刷新页面
-    if (!edit){
-      categoryApi.sort(this.data.sortValue).then(()=>{
-        this.setData({edit})
+    if (!edit) {
+      categoryApi.sort(this.data.sortValue).then(() => {
+        this.setData({
+          edit
+        })
         this.getCategory()
       })
-    }
-    else{
+    } else {
       this.setData({
         edit,
         categoryData
@@ -97,6 +112,6 @@ Page({
         this.selectComponent('#drag-el').init()
       })
     }
-    
+
   }
 })

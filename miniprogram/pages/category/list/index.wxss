@@ -1,9 +1,16 @@
 .category-list-container {
   display: flex;
   flex-flow: column;
-  height: 680px;
-  margin-bottom: 40px;
-  margin: 2px;
+  margin: 40px 0;
+}
+
+.tip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background-color: #f6f8fa;
 }
 
 .category-list-container .delete {
@@ -13,16 +20,28 @@
   height: 50px;
   text-align: center;
 }
+
 .dialog-title {
   font-size: 16px;
   margin: 20px 0;
   text-align: center;
 }
-.dialog-input{
+
+.dialog-input {
   border: 1px solid #f1f1f1;
   font-size: 12px;
   padding-left: 5px;
   margin: 10px;
   height: 30px;
   border-radius: 5px;
+}
+
+.empty-bottom {
+  padding-bottom: 40px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 111;
+  background-color: #f6f8fa;
 }
