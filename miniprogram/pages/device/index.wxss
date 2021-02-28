@@ -121,3 +121,7 @@
   right: 20rpx;
   bottom: 16rpx;
 }
+.head-icon{
+  line-height: 80rpx;
+  text-align: center;
+}

@@ -32,7 +32,7 @@ Page({
       }
     }
     this.setData({
-      category,
+      category: category.length ? category : [{name: '全部设备'}],
       popupHeight: category.length * 36 > 260 ? '260px' : category.length * 36 + 'px'
     })
   },

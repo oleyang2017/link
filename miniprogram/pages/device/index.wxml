@@ -8,13 +8,13 @@
 <view class="container">
   <view>
     <view class="title">我的设备</view>
-    <view class="fa fa-refresh" />
+    <view class="fa fa-refresh head-icon" />
+    <navigator class="fa fa-plus head-icon fr margin-right-xl" hover-class="none" url="/pages/device/edit/index?type=create"></navigator>
   </view>
   <view>
-    <van-tabs type="" active="{{active}}" ellipsis="{{false}}" animated swipeable custom-class="body" tab-class="category-tab-class"
-      tab-active-class="category-tab-active-class" bind:change="changeCategory">
-      <van-tab wx:for="{{category}}" wx:key="id" name="{{item.id}}" title="{{item.name}}"
-        title-style="font-size:16px">
+    <van-tabs type="" active="{{active}}" ellipsis="{{false}}" animated swipeable custom-class="body"
+      tab-class="category-tab-class" tab-active-class="category-tab-active-class" bind:change="changeCategory">
+      <van-tab wx:for="{{category}}" wx:key="id" name="{{item.id}}" title="{{item.name}}" title-style="font-size:16px;text-align: left;">
         <scroll-view style="height: calc(100vh);" scroll-y>
           <view class="device-scroll-container">
             <block wx:for="{{item.device}}" wx:key="id">
@@ -24,8 +24,14 @@
                 <view class="status {{item.status ? 'text-blue':'text-grey'}}">{{item.status?'在线':'离线'}}</view>
               </view>
             </block>
-            <block wx:if="{{item.device.length==0}}">
-              <view class="none-data text-gray text-sm padding text-center">你还没有创建设备</view>
+            <block wx:if="{{!item.device.length}}">
+              <van-empty  wx:if="{{!categoryData.length}}" style="width: 100%">
+                <view class="text-gray text-sm padding-top-xl text-center" style="width: 100%">
+                  <text>你还没有创建设备!</text>
+                  <navigator class="text-blue padding-left-sm" url="/pages/device/edit/index?type=create"
+                    style="display: inline-block;" hover-class="none">点击创建</navigator>
+                </view>
+              </van-empty>
             </block>
           </view>
         </scroll-view>
@@ -46,11 +52,12 @@
             <view class="count">{{item.device_count}}</view>
           </view>
         </scroll-view>
+        <view class="text-gray padding text-center">暂无分类</view>
         <view style="height: 1px; background-color: #e6e6e6;" />
-        <view class="category-item">
+        <navigator class="category-item" url="/pages/device/list/index" hover-class="none">
           <view class="name">全部设备</view>
           <view class="count fa fa-th-large"></view>
-        </view>
+        </navigator>
         <navigator url="/pages/category/list/index">
           <view class="category-item">
             <view class="name">分类管理</view>
