@@ -19,7 +19,7 @@
           <view class="device-scroll-container">
             <block wx:for="{{item.device}}" wx:key="id">
               <view class="bg-white text-black card-container animation-slide-top"
-                style="animation-delay: {{fn.delay(index+1)}}s;" bindtap="tapDeivceCard" data-id="{{item.id}}">
+                style="animation-delay: {{fn.delay(index+1)}}s;" bindtap="toDetail" data-id="{{item.id}}">
                 <view class="name">{{item.name}}</view>
                 <view class="status {{item.status ? 'text-blue':'text-grey'}}">{{item.status?'在线':'离线'}}</view>
               </view>
@@ -48,11 +48,13 @@
       <view class="category-popup">
         <scroll-view scroll-y style="height: {{popupHeight}}">
           <view class="category-item" wx:for="{{category}}" wx:key="id" data-id="{{item.id}}" bindtap="changeCategory">
-            <view class="name">{{item.name}}</view>
-            <view class="count">{{item.device_count}}</view>
+            <view wx:if="{{item.name != '未分类'}}">
+              <view class="name">{{item.name}}</view>
+              <view class="count">{{item.device_count}}</view>
+            </view>
           </view>
         </scroll-view>
-        <view class="text-gray padding text-center">暂无分类</view>
+        <view class="text-gray padding text-center" wx:if="{{category.length <= 1}}">暂无分类</view>
         <view style="height: 1px; background-color: #e6e6e6;" />
         <navigator class="category-item" url="/pages/device/list/index" hover-class="none">
           <view class="name">全部设备</view>
