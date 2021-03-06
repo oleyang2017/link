@@ -48,7 +48,7 @@
       <view class="category-popup">
         <scroll-view scroll-y style="height: {{popupHeight}}">
           <view class="category-item" wx:for="{{category}}" wx:key="id" data-id="{{item.id}}" bindtap="changeCategory">
-            <view wx:if="{{item.name != '未分类'}}">
+            <view wx:if="{{item.id}}">
               <view class="name">{{item.name}}</view>
               <view class="count">{{item.device_count}}</view>
             </view>

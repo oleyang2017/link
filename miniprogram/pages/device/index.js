@@ -37,7 +37,7 @@ Page({
         noCategory.push(device[i])
       }
     }
-    category.push({name: '未分类', device: noCategory, device_count: noCategory.length})
+    category.push({name: '未分类', device: noCategory})
     this.setData({
       category,
       popupHeight: (category.length - 1) * 36 > 260 ? '260px' : (category.length - 1) * 36 + 'px'

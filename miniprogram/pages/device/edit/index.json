@@ -1,0 +1,13 @@
+{
+  "usingComponents": {
+    "van-field": "../../../../external_components/field/index",
+    "van-cell": "../../../../external_components/cell/index",
+    "van-cell-group": "../../../../external_components/cell-group/index",
+    "van-picker": "../../../../external_components/picker/index",
+    "van-popup": "../../../../external_components/popup/index",
+    "van-button": "../../../../external_components/button/index",
+    "van-uploader": "../../../../external_components/uploader/index",
+    "van-tag": "../../../../external_components/tag/index",
+    "van-dialog": "../../../../external_components/dialog/index"
+  }
+}

@@ -1,0 +1,77 @@
+<wxs module="fn">
+  module.exports = {
+    tagColor: function () {
+      colorList = ['#0081ff', '#6739b6', '#8799a3', '#1cbbb4', '#e54d42', '#f37b1d', '#8dc63f','#9c26b0', '#e03997', '#fbbd08']
+      return colorList[Math.round(Math.random() * 10)]
+    },
+  }
+</wxs>
+<view class="padding-lr-lg padding-top-xs bg-white">
+  <text class="text-bold text-black text-xl ">{{name}}</text>
+  <view class="text-xl text-blue fr">
+    <navigator url="/pages/device/edit/index?id={{id}}" hover-class="none">
+      <text class="cuIcon-edit"></text>
+    </navigator>
+  </view>
+</view>
+<view class="device-detail-container bg-white {{showAll?'show-all':''}}">
+  <view class="top-container">
+    <view class="left">
+      <image class="img" src="https://img2018.cnblogs.com/blog/1213309/201907/1213309-20190713160416264-229954616.gif" mode="aspectFit" catchtap="changeStatus" data-key="showImage"></image>
+    </view>
+    <view class="right">
+      <view class="padding-lr-xs text-xs">
+        <text>长按复制编号</text>
+      </view>
+      <view class="padding-xs text-df">
+        <text>设备编号：</text>
+        <text class="text-sm" bindlongtap="copy" data-value="{{id}}">{{id}}</text>
+      </view>
+      <view class="padding-xs text-df">
+        <text>客户端ID：</text>
+        <text class="text-sm" bindlongtap="copy" data-value="{{client_id}}">{{client_id}}</text>
+      </view>
+      <view class="padding-xs text-df">
+        <text>设备状态：</text>
+        <text class="{{status ?'text-blue':''}}">{{status?"设备在线":"设备离线"}}</text>
+      </view>
+      <view class="padding-xs text-df">
+        <text>数据流：</text>
+        <van-tag wx:for="{{streams}}" wx:key="id" color="{{fn.tagColor()}}" class="margin-xs">{{item.name}}</van-tag>
+      </view>
+      <view class="padding-xs text-df">
+        <text>创建时间：</text>
+        <text>{{create_time}}</text>
+      </view>
+      <view class="padding-xs text-df" wx:if="{{last_connect_time}}">
+        <text>最后连接时间：</text>
+        <text>{{last_connect_time}}</text>
+      </view>
+      <view class="padding-xs text-df">
+        <text>设备说明：</text>
+        <text>{{desc}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+<view class="text-gray text-sm text-center bg-white padding-xs show-more-btn" catchtap="changeStatus"
+  data-key="showAll">
+  <text class="{{showAll?'cuIcon-fold':'cuIcon-unfold'}}"></text>
+  <text>{{showAll?'收起':'显示全部'}}</text>
+</view>
+<view class="bg-white">
+  <van-tabs  type="" ellipsis="{{false}}" swipeable  >
+      <van-tab name="1" title="历史数据">
+        历史数据
+      </van-tab>
+      <van-tab name="2" title="控制面板">
+        控制面板
+      </van-tab>
+      <van-tab name="3" title="触发器" >
+        触发器
+      </van-tab>
+      <van-tab name="4" title="日志">
+        日志
+      </van-tab>
+    </van-tabs>
+</view>
