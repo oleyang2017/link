@@ -22,33 +22,37 @@
 </van-cell-group>
 
 <van-cell-group title="高级信息">
-  <van-field label="所属分类" value="{{ category_name }}" border="{{ false }}" bindtap="closePopup" readonly />
+  <van-field label="所属分类" value="{{ category_name }}" border="{{ false }}" bindtap="openPopup" readonly />
   <view class="padding bg-white custom-cell">
     <view class="title">统计图表</view>
     <view class="context">
-      <van-tag wx:for="{{charts}}" data-id="{{item.id}}"  data-name="{{item.title}}" wx:key="id" closeable color="{{fn.tagColor()}}" class="margin-right-xs" bind:close="removeChart">
+      <van-tag wx:for="{{charts}}" data-id="{{item.id}}" data-index="{{index}}" data-name="{{item.title}}" wx:key="id" closeable color="{{fn.tagColor()}}" class="margin-right-xs" bind:close="removeChart">
         {{item.title}}</van-tag>
     </view>
   </view>
   <view class="padding bg-white custom-cell">
     <view class="title">数据流</view>
     <view class="context">
-      <van-tag wx:for="{{streams}}" data-id="{{item.id}}"  data-name="{{item.name}}" wx:key="id" closeable color="{{fn.tagColor()}}" class="margin-right-xs" bind:close="removeStream">
+      <van-tag wx:for="{{streams}}" data-id="{{item.id}}" data-index="{{index}}"  data-name="{{item.name}}" wx:key="id" closeable color="{{fn.tagColor()}}" class="margin-right-xs" bind:close="removeStream">
         {{item.name}}</van-tag>
     </view>
   </view>
 </van-cell-group>
 
+<van-cell-group title="其他信息">
+  <van-field label="设备说明" model:value="{{ desc }}" type="textarea" autosize border="{{ false }}"  placeholder="请输入设备说明" />
+</van-cell-group>
+
 <view class="padding-lr-xl padding-tb-lg">
   <van-button type="primary" color="#0081ff" disabled="{{!name}}" block>确认</van-button>
 </view>
-<view class="padding-lr-xl">
+<view class="padding-lr-xl padding-bottom-xl">
   <van-button type="default" block>取消</van-button>
 </view>
 
 <!-- 弹出层 -->
 <van-dialog id="van-dialog" />
-<van-popup show="{{ show }}" position="bottom" bind:close="closePopup">
-  <van-picker columns="{{ categoryList }}" bind:confirm="changeCagetory" bind:cancel="cancel" title="分类" show-toolbar
-    default-index="{{categoryIndex}}" />
+<van-popup show="{{ show }}" position="bottom" bind:close="openPopup">
+  <van-picker columns="{{ categoryList }}" bind:confirm="changeCagetory" bind:cancel="openPopup" title="分类" show-toolbar
+    default-index="{{categoryIndex}}"/>
 </van-popup>

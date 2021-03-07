@@ -1,5 +1,6 @@
 import deviceApi from '../../../api/device'
 import categoryApi from '../../../api/category'
+import streamApi from '../../../api/stream'
 import Dialog from '../../../external_components/dialog/dialog'
 
 Page({
@@ -46,7 +47,7 @@ Page({
   onShow: function () {
 
   },
-  closePopup(){
+  openPopup(){
     if(!this.data.show && this.data.categoryList.length == 0){
       this.getCategory()
     }
@@ -76,11 +77,6 @@ Page({
       show: false,
     })
   },
-  cancel(){
-    this.setData({
-      show: false,
-    })
-  },
   removeStream(e){
     console.log(e)
     let name = e.currentTarget.dataset.name
@@ -89,11 +85,14 @@ Page({
       message: `确认删除 ‘${name} ’吗？\n删除后将清空该数据流下的所有历史数据,且不可恢复。`,
     })
     .then(() => {
-      // on confirm
+      streamApi.delete(e.currentTarget.dataset.id).then((res) => {
+        let streams = this.data.streams
+        streams.splice(e.currentTarget.dataset.index, 1)
+        this.setData({
+          streams
+        })
+      })
     })
-    .catch(() => {
-      // on cancel
-    });
   },
   removeChart(e){
     console.log(e)
@@ -103,7 +102,7 @@ Page({
       message: `确认删除 ‘${name} ’吗？`,
     })
     .then(() => {
-      // on confirm
+      
     })
     .catch(() => {
       // on cancel
