@@ -10,7 +10,7 @@
       </view>
     </navigator>
     <view slot="right" class="bg-red text-white  delete" bindtap="deleteStream" data-id="{{item.id}}"
-      data-name="{{item.name}}">删除</view>
+      data-name="{{item.name}}" data-index="{{index}}">删除</view>
   </van-swipe-cell>
 
   <van-empty wx:if="{{!streamList.length}}" description="暂无数据！" />
