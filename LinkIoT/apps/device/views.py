@@ -46,7 +46,15 @@ class DeviceViewSet(BaseModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = DeviceDetailSerializer(instance)
+        serializer = DeviceDetailSerializer(instance, context={'request': request})
+        return Response(serializer.data)
+
+    @action(methods=['post'], detail=True)
+    def upload(self, request, *args, **kwargs):
+        device = self.get_object()
+        device.image = request.data.get('file')
+        device.save()
+        serializer = DeviceDetailSerializer(device, context={'request': request})
         return Response(serializer.data)
 
 

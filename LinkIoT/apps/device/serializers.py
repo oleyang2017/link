@@ -7,11 +7,11 @@ from .models import DeviceCategory, Device, Stream, Chart, Trigger, TriggerLog
 class BaseModelSerializer(serializers.ModelSerializer):
     create_user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
-    def update(self, instance, validated_data):
-        # create_user信息仅在create方法中使用
-        if 'create_user' in validated_data:
-            validated_data.pop('create_user')
-        return super(BaseModelSerializer, self).update(instance, validated_data)
+    # def update(self, instance, validated_data):
+    #     # create_user信息仅在create方法中使用
+    #     if 'create_user' in validated_data:
+    #         validated_data.pop('create_user')
+    #     return super(BaseModelSerializer, self).update(instance, validated_data)
 
 
 class DeviceCategorySerializer(BaseModelSerializer):
@@ -47,6 +47,26 @@ class DeviceSerializer(BaseModelSerializer):
 
 
 class StreamSerializer(BaseModelSerializer):
+    device_name = serializers.SerializerMethodField(read_only=True)
+    data_type_name = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_device_name(obj):
+        """
+        获取所属设备名称
+        :param obj: DeviceCategory
+        :return: string
+        """
+        return obj.device.name
+
+    @staticmethod
+    def get_data_type_name(obj):
+        """
+        获取数据类型名称
+        :param obj: DeviceCategory
+        :return: string
+        """
+        return obj.get_data_type_display()
 
     class Meta:
         model = Stream
@@ -54,7 +74,7 @@ class StreamSerializer(BaseModelSerializer):
 
     def create(self, validated_data):
         if settings.MAX_STREAM_NUM:
-            device = Device.objects.filter(id=self.initial_data["device"], create_user=serializers.CurrentUserDefault())
+            device = Device.objects.filter(id=self.initial_data["device"])
             if not device:
                 raise serializers.ValidationError('设备不存在！')
             if device[0].streams.count() >= settings.MAX_STREAM_NUM:
@@ -114,43 +134,6 @@ class ChartSerializer(BaseModelSerializer):
         return super(ChartSerializer, self).update(instance, validated_data)
 
 
-class DeviceDetailSerializer(BaseModelSerializer):
-    streams = StreamSerializer(many=True, required=False)
-    charts = ChartSerializer(many=True, required=False)
-    category_name = serializers.SerializerMethodField(read_only=True)
-
-    @staticmethod
-    def get_category_name(obj):
-        """
-        获取设备分类名称
-        :param obj: device object
-        :return: List[dict]
-        """
-        if obj.category:
-            return obj.category.name
-        else:
-            return None
-
-    class Meta:
-        model = Device
-        fields = ('id', 'client_id', 'category', 'category_name', 'name', 'desc', 'status', 'image', 'sequence', 'create_time',
-                  'update_time', 'last_connect_time', 'streams', 'charts', 'create_user')
-        read_only_fields = ('id', 'client_id', 'status', 'create_time', 'update_time', 'last_connect_time',)
-
-    def is_valid(self, raise_exception=False):
-        if self.initial_data.get("category"):
-            category = DeviceCategory.objects.filter(id=self.initial_data["category"], create_user=self.context.get('request').user)
-            if not category:
-                raise serializers.ValidationError('设备分类不存在！')
-        return super(DeviceDetailSerializer, self).is_valid(raise_exception)
-
-    def create(self, validated_data):
-        if settings.MAX_DEVICE_NUM:
-            if validated_data['create_user'].devices.count() >= settings.MAX_DEVICE_NUM:
-                raise serializers.ValidationError('超过最大创建数！')
-        return Device.objects.create(**validated_data)
-
-
 class TriggerSerializer(BaseModelSerializer):
 
     class Meta:
@@ -178,4 +161,55 @@ class TriggerSerializer(BaseModelSerializer):
         if 'trigger_type' in validated_data and validated_data['trigger_type'] != 'email':
             setattr(instance, validated_data.get('trigger_type'), None)
         return super(TriggerSerializer, self).update(instance, validated_data)
+
+
+class DeviceDetailSerializer(BaseModelSerializer):
+    create_user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    streams = StreamSerializer(many=True, required=False)
+    charts = ChartSerializer(many=True, required=False)
+    triggers = TriggerSerializer(many=True, required=False)
+    category_name = serializers.SerializerMethodField(read_only=True)
+    image_list = serializers.SerializerMethodField(read_only=True)
+
+    def get_image_list(self, instance):
+        request = self.context.get('request')
+        if instance.image:
+            image_list = instance.image.url
+            return [{'url': request.build_absolute_uri(image_list)}]
+        else:
+            return []
+
+    @staticmethod
+    def get_category_name(obj):
+        """
+        获取设备分类名称
+        :param obj: device object
+        :return: List[dict]
+        """
+        if obj.category:
+            return obj.category.name
+        else:
+            return None
+
+    class Meta:
+        model = Device
+        fields = ('id', 'client_id', 'category', 'category_name', 'name', 'desc', 'status', 'image', 'sequence', 'create_time',
+                  'update_time', 'last_connect_time', 'streams', 'charts', 'create_user', 'image_list', 'triggers')
+        read_only_fields = ('id', 'client_id', 'status', 'create_time', 'update_time', 'last_connect_time')
+
+    def is_valid(self, raise_exception=False):
+        if self.initial_data.get("category"):
+            print(self.context.get('request'))
+            category = DeviceCategory.objects.filter(id=self.initial_data["category"], create_user=self.context.get('request').user)
+            if not category:
+                raise serializers.ValidationError('设备分类不存在！')
+        return super(DeviceDetailSerializer, self).is_valid(raise_exception)
+
+    def create(self, validated_data):
+        if settings.MAX_DEVICE_NUM:
+            if self.context.get('request').user.devices.count() >= settings.MAX_DEVICE_NUM:
+                raise serializers.ValidationError('超过最大创建数！')
+        validated_data['create_user'] = self.context.get('request').user
+        return Device.objects.create(**validated_data)
+
 
