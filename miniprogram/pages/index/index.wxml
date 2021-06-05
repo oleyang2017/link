@@ -1,4 +1,0 @@
-<!--pages/index/index.wxml-->
-<text>pages/index/index.wxml</text>
-<button open-type="getUserInfo" bindgetuserinfo="login" class="margin-sm" type="primary">使用微信登录</button>
-    

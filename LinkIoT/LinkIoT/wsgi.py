@@ -1,5 +1,5 @@
 """
-WSGI config for LinkIoT project.
+WSGI service for LinkIoT project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

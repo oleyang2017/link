@@ -17,7 +17,7 @@ import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-sys.path.insert(0, BASE_DIR)
+# sys.path.insert(0, BASE_DIR)
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
+    'service',
     'emqx',
     'user',
     'device',
@@ -169,6 +170,14 @@ WX_SECRET = 'your wechat miniprogram secret'
 MAX_DEVICE_NUM = None
 # 每个设备数量最多可绑定的数据流限制
 MAX_STREAM_NUM = None
+
+# 腾讯云cos配置，可选，当前端无法获取cos临时密钥时会直接保存到服务器里面
+COS_CONFIG = {
+    'SECRET_ID': "your cos Secret Id",
+    'SECRET_KEY': "your cos Secret Key",
+    'BUCKET': 'your cos Bucket'
+}
+
 
 # debug模式下开启debug_toolbar显示
 if DEBUG:

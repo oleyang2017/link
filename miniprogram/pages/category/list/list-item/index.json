@@ -1,7 +1,0 @@
-{
-  "component": true,
-  "usingComponents": {
-    "van-swipe-cell": "../../../../external_components/swipe-cell/index",
-    "van-icon": "../../../../external_components/icon/index"
-  }
-}
