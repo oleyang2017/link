@@ -27,8 +27,8 @@ class Trigger(models.Model):
     id = ShortUUIDField(db_index=True, primary_key=True)
     device = models.ForeignKey('device.Device', related_name='triggers', verbose_name='设备', on_delete=models.CASCADE)
     stream = models.ForeignKey('device.Stream', related_name='triggers', verbose_name='数据流', on_delete=models.CASCADE)  # 对于
-    action = models.ForeignKey('action.Action', related_name='triggers', verbose_name='动作', null=True, blank=True, on_delete=models.DO_NOTHING)
-    action_item = models.ForeignKey('action.ActionItem', related_name='triggers', verbose_name='指令', null=True, blank=True, on_delete=models.DO_NOTHING)
+    # action = models.ForeignKey('action.Action', related_name='triggers', verbose_name='动作', null=True, blank=True, on_delete=models.DO_NOTHING)
+    # action_item = models.ForeignKey('action.ActionItem', related_name='triggers', verbose_name='指令', null=True, blank=True, on_delete=models.DO_NOTHING)
     url = models.URLField(verbose_name='URL', blank=True, default='')
     condition = models.CharField(max_length=8, verbose_name='触发条件', choices=CONDITION_CHOICE, default='==')
     threshold_value = models.FloatField(verbose_name='阈值', default=0)

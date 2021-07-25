@@ -31,7 +31,7 @@ SECRET_KEY = '*ahhox%k)*#to$q2ms)kuqkg^74b0bm90=%1#8d^fbt84&p85q'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
+    '*',
 ]
 
 # Application definition
@@ -44,12 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'cacheops',
     'django_filters',
-    'service',
     'emqx',
     'user',
     'device',
-    'action'
+    # 'action'
 ]
 
 MIDDLEWARE = [
@@ -153,6 +153,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
 }
 
 # 默认设置JWT有效期为7天
@@ -172,12 +175,21 @@ MAX_DEVICE_NUM = None
 MAX_STREAM_NUM = None
 
 # 腾讯云cos配置，可选，当前端无法获取cos临时密钥时会直接保存到服务器里面
-COS_CONFIG = {
-    'SECRET_ID': "your cos Secret Id",
-    'SECRET_KEY': "your cos Secret Key",
-    'BUCKET': 'your cos Bucket'
+
+T_CLOUD_SECRET_ID = "your cos Secret Id"
+T_CLOUD_SECRET_KEY = "your cos Secret Key"
+T_CLOUD_BUCKET = 'your cos Bucket'
+T_CLOUD_REGION = 'your cos region'
+
+CACHEOPS_REDIS = {
+    'host': 'localhost',
+    'port': 6379,
+    'db': 0,
 }
 
+CACHEOPS = {
+    'device.*': {'ops': 'all', 'timeout': 60*15},
+}
 
 # debug模式下开启debug_toolbar显示
 if DEBUG:

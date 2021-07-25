@@ -10,7 +10,7 @@ class Action(models.Model):
     """
     id = ShortUUIDField(db_index=True, primary_key=True)
     show = models.BooleanField(default=True, verbose_name='首页显示')
-    name = models.CharField(max_length=8, verbose_name='动作名称')
+    name = models.CharField(max_length=8, verbose_name='名称')
     device = models.ForeignKey('device.Device', related_name='actions', verbose_name='所属设备', blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
@@ -35,6 +35,31 @@ class Action(models.Model):
                 'content': content,
                 'operator': operator
             })
+
+
+class BaseActionItem(models.Model):
+    QOS_CHOICE = (
+        (0, '0'),
+        (1, '1'),
+        (2, '2')
+    )
+    ACTION_TYPE_CHOICE = (
+        ('none', '普通'),
+        ('button', '按钮'),
+        ('switch', '开关'),
+        ('slider', '滑块'),
+    )
+    device = models.ForeignKey('device.Device', related_name='action_items', verbose_name='所属设备', blank=True, null=True, on_delete=models.SET_NULL)
+    action = models.ForeignKey(Action, related_name='items', on_delete=models.CASCADE)
+    name = models.CharField(max_length=8, blank=True, verbose_name='指令名称')
+    action_type = models.CharField(max_length=8, choices=ACTION_TYPE_CHOICE, default='button', verbose_name='动作类型')
+    topic = models.CharField(max_length=32, verbose_name='topic')
+    qos = models.IntegerField(choices=QOS_CHOICE, default=0, verbose_name='qos')
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    update_time = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+
+    class Meta:
+        abstract = True
 
 
 class ActionItem(models.Model):
@@ -91,7 +116,7 @@ class ActionLog(models.Model):
     """
     动作日志
     """
-    device = models.ForeignKey('device.Device', related_name='action_logs', verbose_name='接收设备', on_delete=models.CASCADE)
+    device = models.ForeignKey('device.Device', related_name='logs', verbose_name='接收设备', on_delete=models.CASCADE)
     operator = models.CharField(max_length=32, verbose_name='操作人', default='')
     action = models.ForeignKey(Action, related_name="logs", verbose_name='动作详情', null=True, blank=True, on_delete=models.SET_NULL)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='执行时间')

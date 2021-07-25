@@ -23,6 +23,7 @@ class Stream(models.Model):
     name = models.CharField(max_length=16, verbose_name='名称')
     device = models.ForeignKey('device.Device', related_name='streams', verbose_name='所属设备', on_delete=models.CASCADE)
     create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='streams', verbose_name='创建人', on_delete=models.CASCADE)
+    unit_name = models.CharField(max_length=8,  blank=True, default='', verbose_name='单位名称')
     unit = models.CharField(max_length=8,  blank=True, default='', verbose_name='单位')
     qos = models.IntegerField(choices=QOS_CHOICE, default=0, verbose_name='Qos')
     data_type = models.CharField(max_length=8, default='int', choices=DATA_TYPE_CHOICE, verbose_name='数据类型')

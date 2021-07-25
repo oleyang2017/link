@@ -58,7 +58,7 @@ class DeviceViewSet(BaseModelViewSet):
         return Response(serializer.data)
 
 
-class CategoryViewSet(BaseModelViewSet):
+class CategoryViewSet(viewsets.ModelViewSet):
 
     serializer_class = DeviceCategorySerializer
     lookup_field = 'id'
@@ -81,7 +81,7 @@ class CategoryViewSet(BaseModelViewSet):
         return Response({})
 
 
-class StreamViewSet(BaseModelViewSet):
+class StreamViewSet(viewsets.ModelViewSet):
     serializer_class = StreamSerializer
     lookup_field = 'id'
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -99,7 +99,7 @@ class StreamViewSet(BaseModelViewSet):
         serializer.save(create_user=self.request.user)
 
 
-class ChartViewSet(BaseModelViewSet):
+class ChartViewSet(viewsets.ModelViewSet):
     serializer_class = ChartSerializer
     lookup_field = 'id'
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -121,7 +121,7 @@ class ChartViewSet(BaseModelViewSet):
         # TODO: 从数据模型中取出前端所需要的dataset
 
 
-class TriggerViewSet(BaseModelViewSet):
+class TriggerViewSet(viewsets.ModelViewSet):
     serializer_class = TriggerSerializer
     lookup_field = 'id'
     filter_backends = (DjangoFilterBackend, OrderingFilter)

@@ -169,15 +169,15 @@ class DeviceDetailSerializer(BaseModelSerializer):
     charts = ChartSerializer(many=True, required=False)
     triggers = TriggerSerializer(many=True, required=False)
     category_name = serializers.SerializerMethodField(read_only=True)
-    image_list = serializers.SerializerMethodField(read_only=True)
+    # image_list = serializers.SerializerMethodField(read_only=True)
 
-    def get_image_list(self, instance):
-        request = self.context.get('request')
-        if instance.image:
-            image_list = instance.image.url
-            return [{'url': request.build_absolute_uri(image_list)}]
-        else:
-            return []
+    # def get_image_list(self, instance):
+    #     request = self.context.get('request')
+    #     if instance.image:
+    #         image_list = instance.image.url
+    #         return [{'url': request.build_absolute_uri(image_list)}]
+    #     else:
+    #         return []
 
     @staticmethod
     def get_category_name(obj):
@@ -194,7 +194,7 @@ class DeviceDetailSerializer(BaseModelSerializer):
     class Meta:
         model = Device
         fields = ('id', 'client_id', 'category', 'category_name', 'name', 'desc', 'status', 'image', 'sequence', 'create_time',
-                  'update_time', 'last_connect_time', 'streams', 'charts', 'create_user', 'image_list', 'triggers')
+                  'update_time', 'last_connect_time', 'streams', 'charts', 'create_user', 'triggers')
         read_only_fields = ('id', 'client_id', 'status', 'create_time', 'update_time', 'last_connect_time')
 
     def is_valid(self, raise_exception=False):
