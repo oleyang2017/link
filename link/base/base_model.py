@@ -13,9 +13,10 @@ class BaseModel(models.Model):
     manager
     缓存
     """
-    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='device_categories', verbose_name='创建人', on_delete=models.CASCADE)
+    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='创建人', on_delete=models.SET_NULL)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name='更新时间')
+    deleted = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
