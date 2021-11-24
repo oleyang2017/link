@@ -1,0 +1,45 @@
+{
+  "pages":[
+    "pages/device/index",
+    "pages/login/index",
+    "pages/category/list/index",
+    "pages/category/detail/index",
+    
+    "pages/device/list/index",
+    "pages/device/detail/index",
+    "pages/device/edit/index",
+    "pages/index/index",
+    "pages/stream/list/index",
+    "pages/stream/edit/index",
+    "pages/trigger/list/index"
+  ],
+  "window":{
+    "backgroundColor": "#f6f8fa",
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#f6f8fa",
+    "navigationBarTextStyle":"black"
+  },
+  "tabBar": {
+    "color": "#000000",
+    "selectedColor": "#494949",
+    "list": [
+     {
+       "pagePath": "pages/device/index",
+       "text": "设备"
+     },
+     {
+      "pagePath": "pages/index/index",
+      "text": "设备"
+    },
+    {
+      "pagePath": "pages/login/index",
+      "text": "设备"
+    }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000
+  },
+  
+  "sitemapLocation": "sitemap.json"
+}

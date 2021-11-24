@@ -1,0 +1,13 @@
+{
+  "usingComponents": {
+    "van-tab": "../../external_components/tab/index",
+    "van-tabs": "../../external_components/tabs/index",
+    "van-overlay": "../../external_components/overlay/index",
+    "van-panel": "../../external_components/panel/index",
+    "van-button": "../../external_components/button/index",
+    "van-empty": "../../external_components/empty/index",
+    "van-icon": "../../external_components/icon/index",
+    "van-image": "../../external_components/image/index"
+  },
+  "disableScroll": true
+}

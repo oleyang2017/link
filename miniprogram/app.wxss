@@ -1,0 +1,13 @@
+/**app.wxss**/
+@import "static/main.wxss";
+@import "static/icon.wxss";
+@import "static/animation.wxss";
+@import "static/fontAwesome.wxss";
+page {
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica,
+    Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei',
+    sans-serif;
+    background-color: #f6f8fa;
+    min-height: 100vh;
+    position: relative;
+}

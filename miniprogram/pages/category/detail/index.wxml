@@ -1,0 +1,12 @@
+<view>
+  <van-cell title="分类名称" is-link value="{{name}}" bind:click="showDialog"/>
+  <van-cell title="设备数量" is-link value="{{device_count}}" url="{{'/pages/device/list/index?category=' + id}}" />
+  <van-cell title="创建时间" value="{{create_time}}" />
+  <van-button type="danger" size="large"  custom-style="width:90%; margin: 30px 5%" bind:click="deleteCategory">删除</van-button>
+
+  <van-dialog close-on-click-overlay use-slot show="{{ showDialog }}" show-cancel-button width="{{ 300 }}" bind:confirm="updateCategory">
+    <view class="dialog-title">修改名称</view>
+    <input class="dialog-input" value="{{name}}" maxlength="8" bindinput="bindKeyInput" placeholder="分类名称" />
+  </van-dialog>
+
+</view>
