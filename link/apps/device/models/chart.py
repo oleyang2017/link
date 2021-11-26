@@ -4,14 +4,14 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete, post_init
 
 from .stream import Stream
-from utils.field_extend import ShortUUIDField
+from shortuuid.django_fields import ShortUUIDField
 
 
 class Chart(models.Model):
     """
     历史数据图表
     """
-    id = ShortUUIDField(db_index=True, primary_key=True)
+    chart_id = ShortUUIDField(db_index=True, unique=True,)
     device = models.ForeignKey('device.Device', related_name='charts', on_delete=models.CASCADE)
     streams = models.ManyToManyField('device.Stream', related_name='charts')
     title = models.CharField(max_length=16, verbose_name='标题')

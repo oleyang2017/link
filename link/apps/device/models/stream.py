@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 
-from utils.field_extend import ShortUUIDField
+from shortuuid.django_fields import ShortUUIDField
 
 
 class Stream(models.Model):
@@ -19,7 +19,7 @@ class Stream(models.Model):
         ('bool', '布尔型（bool）'),
         ('char', '字符型（char）'),
     )
-    id = ShortUUIDField(db_index=True, unique=True, verbose_name='数据流ID', primary_key=True)
+    stream_id = ShortUUIDField(db_index=True, unique=True, verbose_name='数据流ID')
     name = models.CharField(max_length=16, verbose_name='名称')
     device = models.ForeignKey('device.Device', related_name='streams', verbose_name='所属设备', on_delete=models.CASCADE)
     create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='streams', verbose_name='创建人', on_delete=models.CASCADE)

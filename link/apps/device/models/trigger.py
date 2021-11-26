@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 
-from utils.field_extend import ShortUUIDField
+from shortuuid.django_fields import ShortUUIDField
 
 
 class Trigger(models.Model):
@@ -24,7 +24,7 @@ class Trigger(models.Model):
         # 对非char的数据流开放，当数值发生变化时触发
         ('change', 'change'),
     )
-    id = ShortUUIDField(db_index=True, primary_key=True)
+    trigger_id = ShortUUIDField(db_index=True, unique=True,)
     device = models.ForeignKey('device.Device', related_name='triggers', verbose_name='设备', on_delete=models.CASCADE)
     stream = models.ForeignKey('device.Stream', related_name='triggers', verbose_name='数据流', on_delete=models.CASCADE)  # 对于
     # action = models.ForeignKey('action.Action', related_name='triggers', verbose_name='动作', null=True, blank=True, on_delete=models.DO_NOTHING)
