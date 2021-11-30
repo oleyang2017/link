@@ -2,16 +2,7 @@ from django.conf import settings
 from rest_framework import serializers
 
 from .models import DeviceCategory, Device, Stream, Chart, Trigger, TriggerLog
-
-
-class BaseModelSerializer(serializers.ModelSerializer):
-    create_user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-
-    # def update(self, instance, validated_data):
-    #     # create_user信息仅在create方法中使用
-    #     if 'create_user' in validated_data:
-    #         validated_data.pop('create_user')
-    #     return super(BaseModelSerializer, self).update(instance, validated_data)
+from base.base_serializers import BaseModelSerializer
 
 
 class DeviceCategorySerializer(BaseModelSerializer):
@@ -193,13 +184,12 @@ class DeviceDetailSerializer(BaseModelSerializer):
 
     class Meta:
         model = Device
-        fields = ('id', 'client_id', 'category', 'category_name', 'name', 'desc', 'status', 'image', 'sequence', 'create_time',
+        fields = ('id', 'client_id', 'category', 'category_name', 'name', 'desc', 'status', 'image', 'sequence', 'created_time',
                   'update_time', 'last_connect_time', 'streams', 'charts', 'create_user', 'triggers')
-        read_only_fields = ('id', 'client_id', 'status', 'create_time', 'update_time', 'last_connect_time')
+        read_only_fields = ('id', 'client_id', 'status', 'created_time', 'update_time', 'last_connect_time')
 
     def is_valid(self, raise_exception=False):
         if self.initial_data.get("category"):
-            print(self.context.get('request'))
             category = DeviceCategory.objects.filter(id=self.initial_data["category"], create_user=self.context.get('request').user)
             if not category:
                 raise serializers.ValidationError('设备分类不存在！')
@@ -207,9 +197,9 @@ class DeviceDetailSerializer(BaseModelSerializer):
 
     def create(self, validated_data):
         if settings.MAX_DEVICE_NUM:
-            if self.context.get('request').user.devices.count() >= settings.MAX_DEVICE_NUM:
+            if Device.objects.count() >= settings.MAX_DEVICE_NUM:
                 raise serializers.ValidationError('超过最大创建数！')
-        validated_data['create_user'] = self.context.get('request').user
+        print(validated_data)
         return Device.objects.create(**validated_data)
 
 

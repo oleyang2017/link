@@ -6,31 +6,22 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import Trigger, DeviceCategory
+from .models import Trigger, DeviceCategory, Device
 from .serializers import (
     DeviceSerializer, DeviceDetailSerializer, DeviceCategorySerializer,
     StreamSerializer, ChartSerializer, TriggerSerializer
 )
-
-
-class BaseModelViewSet(viewsets.ModelViewSet):
-
-    # 由于微信小程序不支持patch方法，所以这里默认部分更新
-    def get_serializer(self, *args, **kwargs):
-        kwargs['partial'] = True
-        return super(BaseModelViewSet, self).get_serializer(*args, **kwargs)
+from base.base_viewsets import BaseModelViewSet
 
 
 class DeviceViewSet(BaseModelViewSet):
 
     serializer_class = DeviceSerializer
-    lookup_field = 'id'
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
+
     filter_fields = ('category',)
     ordering_fields = ('sequence',)
+    queryset = Device.objects
 
-    def get_queryset(self):
-        return self.request.user.devices
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
