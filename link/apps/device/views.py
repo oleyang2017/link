@@ -15,13 +15,11 @@ from base.base_viewsets import BaseModelViewSet
 
 
 class DeviceViewSet(BaseModelViewSet):
-
+    lookup_field = 'device_id'
     serializer_class = DeviceSerializer
-
     filter_fields = ('category',)
     ordering_fields = ('sequence',)
     queryset = Device.objects
-
 
     def get_serializer_class(self):
         if self.request.method == 'GET':

@@ -155,7 +155,6 @@ class TriggerSerializer(BaseModelSerializer):
 
 
 class DeviceDetailSerializer(BaseModelSerializer):
-    create_user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     streams = StreamSerializer(many=True, required=False)
     charts = ChartSerializer(many=True, required=False)
     triggers = TriggerSerializer(many=True, required=False)
@@ -199,6 +198,7 @@ class DeviceDetailSerializer(BaseModelSerializer):
         if settings.MAX_DEVICE_NUM:
             if Device.objects.count() >= settings.MAX_DEVICE_NUM:
                 raise serializers.ValidationError('超过最大创建数！')
+        print(self.context['request'].user)
         print(validated_data)
         return Device.objects.create(**validated_data)
 

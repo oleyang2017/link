@@ -10,8 +10,7 @@ class BaseManager(models.Manager):
 
     def get_queryset(self):
         self.check_deleted_field()
-
-        return super().get_queryset().filter(deleted=False)
+        return super(BaseManager, self).get_queryset().filter(deleted=False)
 
     def check_deleted_field(self):
         try:
