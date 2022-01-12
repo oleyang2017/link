@@ -1,12 +1,12 @@
 {
   "usingComponents": {
-    "van-tab": "../../../external_components/tab/index",
-    "van-tabs": "../../../external_components/tabs/index",
-    "van-panel": "../../../external_components/panel/index",
-    "van-tag": "../../../external_components/tag/index",
-    "van-empty": "../../../../external_components/empty/index",
-    "van-cell": "../../../../external_components/cell/index",
-    "van-image": "../../../../external_components/image/index"
+    "van-tab": "@vant/weapp/tab/index",
+    "van-tabs": "@vant/weapp/tabs/index",
+    "van-panel": "@vant/weapp/panel/index",
+    "van-tag": "@vant/weapp/tag/index",
+    "van-empty": "@vant/weapp/empty/index",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-image": "@vant/weapp/image/index"
   },
   "navigationBarBackgroundColor": "#ffffff"
 }

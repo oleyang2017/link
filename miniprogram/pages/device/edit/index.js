@@ -5,7 +5,7 @@ import {
   DEFAULT_BUCKET,
   DEFAULT_REGION
 } from '../../../api/upload'
-import Toast from '../../../external_components/toast/toast'
+import Toast from '@vant/weapp//toast/toast'
 const app = getApp()
 
 Page({

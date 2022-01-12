@@ -1,8 +1,8 @@
 {
   "usingComponents": {
-    "van-swipe-cell": "../../../../external_components/swipe-cell/index",
-    "van-icon": "../../../../external_components/icon/index",
-    "van-dialog": "../../../../external_components/dialog/index",
-    "van-empty": "../../../../external_components/empty/index"
+    "van-swipe-cell": "@vant/weapp/swipe-cell/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-empty": "@vant/weapp/empty/index"
   }
 }

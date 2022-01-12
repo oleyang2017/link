@@ -1,13 +1,13 @@
 {
   "usingComponents": {
-    "van-tab": "../../external_components/tab/index",
-    "van-tabs": "../../external_components/tabs/index",
-    "van-overlay": "../../external_components/overlay/index",
-    "van-panel": "../../external_components/panel/index",
-    "van-button": "../../external_components/button/index",
-    "van-empty": "../../external_components/empty/index",
-    "van-icon": "../../external_components/icon/index",
-    "van-image": "../../external_components/image/index"
+    "van-tab": "@vant/weapp/tab/index",
+    "van-tabs": "@vant/weapp/tabs/index",
+    "van-overlay": "@vant/weapp/overlay/index",
+    "van-panel": "@vant/weapp/panel/index",
+    "van-button": "@vant/weapp/button/index",
+    "van-empty": "@vant/weapp/empty/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-image": "@vant/weapp/image/index"
   },
   "disableScroll": true
 }

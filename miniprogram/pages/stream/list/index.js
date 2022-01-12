@@ -1,5 +1,5 @@
 import streamApi from '../../../api/stream'
-import Dialog from '../../../external_components/dialog/dialog'
+import Dialog from '@vant/weapp//dialog/dialog'
 
 Page({
   data: {

@@ -1,7 +1,7 @@
 import streamApi from '../../../api/stream'
 import deviceApi from '../../../api/device'
-import Dialog from '../../../external_components/dialog/dialog'
-import Toast from '../../../external_components/toast/toast'
+import Dialog from '@vant/weapp//dialog/dialog'
+import Toast from '@vant/weapp//toast/toast'
 
 Page({
 
