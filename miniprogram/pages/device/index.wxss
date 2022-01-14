@@ -65,75 +65,19 @@
 .category-popup .category-item .count{
   display: inline-block;
   color: #98999a;
-  right: 10rpx;
+  right: 0;
   text-align: center;
   line-height: 20px;
   position: absolute;
 }
 .device-scroll-container{
-  display: flex;
+  /* display: flex;
   justify-content: space-between;
   flex-direction: row;
-  flex-wrap: wrap;
-  padding-bottom: 80px;
+  flex-wrap: wrap; */
+  padding: 6px 4px 80px;
 }
-.device-scroll-container .card-container {
-  width: 48%;
-  display: inline-block;
-  vertical-align: top;
-  margin-bottom: 40rpx;
-  padding: 20rpx;
-  height: 180rpx;
-  border-radius: 20rpx;
-  box-shadow: 0 4rpx 14rpx -8rpx #888888;
-  position: relative;
-}
-.device-scroll-container .card-container .name{
-  display: inline-block;
-  font-size: 30rpx;
-  padding-bottom: 10rpx;
-  max-width: 70%;
-  overflow: hidden;
-  text-overflow:ellipsis;
-  white-space: nowrap;
-}
-.device-scroll-container .card-container .last-value{
-  display: inline-block;
-  font-size: 30rpx;
-  padding-bottom: 10rpx;
-  max-width: 20%;
-  overflow: hidden;
-  text-overflow:ellipsis;
-  white-space: nowrap;
-}
-.device-scroll-container .card-container .tag{
-  display: inline-block;
-  position: absolute;
-  padding: 4rpx 8rpx;
-  /* background-color: #ecedef; */
-  /* color: #aeaeae; */
-  border-radius: 4rpx;
-  font-size: 20rpx;
-  right: 20rpx;
-  max-width: 94rpx;
-  overflow: hidden;
-  white-space: nowrap;
-}
-.device-scroll-container .card-container .status{
-  font-size: 20rpx;
-  padding-bottom: 10rpx;
-  display: inline-block;
-}
-.device-scroll-container .card-container .pic{
-  height: 48rpx;
-  max-width: 96rpx;
-}
-.device-scroll-container .card-container .show-data{
-  position: absolute;
-  font-size: 28rpx;
-  right: 20rpx;
-  bottom: 16rpx;
-}
+
 .head-icon{
   line-height: 80rpx;
   text-align: center;

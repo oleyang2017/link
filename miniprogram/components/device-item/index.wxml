@@ -1,0 +1,10 @@
+<view class="bg-white text-black card-container" bindtap="_toDeviceDetail" data-id="{{deviceId}}">
+  <view>
+    <view class="name">{{name}}</view>
+    <view class="fr last-value text-gray">{{lastValue}}</view>
+  </view>
+  <view class="status {{status ? 'text-blue':'text-grey'}}">设备{{status?'在线':'离线'}}</view>
+  <view>
+    <van-image wx:if="{{image}}" src="{{image}}" fit="cover" width="24" height="24" radius="4"></van-image>
+  </view>
+</view>

@@ -1,10 +1,4 @@
-<wxs module="fn">
-  module.exports = {
-    delay: function (index) {
-      return Math.round(index / 2 + 0.5) * 0.1
-    },
-  }
-</wxs>
+
 <view class="container">
   <view>
     <view class="title">我的设备</view>
@@ -17,18 +11,8 @@
       <van-tab wx:for="{{category}}" wx:key="id" name="{{item.id}}" title="{{item.name}}" title-style="font-size:16px;text-align: left;">
         <scroll-view style="height: calc(100vh);" scroll-y>
           <view class="device-scroll-container">
-            <block wx:for="{{item.device}}" wx:key="id">
-              <view class="bg-white text-black card-container animation-slide-top"
-                style="animation-delay: {{fn.delay(index+1)}}s;" bindtap="toDetail" data-id="{{item.id}}">
-                <view>
-                  <view class="name">{{item.name}}</view>
-                  <view class="fr last-value text-gray">{{item.last_value}}</view>
-                </view>
-                <view class="status {{item.status ? 'text-blue':'text-grey'}}">设备{{item.status?'在线':'离线'}}</view>
-                <view>
-                  <van-image wx:if="{{item.image}}" src="{{item.image}}" fit="cover" width="24" height="24" radius="4"></van-image>
-                </view>
-              </view>
+            <block wx:for="{{item.device}}" wx:key="id" wx:for-index="index">
+              <device-item deviceId="{{item.id}}" index="{{index}}" name="{{item.name}}" status="{{item.status}}" image="{{item.image}}" />
             </block>
             <block wx:if="{{!item.device.length}}">
               <van-empty  wx:if="{{!categoryData.length}}" style="width: 100%">
