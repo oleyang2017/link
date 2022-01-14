@@ -53,7 +53,7 @@
     <van-overlay show="{{showMask}}" bind:click='showMask' duration="{{0}}">
       <view class="category-popup">
         <scroll-view scroll-y style="height: {{popupHeight}}">
-          <view class="category-item" wx:for="{{category}}" wx:key="id" data-id="{{item.id}}" bindtap="changeCategory">
+          <view class="category-item" wx:for="{{category}}" wx:key="id" data-id="{{item.id}}" wx:if="{{item.id}}" bindtap="changeCategory">
             <view wx:if="{{item.id}}">
               <view class="name">{{item.name}}</view>
               <view class="count">{{item.device_count}}</view>
