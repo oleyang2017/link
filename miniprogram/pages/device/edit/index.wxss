@@ -11,5 +11,5 @@
 }
 .custom-cell .context{
   display: inline-block; 
-  padding-left: 29%
+  padding-left: 28%
 }
