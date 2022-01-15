@@ -1,7 +1,6 @@
 
 .card-container {
-  /* width: 342rpx; */
-  width: 48%;
+  width: 330rpx;
   display: inline-block;
   vertical-align: top;
   margin: 0 1% 40rpx;

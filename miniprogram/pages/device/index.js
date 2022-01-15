@@ -39,12 +39,6 @@ Page({
       }
     }
     category.push({name: '未分类', device: noCategory})
-    let category_len = category.length
-    if(category_len < 4){
-      for(let i = 0; i < 4 - category_len; i++){
-        category.push({name:""})
-      }
-    }
     this.setData({
       category,
       refresh: false,

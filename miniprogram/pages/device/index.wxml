@@ -11,9 +11,14 @@
       <van-tab wx:for="{{category}}" wx:key="id" name="{{item.id}}" title="{{item.name}}" title-style="font-size:16px;text-align: left;">
         <scroll-view style="height: calc(100vh);" scroll-y>
           <view class="device-scroll-container">
-            <block wx:for="{{item.device}}" wx:key="id" wx:for-index="index">
-              <device-item deviceId="{{item.id}}" index="{{index}}" name="{{item.name}}" status="{{item.status}}" image="{{item.image}}" />
-            </block>
+            <van-grid column-num="2" use-slot  border="{{false}}">
+              <van-grid-item use-slot wx:for="{{item.device}}" wx:key="index" wx:for-item="item">
+                <device-item deviceId="{{item.id}}" index="{{index}}" name="{{item.name}}" status="{{item.status}}" image="{{item.image}}" />
+              </van-grid-item>
+              <!-- <block wx:for="{{item.device}}" wx:key="id" wx:for-index="index">
+                
+              </block> -->
+            </van-grid>
             <block wx:if="{{!item.device.length}}">
               <van-empty  wx:if="{{!categoryData.length}}" style="width: 100%">
                 <view class="text-gray text-sm padding-top-xl text-center" style="width: 100%">

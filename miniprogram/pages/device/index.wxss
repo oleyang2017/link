@@ -75,11 +75,17 @@
   justify-content: space-between;
   flex-direction: row;
   flex-wrap: wrap; */
-  padding: 6px 4px 80px;
+  padding-bottom: 80px;
 }
 
 .head-icon{
   line-height: 80rpx;
   text-align: center;
   font-size: 34rpx;
+}
+/* .custom-grid-item-class{
+  background-color:transparent;
+} */
+.van-grid-item__content{
+  background-color:transparent !important;
 }
