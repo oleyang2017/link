@@ -1,5 +1,5 @@
-// const API_BASE_URL = 'http://127.0.0.1:8000/'
-const API_BASE_URL = 'https://www.iotforfml.cn/'
+const API_BASE_URL = 'http://192.168.0.102:8000/'
+// const API_BASE_URL = 'https://www.iotforfml.cn/'
 const DEFAULT_BUCKET = 'iot-1253390446'
 const DEFAULT_REGION = 'ap-shanghai'
 

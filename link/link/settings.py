@@ -187,9 +187,9 @@ CACHEOPS_REDIS = {
     'db': 0,
 }
 
-CACHEOPS = {
-    'device.*': {'ops': 'all', 'timeout': 60*15},
-}
+# CACHEOPS = {
+#     'device.*': {'ops': 'all', 'timeout': 60*15},
+# }
 
 # debug模式下开启debug_toolbar显示
 if DEBUG:

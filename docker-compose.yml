@@ -1,0 +1,41 @@
+services:
+  mqtt:
+    image: "emqx/emqx:latest"
+    depends_on:
+      - db
+    network_mode: "host"
+    environment:
+      - "EMQX_LOADED_PLUGINS=emqx_dashboard,emqx_auth_pgsql,emqx_exhook"
+      - "EMQX_ALLOW_ANONYMOUS=false"
+      - "EMQX_ACL_NOMATCH=deny"
+      - "EMQX_ACL_DENY_ACTION=disconnect"
+      - "EMQX_AUTH__PGSQL__SERVER=127.0.0.1:5432"
+      - "EMQX_AUTH__PGSQL__USERNAME=admin"
+      - "EMQX_AUTH__PGSQL__PASSWORD=admin"
+      - "EMQX_AUTH__PGSQL__PASSWORD_HASH=plain"
+      - "EMQX_AUTH__PGSQL__DATABASE=link_iot"
+      - "EMQX_AUTH__PGSQL__AUTH_QUERY=select token from device_device where client_id = '%u' limit 1"
+      - "EMQX_AUTH__PGSQL__ACL_QUERY=select allow, ipaddr, username, clientid, access, topic from mqtt_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c"
+      - "EMQX_EXHOOK__SERVER__DEFAULT__URL=http://0.0.0.0:9000"
+
+  reids:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+
+  db:
+    image: "postgres:12"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_USER: "admin"
+      POSTGRES_DB: "link_iot"
+    volumes:
+      - "/Users/fanmlei/Desktop/link-iot/data/pg:/var/lib/postgresql/data"
+  mysql:
+     image: "mysql:5.6"
+     ports:
+       - "3306:3306"
+     environment:
+       MYSQL_ROOT_PASSWORD: "123456"

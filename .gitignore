@@ -148,3 +148,5 @@ cython_debug/
 # miniprogram
 miniprogram_npm/
 node_modules/
+
+data/

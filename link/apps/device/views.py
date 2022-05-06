@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import Trigger, DeviceCategory, Device
+from .models import Trigger, DeviceCategory, Device, Stream
 from .serializers import (
     DeviceSerializer, DeviceDetailSerializer, DeviceCategorySerializer,
     StreamSerializer, ChartSerializer, TriggerSerializer
@@ -15,10 +15,11 @@ from base.base_viewsets import BaseModelViewSet
 
 
 class DeviceViewSet(BaseModelViewSet):
-    lookup_field = 'device_id'
+    lookup_field = 'id'
     serializer_class = DeviceSerializer
-    filter_fields = ('category',)
-    ordering_fields = ('sequence',)
+    filter_fields = ['category']
+    ordering_fields = ['sequence', 'created_time']
+    ordering = ['sequence', '-created_time']
     queryset = Device.objects
 
     def get_serializer_class(self):
@@ -70,23 +71,18 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return Response({})
 
 
-class StreamViewSet(viewsets.ModelViewSet):
+class StreamViewSet(BaseModelViewSet):
     serializer_class = StreamSerializer
     lookup_field = 'id'
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     filter_fields = ('device',)
+    queryset = Stream.objects
 
-    def get_queryset(self):
-        return self.request.user.streams
 
     def get_serializer_context(self):
         ret = super(StreamViewSet, self).get_serializer_context()
         ret['user'] = self.request.user
         return ret
-
-    def perform_create(self, serializer):
-        serializer.save(create_user=self.request.user)
-
 
 class ChartViewSet(viewsets.ModelViewSet):
     serializer_class = ChartSerializer
