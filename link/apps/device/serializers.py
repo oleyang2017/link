@@ -205,4 +205,4 @@ class DeviceDetailSerializer(BaseModelSerializer):
             current_num = Device.objects.filter(create_user=validated_data['create_user'], deleted=False).count()
             if current_num >= settings.MAX_DEVICE_NUM:
                 raise serializers.ValidationError('超过最大创建数！')
-        return Device.objects.create(**validated_data)
+        return super(DeviceDetailSerializer, self).create(validated_data)
