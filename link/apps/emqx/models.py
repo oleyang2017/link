@@ -37,7 +37,7 @@ def remove_acl_device(sender, instance, **kwargs):
 @receiver(post_save, sender=Stream, dispatch_uid='add_acl_stream')
 def add_acl_stream(sender, instance, **kwargs):
     if kwargs.get('created'):
-        MQTTAcl.objects.create(allow=1, clientid=instance.device.client_id, access=3, topic='stream/{stream_id}/'.format(stream_id=instance.id))
+        MQTTAcl.objects.create(allow=1, clientid=instance.device_id.client_id, access=3, topic='stream/{stream_id}/'.format(stream_id=instance.id))
 
 
 @receiver(post_delete, sender=Stream, dispatch_uid='remove_acl_stream')

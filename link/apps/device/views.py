@@ -1,17 +1,17 @@
 from datetime import datetime, timedelta
 
-from rest_framework import viewsets
-from rest_framework.filters import OrderingFilter
-from rest_framework.decorators import action
-from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.filters import OrderingFilter
+from rest_framework.response import Response
 
-from .models import Trigger, DeviceCategory, Device, Stream
+from base.base_viewsets import BaseModelViewSet
+from .models import DeviceCategory, Device, Stream
 from .serializers import (
     DeviceSerializer, DeviceDetailSerializer, DeviceCategorySerializer,
     StreamSerializer, ChartSerializer, TriggerSerializer
 )
-from base.base_viewsets import BaseModelViewSet
 
 
 class DeviceViewSet(BaseModelViewSet):
@@ -49,7 +49,6 @@ class DeviceViewSet(BaseModelViewSet):
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
-
     serializer_class = DeviceCategorySerializer
     lookup_field = 'id'
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -75,14 +74,14 @@ class StreamViewSet(BaseModelViewSet):
     serializer_class = StreamSerializer
     lookup_field = 'id'
     filter_backends = (DjangoFilterBackend, OrderingFilter)
-    filter_fields = ('device',)
-    queryset = Stream.objects
+    filter_fields = ['device_id', 'name', 'data_type']
+    queryset = Stream.objects.filter(device_id__deleted=False)
 
+    # def get_serializer_context(self):
+    #     ret = super(StreamViewSet, self).get_serializer_context()
+    #     ret['user'] = self.request.user
+    #     return ret
 
-    def get_serializer_context(self):
-        ret = super(StreamViewSet, self).get_serializer_context()
-        ret['user'] = self.request.user
-        return ret
 
 class ChartViewSet(viewsets.ModelViewSet):
     serializer_class = ChartSerializer

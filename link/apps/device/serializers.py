@@ -1,8 +1,8 @@
 from django.conf import settings
 from rest_framework import serializers
 
-from .models import DeviceCategory, Device, Stream, Chart, Trigger, TriggerLog
 from base.base_serializers import BaseModelSerializer
+from .models import DeviceCategory, Device, Stream, Chart, Trigger
 
 
 class DeviceCategorySerializer(BaseModelSerializer):
@@ -44,29 +44,29 @@ class StreamSerializer(BaseModelSerializer):
     def get_device_name(obj):
         """
         获取所属设备名称
-        :param obj: DeviceCategory
-        :return: string
         """
-        return obj.device.name
+        return obj.device_id.name
 
     @staticmethod
     def get_data_type_name(obj):
         """
         获取数据类型名称
-        :param obj: DeviceCategory
-        :return: string
         """
         return obj.get_data_type_display()
 
     class Meta:
         model = Stream
-        fields = '__all__'
+        fields = (
+            'id', 'stream_id', 'device_id', 'device_name', 'name', 'data_type', 'data_type_name', 'qos', 'unit_name',
+            'created_time', 'update_time'
+        )
+        read_only_fields = ('id', 'stream_id', 'created_time', 'update_time')
 
     def create(self, validated_data):
         if settings.MAX_STREAM_NUM:
             device = Device.objects.filter(
-                id=int(self.initial_data["device"]),
-                create_user=int(self.initial_data["create_user"])).first()
+                id=validated_data["device_id"].id,
+                create_user=validated_data["create_user"]).first()
             if not device:
                 raise serializers.ValidationError('设备不存在！')
             if device.streams.count() >= settings.MAX_STREAM_NUM:
@@ -74,7 +74,7 @@ class StreamSerializer(BaseModelSerializer):
         return Stream.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        if 'device' in validated_data and instance.device != validated_data['device']:
+        if 'device_id' in validated_data and instance.device_id.id != validated_data['device_id'].id:
             raise serializers.ValidationError('不可更改绑定设备')
         if 'data_type' in validated_data and instance.data_type != validated_data['data_type']:
             raise serializers.ValidationError('不可更改数据类型')
@@ -186,11 +186,11 @@ class DeviceDetailSerializer(BaseModelSerializer):
     class Meta:
         model = Device
         fields = (
-            'id', 'device_id', 'client_id', 'category', 'category_name', 'name', 'desc', 'status', 'image', 'sequence',
+            'id', 'client_name', 'client_id', 'category', 'category_name', 'name', 'desc', 'status', 'image', 'sequence',
             'created_time', 'update_time', 'last_connect_time', 'streams', 'charts', 'triggers',
         )
         read_only_fields = (
-            'id', 'device_id', 'client_id', 'status', 'created_time', 'update_time', 'last_connect_time')
+            'id', 'client_name', 'client_id', 'status', 'created_time', 'update_time', 'last_connect_time')
 
     def is_valid(self, raise_exception=False):
         if self.initial_data.get("category"):

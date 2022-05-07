@@ -9,6 +9,7 @@ class DeviceCategory(BaseModel):
     sequence = models.IntegerField(default=0, verbose_name='序列')
 
     class Meta:
+        db_table = 'device_category'
         verbose_name = '设备分类'
         verbose_name_plural = verbose_name
 
