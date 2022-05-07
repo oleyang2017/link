@@ -12,8 +12,6 @@ class DeviceCategorySerializer(BaseModelSerializer):
     def get_device_count(obj):
         """
         获取该分类下面设备数量
-        :param obj: DeviceCategory
-        :return: int
         """
         return obj.devices.count()
 
@@ -175,8 +173,6 @@ class DeviceDetailSerializer(BaseModelSerializer):
     def get_category_name(obj):
         """
         获取设备分类名称
-        :param obj: device object
-        :return: List[dict]
         """
         if obj.category:
             return obj.category.name
@@ -186,8 +182,8 @@ class DeviceDetailSerializer(BaseModelSerializer):
     class Meta:
         model = Device
         fields = (
-            'id', 'client_name', 'client_id', 'category', 'category_name', 'name', 'desc', 'status', 'image', 'sequence',
-            'created_time', 'update_time', 'last_connect_time', 'streams', 'charts', 'triggers',
+            'id', 'client_name', 'client_id', 'category', 'category_name', 'name', 'desc', 'status', 'image',
+            'sequence', 'created_time', 'update_time', 'last_connect_time', 'streams', 'charts', 'triggers',
         )
         read_only_fields = (
             'id', 'client_name', 'client_id', 'status', 'created_time', 'update_time', 'last_connect_time')
