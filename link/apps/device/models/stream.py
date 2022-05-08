@@ -21,7 +21,7 @@ class Stream(BaseModel):
     )
     stream_id = ShortUUIDField(db_index=True, unique=True, verbose_name='数据流ID')
     name = models.CharField(max_length=16, verbose_name='名称')
-    device_id = models.ForeignKey('device.Device', related_name='streams', verbose_name='所属设备',
+    device = models.ForeignKey('device.Device', related_name='streams', verbose_name='所属设备',
                                   on_delete=models.CASCADE, db_constraint=False)
     unit_name = models.CharField(max_length=8, blank=True, default='', verbose_name='单位名称')
     unit = models.CharField(max_length=8, blank=True, default='', verbose_name='单位')

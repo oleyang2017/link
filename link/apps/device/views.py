@@ -74,7 +74,7 @@ class StreamViewSet(BaseModelViewSet):
     serializer_class = StreamSerializer
     lookup_field = 'id'
     filter_backends = (DjangoFilterBackend, OrderingFilter)
-    filter_fields = ['device_id', 'name', 'data_type']
+    filter_fields = ['device', 'name', 'data_type']
     queryset = Stream.objects.filter(device_id__deleted=False)
 
     # def get_serializer_context(self):

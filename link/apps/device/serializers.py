@@ -43,7 +43,7 @@ class StreamSerializer(BaseModelSerializer):
         """
         获取所属设备名称
         """
-        return obj.device_id.name
+        return obj.device.name
 
     @staticmethod
     def get_data_type_name(obj):
@@ -55,15 +55,17 @@ class StreamSerializer(BaseModelSerializer):
     class Meta:
         model = Stream
         fields = (
-            'id', 'stream_id', 'device_id', 'device_name', 'name', 'data_type', 'data_type_name', 'qos', 'unit_name',
+            'id', 'stream_id', 'device', 'device_name', 'name', 'data_type', 'data_type_name', 'qos', 'unit_name',
             'created_time', 'update_time'
         )
         read_only_fields = ('id', 'stream_id', 'created_time', 'update_time')
 
     def create(self, validated_data):
+        if not validated_data.get('device'):
+            raise serializers.ValidationError('请选择绑定的设备!')
         if settings.MAX_STREAM_NUM:
             device = Device.objects.filter(
-                id=validated_data["device_id"].id,
+                id=validated_data["device"].id,
                 create_user=validated_data["create_user"]).first()
             if not device:
                 raise serializers.ValidationError('设备不存在！')
@@ -72,7 +74,7 @@ class StreamSerializer(BaseModelSerializer):
         return Stream.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        if 'device_id' in validated_data and instance.device_id.id != validated_data['device_id'].id:
+        if 'device' in validated_data and instance.device.id != validated_data['device'].id:
             raise serializers.ValidationError('不可更改绑定设备')
         if 'data_type' in validated_data and instance.data_type != validated_data['data_type']:
             raise serializers.ValidationError('不可更改数据类型')

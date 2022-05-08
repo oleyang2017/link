@@ -1,14 +1,12 @@
 from django.db import models
 from django.conf import settings
-
-from utils.field_extend import ShortUUIDField
+from shortuuid.django_fields import ShortUUIDField
 
 
 class Action(models.Model):
     """
     动作
     """
-    id = ShortUUIDField(db_index=True, primary_key=True)
     show = models.BooleanField(default=True, verbose_name='首页显示')
     name = models.CharField(max_length=8, verbose_name='名称')
     device = models.ForeignKey('device.Device', related_name='actions', verbose_name='所属设备', blank=True, null=True, on_delete=models.SET_NULL)
