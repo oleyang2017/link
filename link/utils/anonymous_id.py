@@ -5,7 +5,6 @@ hashids = Hashids(salt=settings.SECRET_KEY, min_length=8)
 
 
 class AnonymousId:
-
     def encode(self, value):
         return hashids.encode(value)
 

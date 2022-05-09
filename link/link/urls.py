@@ -18,13 +18,16 @@ from django.urls import path, include, re_path
 from django.conf import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('user.urls')),
-    path('api/', include('device.urls')),
+    path("admin/", admin.site.urls),
+    path("api/", include("user.urls")),
+    path("api/", include("device.urls")),
 ]
 
 if settings.DEBUG:
     import debug_toolbar
     from django.views.static import serve
-    urlpatterns.append(path('__debug__/', include(debug_toolbar.urls)))
-    urlpatterns.append(re_path(r'media/(?P<path>.*)$', serve, {"document_root": settings.MEDIA_ROOT}),)
+
+    urlpatterns.append(path("__debug__/", include(debug_toolbar.urls)))
+    urlpatterns.append(
+        re_path(r"media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
+    )

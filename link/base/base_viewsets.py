@@ -7,10 +7,10 @@ from rest_framework.response import Response
 
 
 class BaseModelViewSet(viewsets.ModelViewSet):
-    lookup_field = 'id'
+    lookup_field = "id"
     filter_backends = (DjangoFilterBackend, OrderingFilter)
-    ordering_fields = ['created_time']
-    ordering = ['-created_time']
+    ordering_fields = ["created_time"]
+    ordering = ["-created_time"]
 
     def get_queryset(self):
         queryset = super(BaseModelViewSet, self).get_queryset()
@@ -27,7 +27,7 @@ class BaseModelViewSet(viewsets.ModelViewSet):
 
     # 由于微信小程序不支持patch方法，所以这里默认部分更新
     def get_serializer(self, *args, **kwargs):
-        kwargs['partial'] = True
+        kwargs["partial"] = True
         return super(BaseModelViewSet, self).get_serializer(*args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
