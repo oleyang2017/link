@@ -21,7 +21,7 @@ class Device(BaseModel):
     name = models.CharField(max_length=8, verbose_name="设备名称")
     desc = models.TextField(blank=True, null=True, verbose_name="说明")
     status = models.BooleanField(default=False, verbose_name="设备状态")
-    image = models.URLField(null=True, blank=True, verbose_name="图片")
+    image = models.ImageField(null=True, blank=True, verbose_name="图片", upload_to="images/device")
     is_super = models.BooleanField(default=False, verbose_name="权限设备")
     sequence = models.IntegerField(default=0, verbose_name="序列")
     last_connect_time = models.DateTimeField(

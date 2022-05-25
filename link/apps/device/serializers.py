@@ -15,18 +15,18 @@ class DeviceCategorySerializer(BaseModelSerializer):
         """
         return obj.devices.count()
 
-    def create(self, validated_data):
-        if not validated_data.get("sequence"):
-            last_category = DeviceCategory.objects.filter(
-                create_user=self.context.get("request").user
-            ).last()
-            if last_category:
-                validated_data["sequence"] = last_category.sequence + 1
-        return super(DeviceCategorySerializer, self).create(validated_data)
+    # def create(self, validated_data):
+    #     if not validated_data.get("sequence"):
+    #         last_category = DeviceCategory.objects.filter(
+    #             create_user=self.context.get("request").user
+    #         ).last()
+    #         if last_category:
+    #             validated_data["sequence"] = last_category.sequence + 1
+    #     return super(DeviceCategorySerializer, self).create(validated_data)
 
     class Meta:
         model = DeviceCategory
-        fields = "__all__"
+        fields = ("id", "name", "sequence", "device_count")
 
 
 class DeviceSerializer(BaseModelSerializer):
@@ -87,13 +87,13 @@ class StreamSerializer(BaseModelSerializer):
 
     def update(self, instance, validated_data):
         if (
-            "device" in validated_data
-            and instance.device.id != validated_data["device"].id
+                "device" in validated_data
+                and instance.device.id != validated_data["device"].id
         ):
             raise serializers.ValidationError("不可更改绑定设备")
         if (
-            "data_type" in validated_data
-            and instance.data_type != validated_data["data_type"]
+                "data_type" in validated_data
+                and instance.data_type != validated_data["data_type"]
         ):
             raise serializers.ValidationError("不可更改数据类型")
         return super(StreamSerializer, self).update(instance, validated_data)
@@ -184,20 +184,20 @@ class TriggerSerializer(BaseModelSerializer):
     def is_valid(self, raise_exception=False):
         if self.initial_data.get("trigger_type"):
             if self.initial_data.get(
-                "trigger_type"
+                    "trigger_type"
             ) == "action" and not self.initial_data.get("action"):
                 raise serializers.ValidationError("'动作'为必填项")
             if self.initial_data.get(
-                "trigger_type"
+                    "trigger_type"
             ) == "action_item" and not self.initial_data.get("action_item"):
                 raise serializers.ValidationError("'指令'为必填项")
             if self.initial_data.get(
-                "trigger_type"
+                    "trigger_type"
             ) == "http" and not self.initial_data.get("url"):
                 raise serializers.ValidationError("'url'为必填项")
             if (
-                self.initial_data.get("trigger_type") == "email"
-                and not self.context.get("request").user.email
+                    self.initial_data.get("trigger_type") == "email"
+                    and not self.context.get("request").user.email
             ):
                 raise serializers.ValidationError("请先绑定邮箱")
         return super(TriggerSerializer, self).is_valid(raise_exception)
@@ -209,8 +209,8 @@ class TriggerSerializer(BaseModelSerializer):
             raise serializers.ValidationError("不可更改绑定的数据流")
         # 删除原有的数据
         if (
-            "trigger_type" in validated_data
-            and validated_data["trigger_type"] != "email"
+                "trigger_type" in validated_data
+                and validated_data["trigger_type"] != "email"
         ):
             setattr(instance, validated_data.get("trigger_type"), None)
         return super(TriggerSerializer, self).update(instance, validated_data)
@@ -223,14 +223,14 @@ class DeviceDetailSerializer(BaseModelSerializer):
     category_name = serializers.SerializerMethodField(read_only=True)
 
     # image_list = serializers.SerializerMethodField(read_only=True)
-
+    #
     # def get_image_list(self, instance):
     #     request = self.context.get('request')
     #     if instance.image:
-    #         image_list = instance.image.url
-    #         return [{'url': request.build_absolute_uri(image_list)}]
+    #         image_url = instance.image.url
+    #         return request.build_absolute_uri(image_url)
     #     else:
-    #         return []
+    #         return ""
 
     @staticmethod
     def get_category_name(obj):
@@ -276,7 +276,7 @@ class DeviceDetailSerializer(BaseModelSerializer):
         if self.initial_data.get("category"):
             category = DeviceCategory.objects.filter(
                 id=self.initial_data["category"],
-                create_user=self.initial_data["category"],
+                create_user=self.context["request"].user,
                 deleted=False,
             ).first()
             if not category:

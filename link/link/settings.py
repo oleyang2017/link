@@ -10,16 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-from pathlib import Path
 import datetime
 import os
 import sys
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 # sys.path.insert(0, BASE_DIR)
 sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -44,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    'guardian',
     "cacheops",
     "django_filters",
     "emqx",
@@ -154,16 +154,20 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
 }
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
+]
+
 # 默认设置JWT有效期为7天
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=7),
-    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=7),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=14),
 }
 
 # 微信小程序appid和secret
 WX_APPID = "your wechat miniprogram appid"
 WX_SECRET = "your wechat miniprogram secret"
-
 
 # 每个用户注册设备数量限制，为None时无数量限制
 MAX_DEVICE_NUM = None
