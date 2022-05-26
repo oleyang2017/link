@@ -80,7 +80,7 @@ class StreamViewSet(BaseModelViewSet):
     lookup_field = "id"
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     filter_fields = ["device", "name", "data_type"]
-    queryset = Stream.objects.filter(device__deleted=False)
+    queryset = Stream.objects
 
 
 class ChartViewSet(BaseModelViewSet):
@@ -89,7 +89,7 @@ class ChartViewSet(BaseModelViewSet):
     filter_fields = ["device", "name"]
     ordering_fields = ["sequence", "-created_time"]
     ordering = ["sequence", "-created_time"]
-    queryset = Chart.objects.filter(device__deleted=False, streams__deleted=False)
+    queryset = Chart.objects
     serializer_class = ChartSerializer
 
     def perform_create(self, serializer):

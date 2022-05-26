@@ -1,14 +1,14 @@
 from django.db import models
-from django.conf import settings
-
 from shortuuid.django_fields import ShortUUIDField
 
+from base.base_model import BaseModel
 
-class Trigger(models.Model):
+
+class Trigger(BaseModel):
     # TODO: 要支持设备间的联动， 邮件通知， http请求
     TRIGGER_CHOICE = (
         ("email", "邮件通知"),
-        ("url", "发送HTTP请求"),
+        ("http", "发送HTTP请求"),
         ("action", "执行动作"),
         ("action_item", "执行指令"),
     )
@@ -32,16 +32,16 @@ class Trigger(models.Model):
         "device.Device",
         related_name="triggers",
         verbose_name="设备",
+        db_constraint=False,
         on_delete=models.CASCADE,
     )
     stream = models.ForeignKey(
         "device.Stream",
         related_name="triggers",
         verbose_name="数据流",
+        db_constraint=False,
         on_delete=models.CASCADE,
-    )  # 对于
-    # action = models.ForeignKey('action.Action', related_name='triggers', verbose_name='动作', null=True, blank=True, on_delete=models.DO_NOTHING)
-    # action_item = models.ForeignKey('action.ActionItem', related_name='triggers', verbose_name='指令', null=True, blank=True, on_delete=models.DO_NOTHING)
+    )
     url = models.URLField(verbose_name="URL", blank=True, default="")
     condition = models.CharField(
         max_length=8, verbose_name="触发条件", choices=CONDITION_CHOICE, default="=="
@@ -56,15 +56,9 @@ class Trigger(models.Model):
     start_time = models.DateTimeField(verbose_name="开始时间", null=True, blank=True)
     end_time = models.DateTimeField(verbose_name="结束时间", null=True, blank=True)
     active = models.BooleanField(default=True, verbose_name="启用")
-    create_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        related_name="triggers",
-        verbose_name="创建人",
-        on_delete=models.CASCADE,
-    )
-    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
 
     class Meta:
+        db_table = "trigger"
         verbose_name = "触发器"
         verbose_name_plural = verbose_name
 
@@ -96,5 +90,6 @@ class TriggerLog(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        db_table = "trigger_log"
         verbose_name = "触发器日志"
         verbose_name_plural = verbose_name

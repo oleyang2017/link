@@ -20,9 +20,6 @@ class BaseModelViewSet(viewsets.ModelViewSet):
         queryset = super(BaseModelViewSet, self).get_queryset()
         return queryset
 
-    def perform_create(self, serializer):
-        serializer.save(create_user=self.request.user)
-
     # 由于微信小程序不支持patch方法，所以这里默认部分更新
     def get_serializer(self, *args, **kwargs):
         kwargs["partial"] = True
