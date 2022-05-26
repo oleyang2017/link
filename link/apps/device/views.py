@@ -82,11 +82,6 @@ class StreamViewSet(BaseModelViewSet):
     filter_fields = ["device", "name", "data_type"]
     queryset = Stream.objects.filter(device__deleted=False)
 
-    # def get_serializer_context(self):
-    #     ret = super(StreamViewSet, self).get_serializer_context()
-    #     ret['user'] = self.request.user
-    #     return ret
-
 
 class ChartViewSet(BaseModelViewSet):
     lookup_field = "id"

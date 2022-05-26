@@ -1,9 +1,7 @@
 from django.db.models.query import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.filters import OrderingFilter
-from rest_framework.response import Response
 
 
 class BaseModelViewSet(viewsets.ModelViewSet):
@@ -29,10 +27,3 @@ class BaseModelViewSet(viewsets.ModelViewSet):
     def get_serializer(self, *args, **kwargs):
         kwargs["partial"] = True
         return super(BaseModelViewSet, self).get_serializer(*args, **kwargs)
-
-    def destroy(self, request, *args, **kwargs):
-        # 覆盖，软删除
-        instance = self.get_object()
-        instance.deleted = True
-        instance.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)

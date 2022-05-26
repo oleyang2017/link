@@ -31,7 +31,7 @@ class Chart(BaseModel):
     sequence = models.IntegerField(verbose_name="顺序", default=0)
 
     class Meta:
-        db_table = "device_chart"
+        db_table = "chart"
         verbose_name = "历史数据图表"
         verbose_name_plural = verbose_name
 
@@ -52,6 +52,7 @@ def add_chart_stream(sender, instance, **kwargs):
 
 @receiver(pre_delete, sender=Stream, dispatch_uid="remove_chart_stream")
 def remove_chart_stream(sender, instance, **kwargs):
+    print(11111111)
     # 如果某个图表只绑定了即将删除的数据流，则同时删除该图表
     for chart in instance.charts.all():
         if chart.streams.count() == 1:
