@@ -24,3 +24,11 @@ class BaseModelViewSet(viewsets.ModelViewSet):
     def get_serializer(self, *args, **kwargs):
         kwargs["partial"] = True
         return super(BaseModelViewSet, self).get_serializer(*args, **kwargs)
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(create_user=user)
+
+    def perform_update(self, serializer):
+        user = self.request.user
+        serializer.save(last_update_user=user)

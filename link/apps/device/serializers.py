@@ -77,7 +77,7 @@ class StreamSerializer(BaseModelSerializer):
         if settings.MAX_STREAM_NUM:
             device = Device.objects.filter(
                 id=validated_data["device"].id,
-                create_user=validated_data["create_user"],
+                create_user=self.context["request"].user,
             ).first()
             if not device:
                 raise serializers.ValidationError("设备不存在！")
@@ -277,7 +277,6 @@ class DeviceDetailSerializer(BaseModelSerializer):
             category = DeviceCategory.objects.filter(
                 id=self.initial_data["category"],
                 create_user=self.context["request"].user,
-                deleted=False,
             ).first()
             if not category:
                 raise serializers.ValidationError("设备分类不存在！")
@@ -286,8 +285,7 @@ class DeviceDetailSerializer(BaseModelSerializer):
     def create(self, validated_data):
         if settings.MAX_DEVICE_NUM:
             current_num = Device.objects.filter(
-                create_user=validated_data["create_user"],
-                deleted=False,
+                create_user=self.context["request"].user,
             ).count()
             if current_num >= settings.MAX_DEVICE_NUM:
                 raise serializers.ValidationError("超过最大创建数！")

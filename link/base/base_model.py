@@ -26,12 +26,19 @@ class BaseModel(models.Model):
     create_user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         verbose_name="创建人",
-        on_delete=models.SET_NULL,
-        null=True,
+        on_delete=models.CASCADE,
         db_constraint=False,
     )
     created_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     update_time = models.DateTimeField(auto_now=True, verbose_name="更新时间")
+    last_update_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name="最后一次修改人",
+        on_delete=models.DO_NOTHING,
+        null=True,
+        db_constraint=False,
+        related_name='+',
+    )
 
     class Meta:
         abstract = True
