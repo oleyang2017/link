@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 
 class UserProfile(AbstractUser):
@@ -17,7 +17,7 @@ class UserProfile(AbstractUser):
     gender = models.CharField(
         verbose_name="性别", max_length=1, choices=GENDER_CHOICES, default="1"
     )
-    desc = models.TextField(verbose_name="个人介绍", blank=True, default="这个人很懒，什么都没写！")
+    desc = models.TextField(verbose_name="个人介绍", blank=True, default="")
     avatar = models.ImageField(
         verbose_name="头像", upload_to="avatar/", blank=True, null=True
     )

@@ -19,6 +19,7 @@ class Chart(BaseModel):
     device = models.ForeignKey(
         "device.Device",
         related_name="charts",
+        null=True,
         on_delete=models.CASCADE,
         db_constraint=False,
     )

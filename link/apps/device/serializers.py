@@ -15,15 +15,6 @@ class DeviceCategorySerializer(BaseModelSerializer):
         """
         return obj.devices.count()
 
-    # def create(self, validated_data):
-    #     if not validated_data.get("sequence"):
-    #         last_category = DeviceCategory.objects.filter(
-    #             create_user=self.context.get("request").user
-    #         ).last()
-    #         if last_category:
-    #             validated_data["sequence"] = last_category.sequence + 1
-    #     return super(DeviceCategorySerializer, self).create(validated_data)
-
     class Meta:
         model = DeviceCategory
         fields = ("id", "name", "sequence", "device_count")
@@ -116,7 +107,7 @@ class ChartSerializer(BaseModelSerializer):
         """
         获取设备名称
         """
-        return obj.device.name
+        return obj.device.name if obj.device else ""
 
     class Meta:
         model = Chart
@@ -141,38 +132,39 @@ class ChartSerializer(BaseModelSerializer):
             },
             "streams": {
                 "write_only": True,
-                "required": False,
+                "required": True,
                 "error_messages": {"does_not_exist": "数据流不存在！"},
             },
         }
 
     def create(self, validated_data):
-        if "device" not in validated_data:
-            raise serializers.ValidationError("创建图表时必须绑定设备！")
-        if validated_data["device"].create_user != validated_data["create_user"]:
-            raise serializers.ValidationError("设备不存在！")
         if "streams" not in validated_data:
             raise serializers.ValidationError("创建图表时必须选取一个数据流！")
-        for stream in validated_data["streams"]:
-            if stream.device != validated_data["device"]:
-                raise serializers.ValidationError(
-                    "不可绑定非'{}'下的数据流！".format(validated_data["device"].name)
-                )
-            if stream.data_type == "char_data":
-                raise serializers.ValidationError("字符型的数据流不可以用于图表显示")
-        return super(ChartSerializer, self).create(validated_data)
-
-    def update(self, instance, validated_data):
-        if "device" in validated_data and instance.device != validated_data["device"]:
-            raise serializers.ValidationError("不可更改绑定设备！")
-        if "streams" in validated_data:
+        # 如果绑定了设备，那么数据流只能是当前设备的数据流
+        if validated_data["device"]:
+            if validated_data["device"].create_user != validated_data["create_user"]:
+                raise serializers.ValidationError("设备不存在！")
             for stream in validated_data["streams"]:
-                if stream.device != instance.device:
+                if stream.device != validated_data["device"]:
                     raise serializers.ValidationError(
-                        "不可绑定非'{}'下的数据流！".format(instance.device.name)
+                        f"不可绑定非'{validated_data['device'].name}'下的数据流！"
                     )
                 if stream.data_type == "char_data":
                     raise serializers.ValidationError("字符型的数据流不可以用于图表显示")
+        return super(ChartSerializer, self).create(validated_data)
+
+    def update(self, instance, validated_data):
+        if "device" in validated_data:
+            if instance.device != validated_data["device"]:
+                raise serializers.ValidationError("不可更改绑定设备！")
+            if "streams" in validated_data:
+                for stream in validated_data["streams"]:
+                    if stream.device != instance.device:
+                        raise serializers.ValidationError(
+                            f"不可绑定非'{instance.device.name}'下的数据流！"
+                        )
+                    if stream.data_type == "char_data":
+                        raise serializers.ValidationError("字符型的数据流不可以用于图表显示")
         return super(ChartSerializer, self).update(instance, validated_data)
 
 
