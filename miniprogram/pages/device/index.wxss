@@ -67,7 +67,7 @@
   color: #98999a;
   right: 0;
   text-align: center;
-  line-height: 20px;
+  line-height: 40rpx;
   position: absolute;
 }
 .device-scroll-container{
@@ -75,7 +75,8 @@
   justify-content: space-between;
   flex-direction: row;
   flex-wrap: wrap; */
-  padding-bottom: 80px;
+  padding-bottom: 160rpx;
+  padding-top: 10rpx;
 }
 
 .head-icon{

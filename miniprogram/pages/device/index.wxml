@@ -11,19 +11,14 @@
       <van-tab wx:for="{{category}}" wx:key="id" name="{{item.id}}" title="{{item.name}}" title-style="font-size:16px;text-align: left;">
         <scroll-view style="height: calc(100vh);" scroll-y>
           <view class="device-scroll-container">
-            <van-grid column-num="2" use-slot  border="{{false}}">
-              <van-grid-item use-slot wx:for="{{item.device}}" wx:key="index" wx:for-item="item">
+              <view style="display: inline-block; width: 50%;" wx:for="{{item.device}}" wx:key="index" wx:for-item="item">
                 <device-item deviceId="{{item.id}}" index="{{index}}" name="{{item.name}}" status="{{item.status}}" image="{{item.image}}" />
-              </van-grid-item>
-              <!-- <block wx:for="{{item.device}}" wx:key="id" wx:for-index="index">
-                
-              </block> -->
-            </van-grid>
+              </view>
             <block wx:if="{{!item.device.length}}">
               <van-empty  wx:if="{{!categoryData.length}}" style="width: 100%">
                 <view class="text-gray text-sm padding-top-xl text-center" style="width: 100%">
-                  <text>你还没有创建设备!</text>
-                  <navigator class="text-blue padding-left-sm" url="/pages/device/edit/index?type=create"
+                  <text>{{item.name !='共享设备' ? '你还没有创建设备!' :'还没有人分享设备给你哦！'}}</text>
+                  <navigator wx:if="{{item.name !='共享设备'}}" class="text-blue padding-left-sm" url="/pages/device/edit/index?type=create"
                     style="display: inline-block;" hover-class="none">点击创建</navigator>
                 </view>
               </van-empty>
@@ -49,7 +44,7 @@
             </view>
           </view>
         </scroll-view>
-        <view class="text-gray padding text-center" wx:if="{{category.length <= 1}}">暂无分类</view>
+        <view class="text-gray padding text-center" wx:if="{{category.length <= 2}}">暂无分类</view>
         <view style="height: 1px; background-color: #e6e6e6;" />
         <navigator class="category-item" url="/pages/device/list/index" hover-class="none">
           <view class="name">全部设备</view>

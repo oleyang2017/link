@@ -6,7 +6,6 @@ Component({
       name: String,
       status: Boolean,
       image: String,
-      lastValue: null,
   },
 
   data: {

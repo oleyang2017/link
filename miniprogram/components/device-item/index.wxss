@@ -1,34 +1,29 @@
-
 .card-container {
-  width: 330rpx;
+  width: 97%;
   display: inline-block;
   vertical-align: top;
-  margin: 0 1% 40rpx;
+  /* margin: 0 2% 40rpx; */
+  margin-bottom: 40rpx;
   padding: 20rpx;
   height: 180rpx;
   border-radius: 20rpx;
-  box-shadow: 0 4rpx 14rpx -8rpx #888888;
+  /* box-shadow: 0 4rpx 14rpx -8rpx #888888; */
+  box-shadow: 0 4rpx 20rpx -8rpx #888888;
+  /* box-shadow: 0px 0rpx 20rpx -6rpx #888888; */
   position: relative;
 }
-.card-container .name{
-  display: inline-block;
+
+.card-container .name {
   font-size: 30rpx;
   padding-bottom: 10rpx;
-  max-width: 70%;
+  max-width: 150rpx;
   overflow: hidden;
-  text-overflow:ellipsis;
+  text-overflow: ellipsis;
   white-space: nowrap;
+  width: 150rpx;
 }
-.card-container .last-value{
-  display: inline-block;
-  font-size: 30rpx;
-  padding-bottom: 10rpx;
-  max-width: 20%;
-  overflow: hidden;
-  text-overflow:ellipsis;
-  white-space: nowrap;
-}
-.card-container .tag{
+
+.card-container .tag {
   display: inline-block;
   position: absolute;
   padding: 4rpx 8rpx;
@@ -41,18 +36,27 @@
   overflow: hidden;
   white-space: nowrap;
 }
-.card-container .status{
+
+.card-container .status {
   font-size: 20rpx;
   padding-bottom: 10rpx;
   display: inline-block;
 }
-.card-container .pic{
+
+.card-container .pic {
   height: 48rpx;
   max-width: 96rpx;
 }
-.card-container .show-data{
+
+.card-container .show-data {
   position: absolute;
   font-size: 28rpx;
   right: 20rpx;
   bottom: 16rpx;
+}
+
+.card-container .image {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 4px;
 }

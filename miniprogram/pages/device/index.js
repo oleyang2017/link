@@ -38,11 +38,13 @@ Page({
         noCategory.push(device[i])
       }
     }
+    let categoryCount = category.length
     category.push({name: '未分类', device: noCategory})
+    category.push({name: '共享设备', device: []})
     this.setData({
       category,
       refresh: false,
-      popupHeight: (category.length - 1) * 36 > 260 ? '260px' : (category.length - 1) * 36 + 'px'
+      popupHeight: categoryCount * 36 > 260 ? '260px' : categoryCount * 36 + 'px'
     })
   },
   changeCategory(e) {

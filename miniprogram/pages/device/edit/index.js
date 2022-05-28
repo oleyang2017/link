@@ -75,22 +75,24 @@ Page({
       var inverface = deviceApi.update(data)
     } else {
       var inverface = deviceApi.create(data)
+      inverface.then((res) => {
+        Toast({
+          type: 'success',
+          message: this.data.type == 'edit' ? '修改成功' : '创建成功',
+          duration: 1000,
+          onClose: () => {
+            wx.navigateBack()
+          },
+        });
+      })
     }
-    inverface.then((res) => {
-      Toast({
-        type: 'success',
-        message: this.data.type == 'edit' ? '修改成功' : '创建成功',
-        duration: 1000,
-        onClose: () => {
-          wx.navigateBack()
-        },
-      });
-    })
+    
   },
   afterRead(e) {
     const {
       file
     } = e.detail;
+    console.log(e.detail)
     this.setData({
       image_list: [{
         url: file.url
@@ -105,26 +107,27 @@ Page({
     })
   },
   confirm() {
-    if (this.data.filePath) {
-      cos.postObject({
-        Bucket: DEFAULT_BUCKET,
-        Region: DEFAULT_REGION,
-        Key: wx.getStorageSync('uid') + '/' + this.data.filePath.slice(11),
-        FilePath: this.data.filePath,
-      }, (err, data) => {
-        let _data = this.generateData()
-        if (err) {
-          Toast.fail('图片上传失败');
-        } else {
-          _data.image = "http://" + data.Location
-        }
-        this.updateOrCreate(_data)
-      });
-    }
-    else{
+    // if (this.data.filePath) {
+    //   cos.postObject({
+    //     Bucket: DEFAULT_BUCKET,
+    //     Region: DEFAULT_REGION,
+    //     Key: wx.getStorageSync('uid') + '/' + this.data.filePath.slice(11),
+    //     FilePath: this.data.filePath,
+    //   }, (err, data) => {
+    //     let _data = this.generateData()
+    //     if (err) {
+    //       Toast.fail('图片上传失败');
+    //     } else {
+    //       _data.image = "http://" + data.Location
+    //     }
+    //     this.updateOrCreate(_data)
+    //   });
+    // }
+    // else{
       let _data = this.generateData()
-      this.updateOrCreate(_data)
-    }
+      let a = this.updateOrCreate(_data)
+      console.log(a)
+    // }
   },
   cancel() {
     wx.navigateBack()
@@ -132,20 +135,15 @@ Page({
   // 构造数据
   generateData() {
     let {
-      category,
-      name,
-      desc,
-      sequence,
-      streams,
-      charts,
-      image,
+      id, category, name, desc, sequence, streams, charts, image, filePath,
     } = this.data
 
     let data = {
+      id,
       name,
       category,
       desc,
-      image
+      image: filePath,
     }
     if (this.data.type == 'create') {
       if (this.data.charts.length) {

@@ -1,4 +1,4 @@
-import { request } from './request';
+import { request, requestWithFile } from './request';
 
 export default {
   list: (params) => {
@@ -11,6 +11,9 @@ export default {
     return request('api/devices/'+id+'/', {}, "GET") 
   },
   update: (data, needJWT = true, needLoading = false) => {
-    return request('api/devices/' + '10' + '/', data, "PUT")
+    if (data.image){
+      return requestWithFile('api/devices/' + data.id + '/', data, "PUT")
+    }
+    return request('api/devices/' + data.id + '/', data, "PUT")
   },
 }
