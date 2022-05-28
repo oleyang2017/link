@@ -33,6 +33,9 @@ class Device(BaseModel):
         db_table = "device"
         verbose_name = "设备"
         verbose_name_plural = verbose_name
+        permissions = (
+            ("control_device", "Can control device"),
+        )
 
     def __str__(self):
         return self.name

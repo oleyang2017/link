@@ -52,16 +52,13 @@ class DeviceViewSet(BaseModelViewSet):
         return Response(serializer.data)
 
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(BaseModelViewSet):
     serializer_class = DeviceCategorySerializer
     lookup_field = "id"
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering_fields = ["sequence", "created_time"]
     ordering = ["sequence", "-created_time"]
     queryset = DeviceCategory.objects
-
-    def perform_create(self, serializer):
-        serializer.save(create_user=self.request.user)
 
     @action(methods=["put"], detail=False)
     def sort(self, request, *args, **kwargs):

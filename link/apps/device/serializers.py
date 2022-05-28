@@ -214,16 +214,6 @@ class DeviceDetailSerializer(BaseModelSerializer):
     triggers = TriggerSerializer(many=True, required=False, read_only=True)
     category_name = serializers.SerializerMethodField(read_only=True)
 
-    # image_list = serializers.SerializerMethodField(read_only=True)
-    #
-    # def get_image_list(self, instance):
-    #     request = self.context.get('request')
-    #     if instance.image:
-    #         image_url = instance.image.url
-    #         return request.build_absolute_uri(image_url)
-    #     else:
-    #         return ""
-
     @staticmethod
     def get_category_name(obj):
         """
