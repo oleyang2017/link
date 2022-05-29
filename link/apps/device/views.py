@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from django_filters.rest_framework import DjangoFilterBackend
-from guardian.shortcuts import assign_perm
+from guardian.shortcuts import assign_perm, get_user_perms
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
@@ -33,12 +33,6 @@ class DeviceViewSet(BaseModelViewSet):
             return DeviceSerializer
         else:
             return DeviceDetailSerializer
-
-    @action(methods=["get"], detail=True)
-    def streams(self, request, *args, **kwargs):
-        device = self.get_object()
-        serializer = StreamSerializer(device.streams, many=True)
-        return Response(serializer.data)
 
     def perform_create(self, serializer):
         current_user = self.request.user
@@ -74,6 +68,30 @@ class DeviceViewSet(BaseModelViewSet):
         device.save()
         serializer = DeviceDetailSerializer(device, context={"request": request})
         return Response(serializer.data)
+
+    @action(methods=["get"], detail=True)
+    def streams(self, request, *args, **kwargs):
+        device = self.get_object()
+        serializer = StreamSerializer(device.streams, many=True)
+        return Response(serializer.data)
+
+    @action(methods=["get"], detail=True)
+    def charts(self, request, *args, **kwargs):
+        device = self.get_object()
+        serializer = ChartSerializer(device.charts, many=True)
+        return Response(serializer.data)
+
+    @action(methods=["get"], detail=True)
+    def triggers(self, request, *args, **kwargs):
+        device = self.get_object()
+        serializer = TriggerSerializer(device.triggers, many=True)
+        return Response(serializer.data)
+
+    @action(methods=["get"], detail=True)
+    def perms(self, request, *args, **kwargs):
+        device = self.get_object()
+        perms = get_user_perms(request.user, device)
+        return Response(perms)
 
 
 class CategoryViewSet(BaseModelViewSet):
