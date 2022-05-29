@@ -63,29 +63,20 @@ class StreamSerializer(BaseModelSerializer):
         read_only_fields = ("id", "stream_id", "created_time", "update_time")
 
     def create(self, validated_data):
-        if not validated_data.get("device"):
+        device = validated_data.get("device")
+        if not device:
             raise serializers.ValidationError("请选择绑定的设备!")
+        if not self.context["request"].user.has_perm("change_device", device):
+            raise serializers.ValidationError("没有修改该设备的权限!")
         if settings.MAX_STREAM_NUM:
-            device = Device.objects.filter(
-                id=validated_data["device"].id,
-                create_user=self.context["request"].user,
-            ).first()
-            if not device:
-                raise serializers.ValidationError("设备不存在！")
             if device.streams.count() >= settings.MAX_STREAM_NUM:
                 raise serializers.ValidationError("超过每个设备最多可绑定数量！")
         return Stream.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        if (
-                "device" in validated_data
-                and instance.device.id != validated_data["device"].id
-        ):
+        if "device" in validated_data and instance.device.id != validated_data["device"].id:
             raise serializers.ValidationError("不可更改绑定设备")
-        if (
-                "data_type" in validated_data
-                and instance.data_type != validated_data["data_type"]
-        ):
+        if "data_type" in validated_data and instance.data_type != validated_data["data_type"]:
             raise serializers.ValidationError("不可更改数据类型")
         return super(StreamSerializer, self).update(instance, validated_data)
 
@@ -142,13 +133,12 @@ class ChartSerializer(BaseModelSerializer):
             raise serializers.ValidationError("创建图表时必须选取一个数据流！")
         # 如果绑定了设备，那么数据流只能是当前设备的数据流
         if validated_data["device"]:
-            if validated_data["device"].create_user != validated_data["create_user"]:
-                raise serializers.ValidationError("设备不存在！")
+            device = validated_data["device"]
+            if not self.context["request"].user.has_perm("change_device", device):
+                raise serializers.ValidationError("没有修改该设备的权限!")
             for stream in validated_data["streams"]:
-                if stream.device != validated_data["device"]:
-                    raise serializers.ValidationError(
-                        f"不可绑定非'{validated_data['device'].name}'下的数据流！"
-                    )
+                if stream.device != device:
+                    raise serializers.ValidationError(f"不可绑定非'{device.name}'下的数据流！")
                 if stream.data_type == "char_data":
                     raise serializers.ValidationError("字符型的数据流不可以用于图表显示")
         return super(ChartSerializer, self).create(validated_data)
@@ -175,22 +165,14 @@ class TriggerSerializer(BaseModelSerializer):
 
     def is_valid(self, raise_exception=False):
         if self.initial_data.get("trigger_type"):
-            if self.initial_data.get(
-                    "trigger_type"
-            ) == "action" and not self.initial_data.get("action"):
+            trigger_type = self.initial_data.get("trigger_type")
+            if trigger_type == "action" and not self.initial_data.get("action"):
                 raise serializers.ValidationError("'动作'为必填项")
-            if self.initial_data.get(
-                    "trigger_type"
-            ) == "action_item" and not self.initial_data.get("action_item"):
+            if trigger_type == "action_item" and not self.initial_data.get("action_item"):
                 raise serializers.ValidationError("'指令'为必填项")
-            if self.initial_data.get(
-                    "trigger_type"
-            ) == "http" and not self.initial_data.get("url"):
+            if trigger_type == "http" and not self.initial_data.get("url"):
                 raise serializers.ValidationError("'url'为必填项")
-            if (
-                    self.initial_data.get("trigger_type") == "email"
-                    and not self.context.get("request").user.email
-            ):
+            if trigger_type == "email" and not self.context.get("request").user.email:
                 raise serializers.ValidationError("请先绑定邮箱")
         return super(TriggerSerializer, self).is_valid(raise_exception)
 
@@ -200,10 +182,7 @@ class TriggerSerializer(BaseModelSerializer):
         if "stream" in validated_data:
             raise serializers.ValidationError("不可更改绑定的数据流")
         # 删除原有的数据
-        if (
-                "trigger_type" in validated_data
-                and validated_data["trigger_type"] != "email"
-        ):
+        if "trigger_type" in validated_data and validated_data["trigger_type"] != "email":
             setattr(instance, validated_data.get("trigger_type"), None)
         return super(TriggerSerializer, self).update(instance, validated_data)
 

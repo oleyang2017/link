@@ -1,8 +1,10 @@
 from datetime import datetime, timedelta
 
 from django_filters.rest_framework import DjangoFilterBackend
+from guardian.shortcuts import assign_perm
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 
@@ -37,6 +39,28 @@ class DeviceViewSet(BaseModelViewSet):
         device = self.get_object()
         serializer = StreamSerializer(device.streams, many=True)
         return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        current_user = self.request.user
+        device = serializer.save(create_user=current_user)
+        assign_perm("control_device", current_user, device)
+        assign_perm("add_device", current_user, device)
+        assign_perm("view_device", current_user, device)
+        assign_perm("change_device", current_user, device)
+        assign_perm("delete_device", current_user, device)
+
+    def perform_update(self, serializer):
+        serializer.save(last_update_user=self.request.user)
+        if not self.request.user.has_perm("change_device", serializer.instance):
+            raise PermissionDenied("你没有修改该设备的权限")
+        else:
+            serializer.save(last_update_user=self.request.user)
+
+    def perform_destroy(self, instance):
+        if not self.request.user.has_perm("delete_device", instance):
+            raise PermissionDenied("你没有删除该设备的权限")
+        else:
+            instance.delete()
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -77,6 +101,7 @@ class StreamViewSet(BaseModelViewSet):
     lookup_field = "id"
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     filter_fields = ["device", "name", "data_type"]
+    search_fields = ["device"]
     queryset = Stream.objects
 
 
