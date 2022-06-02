@@ -1,15 +1,14 @@
 from datetime import datetime, timedelta
 
 from django_filters.rest_framework import DjangoFilterBackend
-from guardian.shortcuts import assign_perm, get_user_perms
-from rest_framework import viewsets
+from guardian.shortcuts import assign_perm, get_user_perms, get_objects_for_user
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 
 from base.base_viewsets import BaseModelViewSet
-from .models import DeviceCategory, Device, Stream, Chart
+from .models import DeviceCategory, Device, Stream, Chart, Trigger
 from .serializers import (
     DeviceSerializer,
     DeviceDetailSerializer,
@@ -26,7 +25,8 @@ class DeviceViewSet(BaseModelViewSet):
     filter_fields = ["category"]
     ordering_fields = ["sequence", "created_time"]
     ordering = ["sequence", "-created_time"]
-    queryset = Device.objects
+
+    # queryset = Device.objects
 
     def get_serializer_class(self):
         if self.request.method == "GET":
@@ -34,9 +34,13 @@ class DeviceViewSet(BaseModelViewSet):
         else:
             return DeviceDetailSerializer
 
+    def get_queryset(self):
+        return get_objects_for_user(self.request.user, perms="view_device", klass=Device)
+
     def perform_create(self, serializer):
         current_user = self.request.user
         device = serializer.save(create_user=current_user)
+        print(device)
         assign_perm("control_device", current_user, device)
         assign_perm("add_device", current_user, device)
         assign_perm("view_device", current_user, device)
@@ -63,10 +67,11 @@ class DeviceViewSet(BaseModelViewSet):
 
     @action(methods=["post"], detail=True)
     def upload(self, request, *args, **kwargs):
+        # 微信小程序上传文件是post方式，单独处理
         device = self.get_object()
-        device.image = request.data.get("file")
-        device.save()
-        serializer = DeviceDetailSerializer(device, context={"request": request})
+        serializer = self.get_serializer(device, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
         return Response(serializer.data)
 
     @action(methods=["get"], detail=True)
@@ -147,11 +152,9 @@ class ChartViewSet(BaseModelViewSet):
         # TODO: 从数据模型中取出前端所需要的dataset
 
 
-class TriggerViewSet(viewsets.ModelViewSet):
+class TriggerViewSet(BaseModelViewSet):
     serializer_class = TriggerSerializer
     lookup_field = "id"
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     filter_fields = ("device", "stream")
-
-    def get_queryset(self):
-        return self.request.user.triggers
+    queryset = Trigger.objects

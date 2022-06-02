@@ -23,8 +23,8 @@ class DeviceCategorySerializer(BaseModelSerializer):
 class DeviceSerializer(BaseModelSerializer):
     class Meta:
         model = Device
-        fields = ("id", "category", "name", "status", "image", "sequence")
-        read_only_fields = ("id", "category", "name", "status", "image", "sequence")
+        fields = ("id", "category", "name", "status", "image", "sequence", "create_user")
+        read_only_fields = ("id", "category", "name", "status", "image", "sequence", "create_user")
 
 
 class StreamSerializer(BaseModelSerializer):

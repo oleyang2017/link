@@ -4,13 +4,13 @@ export default {
   list: (params) => {
     return request('api/streams/', params, "GET")
   },
-  create:(params, needJWT=true, needLoading=false) => { 
+  create:(params) => { 
     return request('api/streams/', params, "POST") 
   },
-  detail:(id, needJWT=true, needLoading=false) => { 
+  detail:(id) => { 
     return request('api/streams/'+id, {}, "GET") 
   },
-  delete:(id, needJWT=true, needLoading=false) => { 
+  delete:(id) => { 
     return request('api/streams/'+id, {}, "DELETE") 
   },
   update: (data, needJWT = true, needLoading = false) => {

@@ -1,19 +1,29 @@
-import { request, requestWithFile } from './request';
+import {
+  request,
+  requestWithFile
+} from './request';
 
 export default {
   list: (params) => {
     return request('api/devices/', params, "GET")
   },
-  create:(params, needJWT=true, needLoading=false) => { 
-    return request('api/devices/', params, "POST") 
-  },
-  detail:(id, needJWT=true, needLoading=false) => { 
-    return request('api/devices/'+id+'/', {}, "GET") 
-  },
-  update: (data, needJWT = true, needLoading = false) => {
-    if (data.image){
-      return requestWithFile('api/devices/' + data.id + '/', data, "PUT")
+  create: (data) => {
+    if (data.filePath) {
+      let filePath = data.filePath
+      delete data.filePath
+      return requestWithFile('api/devices/', data, filePath)
     }
-    return request('api/devices/' + data.id + '/', data, "PUT")
+    return request('api/devices/', data, "POST")
+  },
+  detail: (id) => {
+    return request(`api/devices/${id}/`, {}, "GET")
+  },
+  update: (data) => {
+    if (data.filePath) {
+      let filePath = data.filePath
+      delete data.filePath
+      return requestWithFile(`api/devices/${data.id}/upload/`, data, filePath)
+    }
+    return request(`api/devices/${data.id}/`, data, "PUT")
   },
 }

@@ -1,10 +1,5 @@
 import deviceApi from '../../../api/device'
 import categoryApi from '../../../api/category'
-import {
-  cos,
-  DEFAULT_BUCKET,
-  DEFAULT_REGION
-} from '../../../api/upload'
 import Toast from '@vant/weapp//toast/toast'
 const app = getApp()
 
@@ -70,7 +65,7 @@ Page({
       show: false,
     })
   },
-  updateOrCreate(data){
+  updateOrCreate(data) {
     if (this.data.type == 'edit') {
       var inverface = deviceApi.update(data)
     } else {
@@ -86,7 +81,7 @@ Page({
         });
       })
     }
-    
+
   },
   afterRead(e) {
     const {
@@ -107,27 +102,20 @@ Page({
     })
   },
   confirm() {
-    // if (this.data.filePath) {
-    //   cos.postObject({
-    //     Bucket: DEFAULT_BUCKET,
-    //     Region: DEFAULT_REGION,
-    //     Key: wx.getStorageSync('uid') + '/' + this.data.filePath.slice(11),
-    //     FilePath: this.data.filePath,
-    //   }, (err, data) => {
-    //     let _data = this.generateData()
-    //     if (err) {
-    //       Toast.fail('图片上传失败');
-    //     } else {
-    //       _data.image = "http://" + data.Location
-    //     }
-    //     this.updateOrCreate(_data)
-    //   });
-    // }
-    // else{
-      let _data = this.generateData()
-      let a = this.updateOrCreate(_data)
-      console.log(a)
-    // }
+    let _data = this.generateData()
+    if (this.data.type == 'create'){
+      deviceApi.create(_data)
+    } else {
+      deviceApi.update(_data)
+    }
+    Toast({
+      type: 'success',
+      message: this.data.type == 'edit' ? '修改成功' : '创建成功',
+      duration: 1000,
+      onClose: () => {
+        wx.navigateBack()
+      },
+    });
   },
   cancel() {
     wx.navigateBack()
@@ -135,25 +123,32 @@ Page({
   // 构造数据
   generateData() {
     let {
-      id, category, name, desc, sequence, streams, charts, image, filePath,
+      id,
+      name,
+      streams,
+      charts,
+      filePath
     } = this.data
 
     let data = {
-      id,
       name,
-      category,
-      desc,
-      image: filePath,
+      filePath
+    }
+    if (this.data.category){
+      data.category = this.data.category
+    }
+    if (this.data.desc){
+      data.desc = this.data.desc
     }
     if (this.data.type == 'create') {
       if (this.data.charts.length) {
-        data.charts = this.data.charts
+        data.charts = charts
       }
       if (this.data.streams.length) {
-        data.streams = this.data.streams
+        data.streams = streams
       }
     } else {
-      data.sequence = sequence
+      data.id = id
     }
     return data
   },
