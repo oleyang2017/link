@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db import transaction
 from rest_framework import serializers
 
 from base.base_serializers import BaseModelSerializer
@@ -66,7 +67,7 @@ class StreamSerializer(BaseModelSerializer):
         device = validated_data.get("device")
         if not device:
             raise serializers.ValidationError("请选择绑定的设备!")
-        if not self.context["request"].user.has_perm("change_device", device):
+        if not self.context["request"].user.has_perm("change_device", device) and self.context.get("need_prem", True):
             raise serializers.ValidationError("没有修改该设备的权限!")
         if settings.MAX_STREAM_NUM:
             if device.streams.count() >= settings.MAX_STREAM_NUM:
@@ -188,16 +189,13 @@ class TriggerSerializer(BaseModelSerializer):
 
 
 class DeviceDetailSerializer(BaseModelSerializer):
-    streams = StreamSerializer(many=True, required=False, read_only=True)
-    charts = ChartSerializer(many=True, required=False, read_only=True)
-    triggers = TriggerSerializer(many=True, required=False, read_only=True)
+    streams = StreamSerializer(many=True, required=False)
+    charts = ChartSerializer(many=True, required=False)
+    triggers = TriggerSerializer(many=True, required=False)
     category_name = serializers.SerializerMethodField(read_only=True)
 
     @staticmethod
     def get_category_name(obj):
-        """
-        获取设备分类名称
-        """
         if obj.category:
             return obj.category.name
         else:
@@ -244,11 +242,23 @@ class DeviceDetailSerializer(BaseModelSerializer):
         return super(DeviceDetailSerializer, self).is_valid(raise_exception)
 
     def create(self, validated_data):
+        stream_list = validated_data.pop("streams")
         if settings.MAX_DEVICE_NUM:
             current_num = Device.objects.filter(
                 create_user=self.context["request"].user,
             ).count()
             if current_num >= settings.MAX_DEVICE_NUM:
                 raise serializers.ValidationError("超过最大创建数！")
-
-        return super(DeviceDetailSerializer, self).create(validated_data)
+        try:
+            with transaction.atomic():
+                instance = super(DeviceDetailSerializer, self).create(validated_data)
+                if stream_list:
+                    self.context["need_prem"] = False
+                    for stream in stream_list:
+                        stream["device"] = instance.id
+                        stream_serializer = StreamSerializer(data=stream, context=self.context)
+                        stream_serializer.is_valid(raise_exception=True)
+                        stream_serializer.save(create_user=self.context["request"].user)
+                return instance
+        except Exception as e:
+            raise e
