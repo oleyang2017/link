@@ -242,7 +242,6 @@ class DeviceDetailSerializer(BaseModelSerializer):
         return super(DeviceDetailSerializer, self).is_valid(raise_exception)
 
     def create(self, validated_data):
-        stream_list = validated_data.pop("streams")
         if settings.MAX_DEVICE_NUM:
             current_num = Device.objects.filter(
                 create_user=self.context["request"].user,
@@ -252,7 +251,8 @@ class DeviceDetailSerializer(BaseModelSerializer):
         try:
             with transaction.atomic():
                 instance = super(DeviceDetailSerializer, self).create(validated_data)
-                if stream_list:
+                if validated_data.get("streams"):
+                    stream_list = validated_data.pop("streams")
                     self.context["need_prem"] = False
                     for stream in stream_list:
                         stream["device"] = instance.id
