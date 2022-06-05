@@ -34,7 +34,10 @@ Page({
       })
     }
   },
-
+  onShow: function () {
+    // 因为在其他页面setData不会刷新页面，这里再set一次强制刷新页面
+    this.setData({...this.data})
+  },
   openPopup() {
     if (!this.data.show && this.data.categoryList.length == 0) {
       this.getCategory()
@@ -104,18 +107,27 @@ Page({
   confirm() {
     let _data = this.generateData()
     if (this.data.type == 'create'){
-      deviceApi.create(_data)
+      deviceApi.create(_data).then((res) => {
+        Toast({
+          type: 'success',
+          message: '创建成功',
+          duration: 1000,
+          onClose: () => {
+            wx.navigateBack()
+          },
+        });
+      })
     } else {
       deviceApi.update(_data)
+      Toast({
+        type: 'success',
+        message: '修改成功',
+        duration: 1000,
+        onClose: () => {
+          wx.navigateBack()
+        },
+      });
     }
-    Toast({
-      type: 'success',
-      message: this.data.type == 'edit' ? '修改成功' : '创建成功',
-      duration: 1000,
-      onClose: () => {
-        wx.navigateBack()
-      },
-    });
   },
   cancel() {
     wx.navigateBack()
@@ -159,5 +171,10 @@ Page({
         url: '/pages/' + e.currentTarget.dataset.name + '/list/index?device=' + this.data.id,
       })
     }
+  },
+  createStream(e){
+    wx.navigateTo({
+      url: '/pages/stream/edit/index?type=create&source=create_new_device',
+    })
   }
 })

@@ -22,7 +22,7 @@ Page({
   async getCategory() {
     let category = await categoryApi.list()
     let device = await deviceApi.list()
-    let uid =  wx.getStorageSync('uid')
+    let uid = wx.getStorageSync('uid')
     let noCategory = []
     let shareCategory = []
     for (let i = 0; i < device.length; i++) {
@@ -36,16 +36,21 @@ Page({
           hasCategory = true
         }
       }
-      if (device[i].create_user != uid){
+      if (device[i].create_user != uid) {
         shareCategory.push(device[i])
-      }
-      else if (!hasCategory){
+      } else if (!hasCategory) {
         noCategory.push(device[i])
       }
     }
     let categoryCount = category.length
-    category.push({name: '未分类', device: noCategory})
-    category.push({name: '共享设备', device: shareCategory})
+    category.push({
+      name: '未分类',
+      device: noCategory
+    })
+    category.push({
+      name: '共享设备',
+      device: shareCategory
+    })
     this.setData({
       category,
       refresh: false,
@@ -62,7 +67,7 @@ Page({
       url: '/pages/device/detail/index?id=' + e.currentTarget.dataset.id,
     })
   },
-  refresh: function (){
+  refresh: function () {
     this.setData({
       refresh: true
     })

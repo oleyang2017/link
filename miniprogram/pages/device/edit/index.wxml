@@ -23,16 +23,17 @@
 </van-cell-group>
 
 <van-cell-group title="高级信息">
-  <van-field label="所属分类" value="{{ category_name }}" border="{{ false }}" bindtap="openPopup" placeholder="点击选择分类" readonly />
-  <view class="padding bg-white custom-cell" bindtap="toOtherPage" data-name='stream'>
+  <van-field label="所属分类" value="{{ category_name }}"  border="{{ false }}" bindtap="openPopup" placeholder="点击选择分类" readonly />
+  <view class="padding bg-white custom-cell" bindtap="createStream" data-name='stream'>
     <view class="title">数据流</view>
     <view class="context">
-      <view class="{{ type=='edit' ? '' : 'padding-bottom'}}" wx:if="{{streams.length != 0}}">
+      <view class="{{ streams.length ? 'padding-bottom-xs' : ''}}" wx:if="{{streams.length != 0}}">
         <van-tag wx:for="{{streams}}" data-id="{{item.id}}" data-index="{{index}}" data-name="{{item.name}}" wx:key="id"
           color="{{fn.tagColor()}}" class="margin-right-xs">
-          {{item.name}}</van-tag>
+          {{item.name}}
+        </van-tag>
       </view>
-      <view wx:if="{{type == 'create'}}" class="text-df text-blue">点击创建数据流</view>
+      <view class="text-df" style="color:#c8c9cc" bindtap="createStream">点击创建数据流</view>
     </view>
   </view>
   <view class="padding bg-white custom-cell" bindtap="toOtherPage" data-name='trigger' wx:if="{{type=='edit'}}">

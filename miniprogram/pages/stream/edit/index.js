@@ -4,9 +4,9 @@ import Dialog from '@vant/weapp//dialog/dialog'
 import Toast from '@vant/weapp//toast/toast'
 
 Page({
-
   data: {
     type: 'edit',
+    source: '',
     typeList: [{
         name: '整型（int）',
         value: 'int'
@@ -78,6 +78,11 @@ Page({
         }
       })
     }
+    if (options.type) {
+      this.setData({
+        type: options.type
+      })
+    }
     deviceApi.list().then((res) => {
       if (this.data.device) {
         for (let i = 0; i < res.length; i++) {
@@ -126,7 +131,9 @@ Page({
 
   },
   changeSelect(e) {
-    const { index } = e.detail;
+    const {
+      index
+    } = e.detail;
     if (this.data.selectName == 'qos') {
       this.setData({
         qos: this.data.qosList[index].value,
@@ -157,7 +164,7 @@ Page({
         unit: this.data.unit,
         qos: this.data.qos,
         data_type: this.data.data_type
-      }).then(()=>{
+      }).then(() => {
         Toast({
           type: 'success',
           message: '修改成功',
@@ -167,14 +174,14 @@ Page({
           },
         });
       })
-    } else {
+    } else if (this.data.type == 'create' && this.data.source != 'create_new_device') {
       streamApi.create({
         name: this.data.name,
         device: this.data.device,
         unit: this.data.unit,
         qos: this.data.qos,
         data_type: this.data.data_type
-      }).then(()=>{
+      }).then(() => {
         Toast({
           type: 'success',
           message: '创建成功',
@@ -184,27 +191,42 @@ Page({
           },
         });
       })
+    } else if (this.data.type == 'create' && this.data.source == 'create_new_device') {
+      let pages = getCurrentPages()
+      let prevPage = pages[pages.length - 2]
+      let streamList = prevPage.data.streams
+      streamList.push({
+        name: this.data.name,
+        unit: this.data.unit,
+        unit_name: this.data.unit_name,
+        qos: this.data.qos,
+        data_type: this.data.data_type
+      })
+      prevPage.setData({
+        stream: streamList
+      })
+      wx.navigateBack()
     }
-  }, 
-  cancel(){
+  },
+  cancel() {
     wx.navigateBack()
   },
-  delete(){
+  delete() {
     Dialog.confirm({
-      title: '警告！',
-      message: `确认删除 ‘${this.data.name} ’吗？\n删除后将清空该数据流下的所有历史数据,且不可恢复。`,
-    })
-    .then(() => {
-      streamApi.delete(this.data.id).then(()=>{
-        Toast({
-          type: 'success',
-          message: '删除成功',
-          duration: 1000,
-          onClose: () => {
-            wx.navigateBack()
-          },
+        title: '警告！',
+        message: `确认删除 ‘${this.data.name} ’吗？\n删除后将清空该数据流下的所有历史数据,且不可恢复。`,
+      })
+      .then(() => {
+        streamApi.delete(this.data.id).then(() => {
+          Toast({
+            type: 'success',
+            message: '删除成功',
+            duration: 1000,
+            onClose: () => {
+              wx.navigateBack()
+            },
+          })
         })
       })
-    })
   },
 })
