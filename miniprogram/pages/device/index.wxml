@@ -2,21 +2,25 @@
 <view class="container">
   <view>
     <view class="title">我的设备</view>
-    <view class="fa fa-refresh head-icon {{refresh ? 'refresh-ani':''}}" bindtap="refresh"/>
-    <navigator class="fa fa-plus head-icon fr margin-right-xl" hover-class="none" url="/pages/device/edit/index?type=create"></navigator>
   </view>
   <view>
     <van-tabs type="" active="{{active}}" ellipsis="{{false}}" animated swipeable custom-class="body"
       tab-class="category-tab-class" tab-active-class="category-tab-active-class" bind:change="changeCategory">
-      <van-tab wx:for="{{category}}" wx:key="id" name="{{item.id}}" title="{{item.name}}" title-style="font-size:16px;text-align: left;">
-        <scroll-view style="height: calc(100vh);" scroll-y>
+      <van-tab wx:for="{{category}}" wx:key="id" name="{{item.id}}" title="{{item.name}}" title-style="font-size:40rpx;text-align: left;">
+        <scroll-view style="height: calc(100vh);" scroll-y refresher-enabled refresher-triggered="{{refresh}}" bindrefresherrefresh="refresh">
           <view class="device-scroll-container">
               <view style="display: inline-block; width: 50%;" wx:for="{{item.device}}" wx:key="index" wx:for-item="item">
                 <device-item deviceId="{{item.id}}" index="{{index}}" name="{{item.name}}" status="{{item.status}}" image="{{item.image}}" />
               </view>
+            <block wx:if="{{item.device.length}}">
+              <view class="text-blue text-df text-center padding-bottom-xl" style="width: 100%;padding-bottom: 240rpx;">
+                <navigator wx:if="{{item.name !='共享设备'}}" url="/pages/device/edit/index?type=create" hover-class="none">点击创建更多设备</navigator>  
+              </view>
+            </block>
+            
             <block wx:if="{{!item.device.length}}">
               <van-empty  wx:if="{{!categoryData.length}}" style="width: 100%">
-                <view class="text-gray text-sm padding-top-xl text-center" style="width: 100%">
+                <view class="text-gray text-df padding-top-xl text-center" style="width: 100%">
                   <text>{{item.name !='共享设备' ? '你还没有创建设备!' :'还没有人分享设备给你哦！'}}</text>
                   <navigator wx:if="{{item.name !='共享设备'}}" class="text-blue padding-left-sm" url="/pages/device/edit/index?type=create"
                     style="display: inline-block;" hover-class="none">点击创建</navigator>

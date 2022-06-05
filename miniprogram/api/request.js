@@ -1,5 +1,5 @@
-// const API_BASE_URL = 'http://192.168.0.103:8000/'
-const API_BASE_URL = 'http://127.0.0.1:8000/'
+const API_BASE_URL = 'http://192.168.0.104:8000/'
+// const API_BASE_URL = 'http://127.0.0.1:8000/'
 // const API_BASE_URL = 'https://www.iotforfml.cn/'
 
 const request = (url, data, method) => {
@@ -18,7 +18,13 @@ const request = (url, data, method) => {
         if (response.statusCode == 500) {
           wx.showToast({
             title: '服务器错误！',
-            duration: 2000
+            duration: 1000
+          })
+        }
+        else if (response.statusCode == 400) {
+          wx.showToast({
+            title: '请求失败！',
+            duration: 1000
           })
         }
         resolve(response.data)
@@ -39,7 +45,6 @@ const requestWithFile = (url, formData, filePath) => {
   let _header = {
     'Authorization': 'Bearer ' + wx.getStorageSync('token')
   }
-  console.log(12313123)
   wx.uploadFile({
     url: _url,
     formData: formData,
