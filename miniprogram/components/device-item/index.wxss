@@ -39,9 +39,26 @@
 }
 
 .card-container .status {
-  font-size: 20rpx;
-  padding-bottom: 10rpx;
+  font-size: 14rpx;
   display: inline-block;
+  top: 0;
+  right: 0;
+  border-radius: 0 20rpx;
+  /* top: 0;
+  left: 0;
+  border-radius: 20rpx 0; */
+  position: absolute;
+  padding: 6rpx 8rpx;
+}
+
+.card-container .online-status {
+  background-color: #0081ff;
+  color: #ffffff;
+}
+
+.card-container .offline-status {
+  background-color: #aaaaaa;
+  color: #ffffff;
 }
 
 .card-container .pic {

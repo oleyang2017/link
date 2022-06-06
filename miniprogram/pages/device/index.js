@@ -51,6 +51,12 @@ Page({
       name: '共享设备',
       device: shareCategory
     })
+    if (!categoryCount){
+      category.push({
+        name: '',
+        device:[]
+      })
+    }
     this.setData({
       category,
       refresh: false,

@@ -6,7 +6,7 @@
   <view>
     <van-tabs type="" active="{{active}}" ellipsis="{{false}}" animated swipeable custom-class="body"
       tab-class="category-tab-class" tab-active-class="category-tab-active-class" bind:change="changeCategory">
-      <van-tab wx:for="{{category}}" wx:key="id" name="{{item.id}}" title="{{item.name}}" title-style="font-size:40rpx;text-align: left;">
+      <van-tab wx:for="{{category}}" wx:key="id" name="{{item.id}}" title="{{item.name}}" title-style="font-size:40rpx;text-align: left;" disabled="{{item.name==''}}">
         <scroll-view style="height: calc(100vh);" scroll-y refresher-enabled refresher-triggered="{{refresh}}" bindrefresherrefresh="refresh">
           <view class="device-scroll-container">
               <view style="display: inline-block; width: 50%;" wx:for="{{item.device}}" wx:key="index" wx:for-item="item">
@@ -16,8 +16,7 @@
               <view class="text-blue text-df text-center padding-bottom-xl" style="width: 100%;padding-bottom: 240rpx;">
                 <navigator wx:if="{{item.name !='共享设备'}}" url="/pages/device/edit/index?type=create" hover-class="none">点击创建更多设备</navigator>  
               </view>
-            </block>
-            
+            </block>   
             <block wx:if="{{!item.device.length}}">
               <van-empty  wx:if="{{!categoryData.length}}" style="width: 100%">
                 <view class="text-gray text-df padding-top-xl text-center" style="width: 100%">
@@ -48,7 +47,7 @@
             </view>
           </view>
         </scroll-view>
-        <view class="text-gray padding text-center" wx:if="{{category.length <= 2}}">暂无分类</view>
+        <view class="text-gray padding text-center" wx:if="{{category.length <= 3}}">暂无分类</view>
         <view style="height: 1px; background-color: #e6e6e6;" />
         <navigator class="category-item" url="/pages/device/list/index" hover-class="none">
           <view class="name">全部设备</view>

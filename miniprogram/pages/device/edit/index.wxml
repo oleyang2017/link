@@ -9,7 +9,7 @@
 </wxs>
 
 <van-cell-group title="基础信息">
-  <van-field label="设备名称" model:value="{{ name }}" placeholder="请输入设备名称" border="{{ false }}" required />
+  <van-field label="设备名称" model:value="{{ name }}" placeholder="请输入设备名称" border="{{ false }}" maxlength="{{7}}" required />
   <van-field wx:if="{{type =='edit'}}" label="设备编号" model:value="{{ id }}" placeholder="请输入设备名称" border="{{ false }}"
     required readonly />
   <van-field wx:if="{{type =='edit'}}" label="客户端ID" model:value="{{ client_id }}" placeholder="请输入设备名称"
