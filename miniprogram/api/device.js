@@ -26,4 +26,16 @@ export default {
     }
     return request(`api/devices/${data.id}/`, data, "PUT")
   },
+  getStreams:(id) =>{
+    return request(`api/devices/${id}/streams/`, {}, "GET")
+  },
+  getCharts:(id) =>{
+    return request(`api/devices/${id}/charts/`, {}, "GET")
+  },
+  getTriggers:(id) =>{
+    return request(`api/devices/${id}/triggers/`, {}, "GET")
+  },
+  getPerms:(id) =>{
+    return request(`api/devices/${id}/perms/`, {}, "GET")
+  }
 }

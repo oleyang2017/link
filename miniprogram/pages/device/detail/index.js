@@ -4,6 +4,9 @@ Page({
   data: {
     showAll: false,
     showImage: false,
+    canEdit: false,
+    canDelete: false,
+    canControl: false,
   },
   onLoad(options) {
     this.setData({
@@ -19,6 +22,15 @@ Page({
         ...res
       })
     })
+    deviceApi.getPerms(this.data.id).then((res) => {
+      this.setData({
+        canEdit: res.includes('change_device'),
+        canDelete: res.includes('delete_device'),
+        canControl: res.includes('control_device'),
+        prems:res,
+      })
+    })
+
   },
 
   // 更改显示状态

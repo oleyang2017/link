@@ -7,8 +7,7 @@
       required />
     <van-field value="{{ defaultType }}" bindtap="openPopup" data-name="type" label="数据类型" border="{{ false }}" readonly
       required />
-    <van-field wx:if="{{source != 'create_new_device'}}" value="{{ defaultDevice }}" bindtap="openPopup" data-name="device" label="所属设备" border="{{ false }}"
-      readonly required />
+    <van-field wx:if="{{source != 'create_new_device'}}" value="{{ defaultDevice }}" bindtap="openPopup" data-name="device" label="所属设备" border="{{ false }}" readonly="{{type=='edit'}}" required />
     <van-field wx:if="{{type!='create'}}" value="{{ create_time }}" label="创建时间" border="{{ false }}" readonly />
   </van-cell-group>
   <view class="padding-lr-xl padding-tb-lg">

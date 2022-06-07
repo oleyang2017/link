@@ -195,13 +195,17 @@ Page({
       let pages = getCurrentPages()
       let prevPage = pages[pages.length - 2]
       let streamList = prevPage.data.streams
-      streamList.push({
+      let stream = {
         name: this.data.name,
         unit: this.data.unit,
         unit_name: this.data.unit_name,
         qos: this.data.qos,
         data_type: this.data.data_type
-      })
+      }
+      if (this.data.id){
+        stream.id = this.data.id
+      }
+      streamList.push(stream)
       prevPage.setData({
         stream: streamList
       })

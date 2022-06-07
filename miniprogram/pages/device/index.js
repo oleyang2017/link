@@ -59,6 +59,7 @@ Page({
     }
     this.setData({
       category,
+      categoryCount,
       refresh: false,
       popupHeight: categoryCount * 36 > 260 ? '260px' : categoryCount * 36 + 'px'
     })

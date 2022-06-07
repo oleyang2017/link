@@ -47,7 +47,7 @@
             </view>
           </view>
         </scroll-view>
-        <view class="text-gray padding text-center" wx:if="{{category.length <= 3}}">暂无分类</view>
+        <view class="text-gray padding text-center" wx:if="{{!categoryCount}}">暂无分类</view>
         <view style="height: 1px; background-color: #e6e6e6;" />
         <navigator class="category-item" url="/pages/device/list/index" hover-class="none">
           <view class="name">全部设备</view>

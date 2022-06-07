@@ -26,13 +26,15 @@
         {
           "name": "detail",
           "pathName": "pages/device/detail/index",
-          "query": "id=10",
+          "query": "id=46",
+          "launchMode": "default",
           "scene": null
         },
         {
-          "name": "pages/device/edit/index",
+          "name": "device-edit",
           "pathName": "pages/device/edit/index",
-          "query": "id=10",
+          "query": "id=68",
+          "launchMode": "default",
           "scene": null
         }
       ]

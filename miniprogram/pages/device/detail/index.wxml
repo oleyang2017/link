@@ -9,7 +9,7 @@
 <page-meta background-color='#ffffff' />
 <view class="padding-lr-sm padding-top-xs bg-white">
   <text class="text-bold text-black text-xxl ">{{name}}</text>
-  <view class="text-xl text-blue fr">
+  <view class="text-xl text-blue fr" wx:if="{{canEdit}}">
     <navigator url="/pages/device/edit/index?id={{id}}" hover-class="none">
       <text class="cuIcon-edit"></text>
     </navigator>
@@ -26,7 +26,7 @@
       </view>
       <view class="padding-xs text-df">
         <text>设备编号：</text>
-        <text class="text-sm" bindlongtap="copy" data-value="{{id}}">{{id}}</text>
+        <text class="text-sm" bindlongtap="copy" data-value="{{client_name}}">{{client_name}}</text>
       </view>
       <view class="padding-xs text-df">
         <text>客户端ID：</text>

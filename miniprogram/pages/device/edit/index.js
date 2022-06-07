@@ -1,5 +1,6 @@
 import deviceApi from '../../../api/device'
 import categoryApi from '../../../api/category'
+import streamApi from '../../../api/stream'
 import Toast from '@vant/weapp//toast/toast'
 const app = getApp()
 
@@ -12,31 +13,24 @@ Page({
     charts: [],
     streams: [],
     triggers: [],
-    filePath: null
+    filePath: null,
+    deleteStreams: [],
   },
 
   onLoad: function (options) {
     this.setData({
       ...options
     })
-    if (options.id) {
-      deviceApi.detail(this.data.id).then((res) => {
-        let image_list = []
-        if (res.image) {
-          image_list = [{
-            url: res.image
-          }]
-        }
-        this.setData({
-          ...res,
-          image_list
-        })
-      })
-    }
   },
   onShow: function () {
-    // 因为在其他页面setData不会刷新页面，这里再set一次强制刷新页面
-    this.setData({...this.data})
+    if (this.data.type == 'edit') {
+      this.getDetailInfo(this.data.id)
+    } else if (this.data.type == 'create') {
+      // 因为在其他页面setData不会刷新页面，这里再set一次强制刷新页面
+      this.setData({
+        ...this.data
+      })
+    }
   },
   openPopup() {
     if (!this.data.show && this.data.categoryList.length == 0) {
@@ -84,13 +78,25 @@ Page({
         });
       })
     }
-
+  },
+  getDetailInfo(id) {
+    deviceApi.detail(id).then((res) => {
+      let image_list = []
+      if (res.image) {
+        image_list = [{
+          url: res.image
+        }]
+      }
+      this.setData({
+        ...res,
+        image_list
+      })
+    })
   },
   afterRead(e) {
     const {
       file
     } = e.detail;
-    console.log(e.detail)
     this.setData({
       image_list: [{
         url: file.url
@@ -104,30 +110,26 @@ Page({
       filePath: null
     })
   },
-  confirm() {
+  async confirm() {
     let _data = this.generateData()
-    if (this.data.type == 'create'){
-      deviceApi.create(_data).then((res) => {
-        Toast({
-          type: 'success',
-          message: '创建成功',
-          duration: 1000,
-          onClose: () => {
-            wx.navigateBack()
-          },
-        });
-      })
+    let deleteStreams = this.data.deleteStreams
+    if (this.data.type == 'create') {
+      await deviceApi.create(_data)
     } else {
-      deviceApi.update(_data)
-      Toast({
-        type: 'success',
-        message: '修改成功',
-        duration: 1000,
-        onClose: () => {
-          wx.navigateBack()
-        },
-      });
+      await deviceApi.update(_data)
     }
+
+    for (let i = 0; i < deleteStreams.length; i++) {
+      await streamApi.delete(deleteStreams[i])
+    }
+    Toast({
+      type: 'success',
+      message: this.data.type == 'create' ? '创建成功' : '修改成功',
+      duration: 1000,
+      onClose: () => {
+        wx.navigateBack()
+      },
+    });
   },
   cancel() {
     wx.navigateBack()
@@ -146,18 +148,18 @@ Page({
       name,
       filePath
     }
-    if (this.data.category){
+    if (this.data.category) {
       data.category = this.data.category
     }
-    if (this.data.desc){
+    if (this.data.desc) {
       data.desc = this.data.desc
+    }
+    if (this.data.streams.length) {
+      data.streams = streams
     }
     if (this.data.type == 'create') {
       if (this.data.charts.length) {
         data.charts = charts
-      }
-      if (this.data.streams.length) {
-        data.streams = streams
       }
     } else {
       data.id = id
@@ -172,9 +174,23 @@ Page({
       })
     }
   },
-  createStream(e){
+  createStream(e) {
     wx.navigateTo({
-      url: '/pages/stream/edit/index?type=create&source=create_new_device',
+      url: `/pages/stream/edit/index?type=create&source=${e.currentTarget.dataset.source}&device=${this.data.id}`,
     })
-  }
+  },
+  deleteStream(e) {
+    let streams = this.data.streams
+    streams.splice(e.currentTarget.dataset.index, 1)
+    this.setData({
+      streams
+    })
+    if (e.currentTarget.dataset.id) {
+      let deleteStreams = this.data.deleteStreams
+      deleteStreams.push(e.currentTarget.dataset.id)
+      this.setData({
+        deleteStreams
+      })
+    }
+  },
 })

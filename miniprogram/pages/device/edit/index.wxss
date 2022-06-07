@@ -12,6 +12,7 @@
   margin-right: 12px;
 }
 .custom-cell .context{
+  width: 100%;
   display: inline-block; 
   overflow: hidden;
   vertical-align: middle;
