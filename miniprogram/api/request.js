@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://192.168.0.104:8000/'
+const API_BASE_URL = 'http://192.168.0.105:8000/'
 // const API_BASE_URL = 'http://127.0.0.1:8000/'
 // const API_BASE_URL = 'https://www.iotforfml.cn/'
 
@@ -25,6 +25,11 @@ const request = (url, data, method) => {
           wx.showToast({
             title: '请求失败！',
             duration: 1000
+          })
+        }
+        else if (response.statusCode == 401) {
+          wx.navigateTo({
+            url: '/pages/login/index',
           })
         }
         resolve(response.data)
