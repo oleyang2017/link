@@ -5,7 +5,7 @@
   /* margin: 0 2% 40rpx; */
   margin-bottom: 40rpx;
   padding: 20rpx;
-  height: 180rpx;
+  height: 120rpx;
   border-radius: 20rpx;
   /* box-shadow: 0 4rpx 14rpx -8rpx #888888; */
   box-shadow: 0 4rpx 20rpx -8rpx #e3e5e7;
@@ -15,13 +15,14 @@
 }
 
 .card-container .name {
-  font-size: 30rpx;
-  padding-bottom: 10rpx;
-  max-width: 150rpx;
+  font-size: 28rpx;
+  line-height: 28rpx;
+  padding-bottom: 20rpx;
+  max-width: 200rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 150rpx;
+  width: 200rpx;
 }
 
 .card-container .tag {
@@ -39,7 +40,7 @@
 }
 
 .card-container .status {
-  font-size: 14rpx;
+  font-size: 16rpx;
   display: inline-block;
   top: 0;
   right: 0;
@@ -48,7 +49,7 @@
   left: 0;
   border-radius: 20rpx 0; */
   position: absolute;
-  padding: 6rpx 8rpx;
+  padding: 4rpx 8rpx;
 }
 
 .card-container .online-status {
@@ -74,7 +75,21 @@
 }
 
 .card-container .image {
-  width: 140rpx;
-  height: 140rpx;
+  /* width: 140rpx; */
+  /* height: 140rpx; */
   border-radius: 4px;
+  width: 80rpx;
+  height: 80rpx;
+  /* border-radius: 50%; */
+}
+
+.card-container .custom-info {
+  font-size: 24rpx;
+  padding-bottom: 10rpx;
+  max-width: 200rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #aaaaaa;
+  width: 200rpx;
 }

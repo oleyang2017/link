@@ -3,5 +3,6 @@
   <view class="status {{status ? 'online-status':'offline-status'}}">{{status?'在线':'离线'}}</view>
   <view style="display: inline-block; margin-left: 10rpx;vertical-align: top;">
     <view class="name">{{name}}</view>
+    <view class="custom-info">{{name}}</view>
   </view>
 </view>
