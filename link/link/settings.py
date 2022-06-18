@@ -88,10 +88,10 @@ WSGI_APPLICATION = "link.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "link_iot",
-        "USER": "your username",
-        "PASSWORD": "your password",
-        "HOST": "localhost",
+        "NAME": "link",
+        "USER": "admin",
+        "PASSWORD": "admin",
+        "HOST": "link_pgsql",
         "PORT": "5432",
         "OPTIONS": {"client_encoding": "UTF8"},
     }
