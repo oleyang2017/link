@@ -52,12 +52,12 @@ def add_acl_stream(sender, instance, **kwargs):
             allow=1,
             clientid=instance.device.client_id,
             access=3,
-            topic="stream/{stream_id}/".format(stream_id=instance.id),
+            topic="stream/{stream_id}/".format(stream_id=instance.stream_id),
         )
 
 
 @receiver(post_delete, sender=Stream, dispatch_uid="remove_acl_stream")
 def remove_acl_stream(sender, instance, **kwargs):
     EMQXAcl.objects.filter(
-        topic="stream/{stream_id}/".format(stream_id=instance.id)
+        topic="stream/{stream_id}/".format(stream_id=instance.stream_id)
     ).delete()

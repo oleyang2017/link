@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import transaction
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from base.base_serializers import BaseModelSerializer
 from .models import DeviceCategory, Device, Stream, Chart, Trigger
@@ -22,10 +23,17 @@ class DeviceCategorySerializer(BaseModelSerializer):
 
 
 class DeviceSerializer(BaseModelSerializer):
+    display_custom_info = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_display_custom_info(obj):
+        return obj.get_display_custom_info()
+
     class Meta:
         model = Device
-        fields = ("id", "category", "name", "status", "image", "sequence", "create_user")
-        read_only_fields = ("id", "category", "name", "status", "image", "sequence", "create_user")
+        fields = ("id", "category", "name", "status", "image", "sequence", "create_user", "display_custom_info")
+        read_only_fields = ("id", "category", "name", "status", "image", "sequence", "create_user",
+                            "display_custom_info")
 
 
 class StreamSerializer(BaseModelSerializer):
@@ -62,6 +70,13 @@ class StreamSerializer(BaseModelSerializer):
             "update_time",
         )
         read_only_fields = ("id", "stream_id", "created_time", "update_time")
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Stream.objects.all(),
+                fields=('device', 'name'),
+                message="同一设备数据流名称不能重复！"
+            )
+        ]
 
     def create(self, validated_data):
         device = validated_data.get("device")
@@ -193,6 +208,11 @@ class DeviceDetailSerializer(BaseModelSerializer):
     charts = ChartSerializer(many=True, required=False)
     triggers = TriggerSerializer(many=True, required=False)
     category_name = serializers.SerializerMethodField(read_only=True)
+    display_custom_info = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_display_custom_info(obj):
+        return obj.get_display_custom_info()
 
     @staticmethod
     def get_category_name(obj):
@@ -220,6 +240,9 @@ class DeviceDetailSerializer(BaseModelSerializer):
             "streams",
             "charts",
             "triggers",
+            "token",
+            "custom_info",
+            "display_custom_info",
         )
         read_only_fields = (
             "id",

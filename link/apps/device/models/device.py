@@ -2,6 +2,8 @@ from django.db import models
 from shortuuid.django_fields import ShortUUIDField
 
 from base.base_model import BaseModel
+import re
+from emqx.models.data import EMQXData
 
 
 class Device(BaseModel):
@@ -27,6 +29,8 @@ class Device(BaseModel):
     last_connect_time = models.DateTimeField(
         verbose_name="最近连接时间", null=True, blank=True
     )
+    custom_info = models.CharField(verbose_name="自定义展示信息", null=True, blank=True, max_length=64)
+    # e.g 当前温度[stream_name]，当前湿度[stream_name]
     token = ShortUUIDField(length=16, verbose_name="token")
 
     class Meta:
@@ -39,3 +43,21 @@ class Device(BaseModel):
 
     def __str__(self):
         return self.name
+
+    def get_display_custom_info(self):
+        if self.custom_info:
+            display_custom_info = self.custom_info
+            stream_list = re.findall(r'[\[](.*?)[\]]', display_custom_info)
+            for name in stream_list:
+                stream = self.streams.filter(name=name).first()
+                data = '--'
+                if stream:
+                    last_data = EMQXData.objects.filter(client_id=self.client_id,
+                                                        topic__endswith=f"{stream.stream_id}/").order_by(
+                        '-timestamp').first()
+                    if last_data:
+                        data = f"{last_data.payload} {stream.unit}"
+                display_custom_info = display_custom_info.replace(f"[{name}]", data)
+            return display_custom_info
+        else:
+            return None

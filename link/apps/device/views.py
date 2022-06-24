@@ -47,7 +47,6 @@ class DeviceViewSet(BaseModelViewSet):
         assign_perm("delete_device", current_user, device)
 
     def perform_update(self, serializer):
-        serializer.save(last_update_user=self.request.user)
         if not self.request.user.has_perm("change_device", serializer.instance):
             raise PermissionDenied("你没有修改该设备的权限")
         else:

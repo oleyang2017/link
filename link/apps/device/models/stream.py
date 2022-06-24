@@ -42,6 +42,7 @@ class Stream(BaseModel):
         db_table = "stream"
         verbose_name = "数据流"
         verbose_name_plural = verbose_name
+        unique_together = ("device", "name",)
 
     def __str__(self):
         return self.name
