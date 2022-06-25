@@ -1,4 +1,6 @@
 
+<import src="index.skeleton.wxml"/>
+<template is="skeleton"  wx:if="{{showSkeleton}}"/>
 <view class="container">
   <view>
     <view class="title">我的设备</view>

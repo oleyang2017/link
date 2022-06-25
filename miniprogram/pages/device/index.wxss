@@ -1,3 +1,4 @@
+@import "./index.skeleton.wxss";
 .container {
   --tabs-nav-background-color: #f6f8fa;
   min-height: 100vh;
