@@ -1,11 +1,7 @@
 from django.urls import path
+from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView, TokenObtainPairView
 
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView,
-)
-from .views import login_or_register_with_wx, get_tmp_secret
+from .views import get_tmp_secret, login_or_register_with_wx
 
 urlpatterns = [
     path("auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),

@@ -1,9 +1,10 @@
 from django.db import models
-from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from shortuuid.django_fields import ShortUUIDField
+from django.db.models.signals import post_save, pre_delete
 
 from base.base_model import BaseModel
+
 from .stream import Stream
 
 
@@ -23,9 +24,7 @@ class Chart(BaseModel):
         on_delete=models.CASCADE,
         db_constraint=False,
     )
-    streams = models.ManyToManyField(
-        "device.Stream", related_name="charts", db_constraint=False
-    )
+    streams = models.ManyToManyField("device.Stream", related_name="charts", db_constraint=False)
     title = models.CharField(max_length=16, verbose_name="标题", null=True, blank=True)
     name = models.CharField(max_length=16, verbose_name="名称")
     custom_settings = models.JSONField(verbose_name="自定义设置", null=True, blank=True)

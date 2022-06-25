@@ -2,8 +2,8 @@ import json
 
 import requests
 from django.conf import settings
-from requests.exceptions import Timeout
 from rest_framework import exceptions
+from requests.exceptions import Timeout
 
 
 def code2openid(code: str) -> str:

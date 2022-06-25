@@ -1,7 +1,7 @@
 import logging
 
-from django.conf import settings
 from django.db import models
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ class BaseModel(models.Model):
         on_delete=models.DO_NOTHING,
         null=True,
         db_constraint=False,
-        related_name='+',
+        related_name="+",
     )
 
     class Meta:

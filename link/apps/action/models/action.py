@@ -2,12 +2,10 @@ from django.db import models
 from django.conf import settings
 from shortuuid.django_fields import ShortUUIDField
 
+from base.base_model import BaseModel
 
-class Action(models.Model):
-    """
-    动作
-    """
 
+class Action(BaseModel):
     show = models.BooleanField(default=True, verbose_name="首页显示")
     name = models.CharField(max_length=8, verbose_name="名称")
     device = models.ForeignKey(
@@ -16,15 +14,17 @@ class Action(models.Model):
         verbose_name="所属设备",
         blank=True,
         null=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
+        db_constraint=False,
     )
+    icon = models.ImageField(null=True, blank=True, verbose_name="图表", upload_to="images/action")
 
     class Meta:
         verbose_name = "动作"
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.name if self.name else self.device.name
+        return self.name
 
     def send(self, content, operator, log=True):
         """
@@ -48,14 +48,14 @@ class BaseActionItem(models.Model):
         ("button", "按钮"),
         ("switch", "开关"),
         ("slider", "滑块"),
+        ("rgb", "RGB调色"),
     )
     device = models.ForeignKey(
         "device.Device",
         related_name="action_items",
         verbose_name="所属设备",
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
+        db_constraint=False,
     )
     action = models.ForeignKey(Action, related_name="items", on_delete=models.CASCADE)
     name = models.CharField(max_length=8, blank=True, verbose_name="指令名称")
@@ -79,9 +79,10 @@ class ActionItem(models.Model):
         ("button", "按钮"),
         ("switch", "开关"),
         ("slider", "滑块"),
+        ("rgb", "RGB"),
     )
     SIZE_CHOICE = (("small", "小号"), ("default", "默认"), ("lager", "大号"))
-    id = ShortUUIDField(db_index=True, primary_key=True)
+    action_id = ShortUUIDField(db_index=True, primary_key=True)
     action = models.ForeignKey(Action, related_name="items", on_delete=models.CASCADE)
     device = models.ForeignKey(
         "device.Device",
@@ -123,10 +124,6 @@ class ActionItem(models.Model):
 
 
 class ActionLog(models.Model):
-    """
-    动作日志
-    """
-
     device = models.ForeignKey(
         "device.Device",
         related_name="logs",
@@ -143,9 +140,7 @@ class ActionLog(models.Model):
         on_delete=models.SET_NULL,
     )
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="执行时间")
-    content = models.CharField(
-        max_length=32, default="", blank=True, verbose_name="指令内容"
-    )
+    content = models.CharField(max_length=32, default="", blank=True, verbose_name="指令内容")
     result = models.TextField(blank=True, default="", verbose_name="执行结果")
     success = models.BooleanField(default=True, verbose_name="是否成功")
 

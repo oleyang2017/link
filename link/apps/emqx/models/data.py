@@ -5,6 +5,7 @@ class EMQXData(models.Model):
     """
     历史消息
     """
+
     node = models.CharField(max_length=32, verbose_name="节点")
     msg_id = models.CharField(max_length=64, verbose_name="消息ID")
     client_id = models.CharField(max_length=16, verbose_name="client_id", db_index=True)

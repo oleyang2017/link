@@ -29,9 +29,7 @@ class Stream(BaseModel):
         on_delete=models.CASCADE,
         db_constraint=False,
     )
-    unit_name = models.CharField(
-        max_length=8, blank=True, default="", verbose_name="单位名称"
-    )
+    unit_name = models.CharField(max_length=8, blank=True, default="", verbose_name="单位名称")
     unit = models.CharField(max_length=8, blank=True, default="", verbose_name="单位")
     qos = models.IntegerField(choices=QOS_CHOICE, default=0, verbose_name="Qos")
     data_type = models.CharField(
@@ -42,7 +40,10 @@ class Stream(BaseModel):
         db_table = "stream"
         verbose_name = "数据流"
         verbose_name_plural = verbose_name
-        unique_together = ("device", "name",)
+        unique_together = (
+            "device",
+            "name",
+        )
 
     def __str__(self):
         return self.name

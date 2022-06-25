@@ -1,18 +1,15 @@
-from rest_framework.response import Response
-from rest_framework.exceptions import APIException, AuthenticationFailed
-from rest_framework.decorators import (
-    authentication_classes,
-    permission_classes,
-    api_view,
-)
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-from utils.wechat import code2openid
 from sts.sts import Sts
 from django.conf import settings
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.exceptions import APIException, AuthenticationFailed
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+from utils.wechat import code2openid
 
 from .models import UserProfile as User
 

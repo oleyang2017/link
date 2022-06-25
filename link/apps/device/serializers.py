@@ -1,10 +1,11 @@
-from django.conf import settings
 from django.db import transaction
+from django.conf import settings
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from base.base_serializers import BaseModelSerializer
-from .models import DeviceCategory, Device, Stream, Chart, Trigger
+
+from .models import Chart, Device, Stream, Trigger, DeviceCategory
 
 
 class DeviceCategorySerializer(BaseModelSerializer):
@@ -31,9 +32,26 @@ class DeviceSerializer(BaseModelSerializer):
 
     class Meta:
         model = Device
-        fields = ("id", "category", "name", "status", "image", "sequence", "create_user", "display_custom_info")
-        read_only_fields = ("id", "category", "name", "status", "image", "sequence", "create_user",
-                            "display_custom_info")
+        fields = (
+            "id",
+            "category",
+            "name",
+            "status",
+            "image",
+            "sequence",
+            "create_user",
+            "display_custom_info",
+        )
+        read_only_fields = (
+            "id",
+            "category",
+            "name",
+            "status",
+            "image",
+            "sequence",
+            "create_user",
+            "display_custom_info",
+        )
 
 
 class StreamSerializer(BaseModelSerializer):
@@ -72,9 +90,7 @@ class StreamSerializer(BaseModelSerializer):
         read_only_fields = ("id", "stream_id", "created_time", "update_time")
         validators = [
             UniqueTogetherValidator(
-                queryset=Stream.objects.all(),
-                fields=('device', 'name'),
-                message="同一设备数据流名称不能重复！"
+                queryset=Stream.objects.all(), fields=("device", "name"), message="同一设备数据流名称不能重复！"
             )
         ]
 
@@ -82,7 +98,9 @@ class StreamSerializer(BaseModelSerializer):
         device = validated_data.get("device")
         if not device:
             raise serializers.ValidationError("请选择绑定的设备!")
-        if not self.context["request"].user.has_perm("change_device", device) and self.context.get("need_prem", True):
+        if not self.context["request"].user.has_perm("change_device", device) and self.context.get(
+            "need_prem", True
+        ):
             raise serializers.ValidationError("没有修改该设备的权限!")
         if settings.MAX_STREAM_NUM:
             if device.streams.count() >= settings.MAX_STREAM_NUM:
@@ -166,9 +184,7 @@ class ChartSerializer(BaseModelSerializer):
             if "streams" in validated_data:
                 for stream in validated_data["streams"]:
                     if stream.device != instance.device:
-                        raise serializers.ValidationError(
-                            f"不可绑定非'{instance.device.name}'下的数据流！"
-                        )
+                        raise serializers.ValidationError(f"不可绑定非'{instance.device.name}'下的数据流！")
                     if stream.data_type == "char_data":
                         raise serializers.ValidationError("字符型的数据流不可以用于图表显示")
         return super(ChartSerializer, self).update(instance, validated_data)

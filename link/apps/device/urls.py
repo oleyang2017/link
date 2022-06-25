@@ -1,12 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
-from .views import (
-    DeviceViewSet,
-    CategoryViewSet,
-    StreamViewSet,
-    ChartViewSet,
-    TriggerViewSet,
-)
+from .views import ChartViewSet, DeviceViewSet, StreamViewSet, TriggerViewSet, CategoryViewSet
 
 router = DefaultRouter()
 

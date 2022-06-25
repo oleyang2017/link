@@ -1,21 +1,22 @@
 from datetime import datetime, timedelta
 
-from django_filters.rest_framework import DjangoFilterBackend
 from guardian.shortcuts import assign_perm, get_user_perms, get_objects_for_user
-from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
+from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
+from django_filters.rest_framework import DjangoFilterBackend
 
 from base.base_viewsets import BaseModelViewSet
-from .models import DeviceCategory, Device, Stream, Chart, Trigger
+
+from .models import Chart, Device, Stream, Trigger, DeviceCategory
 from .serializers import (
+    ChartSerializer,
     DeviceSerializer,
+    StreamSerializer,
+    TriggerSerializer,
     DeviceDetailSerializer,
     DeviceCategorySerializer,
-    StreamSerializer,
-    ChartSerializer,
-    TriggerSerializer,
 )
 
 
@@ -108,9 +109,7 @@ class CategoryViewSet(BaseModelViewSet):
     @action(methods=["put"], detail=False)
     def sort(self, request, *args, **kwargs):
         for cid in request.data:
-            category = DeviceCategory.objects.filter(
-                id=cid, create_user=request.user
-            ).first()
+            category = DeviceCategory.objects.filter(id=cid, create_user=request.user).first()
             if category:
                 category.sequence = request.data[cid]
                 category.save()
@@ -143,9 +142,7 @@ class ChartViewSet(BaseModelViewSet):
         """
         获取图表数据
         """
-        start_time = self.request.query_params.get(
-            "start_time", datetime.now() + timedelta(days=7)
-        )
+        start_time = self.request.query_params.get("start_time", datetime.now() + timedelta(days=7))
         end_time = self.request.query_params.get("end_time", datetime.now())
         # TODO: 从数据模型中取出前端所需要的dataset
 
