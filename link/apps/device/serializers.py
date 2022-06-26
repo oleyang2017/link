@@ -220,9 +220,9 @@ class TriggerSerializer(BaseModelSerializer):
 
 
 class DeviceDetailSerializer(BaseModelSerializer):
-    streams = StreamSerializer(many=True, required=False)
-    charts = ChartSerializer(many=True, required=False)
-    triggers = TriggerSerializer(many=True, required=False)
+    streams = StreamSerializer(many=True, required=False, read_only=True)
+    charts = ChartSerializer(many=True, required=False, read_only=True)
+    triggers = TriggerSerializer(many=True, required=False, read_only=True)
     category_name = serializers.SerializerMethodField(read_only=True)
     display_custom_info = serializers.SerializerMethodField(read_only=True)
 
