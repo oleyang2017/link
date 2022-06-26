@@ -8,6 +8,7 @@ Page({
   data: {
     type: 'edit',
     show: false,
+    popupType: "category",
     categoryList: [],
     categoryIndex: 0,
     charts: [],
@@ -32,9 +33,17 @@ Page({
       })
     }
   },
-  openPopup() {
-    if (!this.data.show && this.data.categoryList.length == 0) {
-      this.getCategory()
+  openPopup(e) {
+    if (e.currentTarget.dataset.type) {
+      this.setData({
+        popupType: e.currentTarget.dataset.type
+      })
+    }
+    if (e.currentTarget.dataset.type == 'category') {
+      // 关闭的时候也会调用这个方法，避免再次请求分类接口
+      if (!this.data.show && this.data.categoryList.length == 0) {
+        this.getCategory()
+      }
     }
     this.setData({
       show: !this.data.show
@@ -55,12 +64,22 @@ Page({
       categoryList,
     })
   },
-  changeCagetory(e) {
-    this.setData({
-      category: e.detail.value.id,
-      category_name: e.detail.value.name,
-      show: false,
-    })
+  selectItem(e) {
+    if (this.data.popupType == 'category'){
+      this.setData({
+        category: e.detail.value.id,
+        category_name: e.detail.value.name,
+        show: false,
+      })
+    }
+    else if (this.data.popupType == 'stream'){
+      let custom_info = this.data.custom_info
+      custom_info = custom_info + `[${e.detail.value.name}]`
+      this.setData({
+        custom_info,
+        show:false,
+      })
+    }
   },
   updateOrCreate(data) {
     if (this.data.type == 'edit') {
@@ -141,25 +160,31 @@ Page({
       name,
       streams,
       charts,
-      filePath
+      filePath,
+      custom_info,
+      desc,
+      category
     } = this.data
 
     let data = {
       name,
       filePath
     }
-    if (this.data.category) {
-      data.category = this.data.category
+    if (category) {
+      data.category = category
     }
-    if (this.data.desc) {
-      data.desc = this.data.desc
+    if (desc) {
+      data.desc = desc
     }
-    if (this.data.streams.length) {
-      data.streams = streams
+    if (custom_info) {
+      data.custom_info = custom_info
     }
     if (this.data.type == 'create') {
       if (this.data.charts.length) {
         data.charts = charts
+      }
+      if (streams.length){
+        data.streams = streams
       }
     } else {
       data.id = id

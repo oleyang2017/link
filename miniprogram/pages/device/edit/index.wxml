@@ -23,7 +23,7 @@
 </van-cell-group>
 
 <van-cell-group title="高级信息">
-  <van-field label="所属分类" value="{{ category_name }}"  border="{{ false }}" bindtap="openPopup" placeholder="点击选择分类" readonly />
+  <van-field label="所属分类" value="{{ category_name }}"  border="{{ false }}" bindtap="openPopup" placeholder="点击选择分类" data-type="category" readonly />
   <view class="padding bg-white custom-cell" data-name='stream'>
     <view class="title">数据流</view>
     <view class="context" bindtap='toOtherPage' data-name="stream">
@@ -51,6 +51,13 @@
 </van-cell-group>
 
 <van-cell-group title="其他信息">
+  <van-field label="自定义信息" model:value="{{ custom_info }}" type="textarea" autosize use-button-slot border="{{ false }}"
+    placeholder="可动态展示最新数据">
+    <van-button slot="button" size="small" type="info" bindtap="openPopup" data-type="stream">
+      选择数据流
+    </van-button>
+  </van-field>
+   
   <van-field label="设备说明" model:value="{{ desc }}" type="textarea" autosize border="{{ false }}"
     placeholder="请输入设备说明" />
 </van-cell-group>
@@ -65,8 +72,7 @@
 <!-- 弹出层 -->
 <van-dialog id="van-dialog" />
 <van-popup show="{{ show }}" position="bottom" bind:close="openPopup">
-  <van-picker columns="{{ categoryList }}" bind:confirm="changeCagetory" bind:cancel="openPopup" title="分类" show-toolbar
-    default-index="{{categoryIndex}}" />
+  <van-picker wx:if="{{popupType=='category'}}" columns="{{ categoryList }}" bind:confirm="selectItem" bind:cancel="openPopup" title="分类" show-toolbar default-index="{{categoryIndex}}" />
+  <van-picker wx:if="{{popupType=='stream'}}" columns="{{ streams }}" value-key="name" bind:confirm="selectItem" bind:cancel="openPopup" title="数据流" show-toolbar/>
 </van-popup>
-
 <van-toast id="van-toast" />
