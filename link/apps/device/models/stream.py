@@ -35,6 +35,9 @@ class Stream(BaseModel):
     data_type = models.CharField(
         max_length=8, default="int", choices=DATA_TYPE_CHOICE, verbose_name="数据类型"
     )
+    show = models.BooleanField(default=False, verbose_name="首页显示")
+    image = models.ImageField(null=True, blank=True, verbose_name="图片", upload_to="images/stream")
+    icon = models.CharField(null=True, blank=True, max_length=32, verbose_name="icon名称")
 
     class Meta:
         db_table = "stream"
