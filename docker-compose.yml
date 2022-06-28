@@ -7,32 +7,42 @@ services:
     command: bash -c "python ./link/manage.py makemigrations && python ./link/manage.py migrate && uwsgi --ini /home/workspace/link/uwsgi.ini"
     ports:
       - "8000:8000"
+      - "4010:4010"
     links: 
-        - pgsql
+      - pgsql
     depends_on:
       - pgsql
       - redis
 
-  mqtt:
+
+  emqx:
     image: "emqx/emqx:latest"
     restart: always
-    network_mode: "host"
     container_name: "link_emqx"
+    links: 
+      - pgsql
+      - backend
     depends_on:
       - pgsql
+    ports:
+      - "18083:18083"
+      - "8083:8083"
+      - "1883:1883"
+      - "4369:4369"
     environment:
       - "EMQX_LOADED_PLUGINS=emqx_dashboard,emqx_auth_pgsql,emqx_exhook"
       - "EMQX_ALLOW_ANONYMOUS=false"
       - "EMQX_ACL_NOMATCH=deny"
       - "EMQX_ACL_DENY_ACTION=disconnect"
-      - "EMQX_AUTH__PGSQL__SERVER=127.0.0.1:5432"
+      - "EMQX_AUTH__PGSQL__SERVER=link_pgsql:5432"
       - "EMQX_AUTH__PGSQL__USERNAME=admin"
       - "EMQX_AUTH__PGSQL__PASSWORD=admin"
       - "EMQX_AUTH__PGSQL__PASSWORD_HASH=plain"
       - "EMQX_AUTH__PGSQL__DATABASE=link"
-      - "EMQX_AUTH__PGSQL__AUTH_QUERY=select token from device where client_id = '%u' limit 1"
+      - "EMQX_AUTH__PGSQL__AUTH_QUERY=select token from device where client_id = '%c' and client_name = '%u' limit 1"
+      - "EMQX_AUTH__PGSQL__SUPER_QUERY=select is_super from device where client_id = '%c' and client_name = '%u' limit 1"
       - "EMQX_AUTH__PGSQL__ACL_QUERY=select allow, ipaddr, username, clientid, access, topic from emqx_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'"
-      - "EMQX_EXHOOK__SERVER__DEFAULT__URL=http://0.0.0.0:9000"
+      - "EMQX_EXHOOK__SERVER__DEFAULT__URL=http://link_backend:4010"
 
   redis:
     image: "redis:latest"
