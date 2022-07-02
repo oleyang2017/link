@@ -1,35 +1,30 @@
 from concurrent import futures
 
 import grpc
-
-from database.db import db
-from database.models import Device
-from exhooks.exhook_pb2 import (
+from loguru import logger
+from services.tasks.device.task import change_device_status
+from services.exhooks.exhook_pb2 import (
     HookSpec,
     EmptySuccess,
     LoadedResponse,
     ValuedResponse,
     ClientSubscribeRequest,
 )
-from exhooks.exhook_pb2_grpc import HookProviderServicer, add_HookProviderServicer_to_server
+from services.exhooks.exhook_pb2_grpc import (
+    HookProviderServicer,
+    add_HookProviderServicer_to_server,
+)
 
 
 class HookProvider(HookProviderServicer):
     def OnClientConnected(self, request, context):
-        client_id = request.clientinfo.clientid
-        device = db.session.query(Device).filter(Device.client_id == client_id).first()
-        if device:
-            device.status = True
-            db.session.commit()
-
+        logger.info(request)
+        change_device_status.delay(request, True)
         return EmptySuccess()
 
     def OnClientDisconnected(self, request, context):
-        client_id = request.clientinfo.clientid
-        device = db.session.query(Device).filter(Device.client_id == client_id).first()
-        if device:
-            device.status = False
-            db.session.commit()
+        logger.info(request)
+        change_device_status.delay(request, False)
         return EmptySuccess()
 
     def OnClientSubscribe(self, request, context):
@@ -55,13 +50,14 @@ class HookProvider(HookProviderServicer):
         return EmptySuccess()
 
 
-def server():
+def run_server():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=4))
     add_HookProviderServicer_to_server(HookProvider(), server)
-    server.add_insecure_port("[::]:4010")
+    server.add_insecure_port("[::]:4000")
     server.start()
+    logger.info("start grpc server")
     server.wait_for_termination()
 
 
 if __name__ == "__main__":
-    server()
+    run_server()
