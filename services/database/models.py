@@ -115,8 +115,8 @@ class EmqxData(Base):
     )
     node = Column(String(32), nullable=False)
     msg_id = Column(String(64), nullable=False)
-    client_id = Column(String(16), nullable=False, index=True)
-    topic = Column(String(32), nullable=False, index=True)
+    client_id = Column(String(64), nullable=False, index=True)
+    topic = Column(String(128), nullable=False, index=True)
     payload = Column(String(256), nullable=False)
     timestamp = Column(DateTime(True), nullable=False)
 
