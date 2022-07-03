@@ -44,6 +44,7 @@ shortuuid==1.0.8
 six==1.15.0
 SQLAlchemy==1.4.39
 sqlparse==0.4.1
+supervisor==4.2.4
 tencentcloud-sdk-python==3.0.413
 tomli==2.0.1
 typing-extensions==4.2.0
