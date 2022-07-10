@@ -12,4 +12,4 @@ RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 EXPOSE 8000 9000
 
-# CMD chmod +x ./start.sh
+CMD ["supervisord", "-c", "./supervisord.conf"]
