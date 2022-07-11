@@ -1,5 +1,5 @@
-const API_BASE_URL = 'http://192.168.0.105:8000/'
-// const API_BASE_URL = 'http://127.0.0.1:8000/'
+// const API_BASE_URL = 'http://192.168.0.102:8000/'
+const API_BASE_URL = 'http://127.0.0.1:8000/'
 // const API_BASE_URL = 'https://www.iotforfml.cn/'
 
 const request = (url, data, method) => {
@@ -29,7 +29,7 @@ const request = (url, data, method) => {
         }
         else if (response.statusCode == 401) {
           wx.navigateTo({
-            url: '/pages/login/index',
+            url: '/pages/device/index',
           })
         }
         resolve(response.data)

@@ -1,4 +1,4 @@
-// pages/login/index.js
+import  auth  from '../../api/auth';
 Page({
 
   /**
@@ -62,5 +62,25 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  login: function(e){
+    let userInfo = e.detail.userInfo
+    console.log(e)
+    wx.login({
+      success (res) {
+        console.log(res)
+        if (res.code) {
+          userInfo.code = res.code
+          auth.login(userInfo).then((res)=>{
+            wx.setStorageSync('token', res.access)
+            wx.setStorageSync('refresh', res.refresh)
+            wx.setStorageSync('uid', res.uid)
+          })
+          wx.navigateBack()
+        } else {
+          console.log('登录失败！' + res.errMsg)
+        }
+      }
+    })
   }
 })

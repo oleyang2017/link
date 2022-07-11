@@ -1,19 +1,21 @@
 /* pages/device/edit/index.wxss */
 
-.custom-cell{
+.custom-cell {
   position: relative;
   width: 100%;
   display: flex;
 }
-.custom-cell .title{
-  display: inline-block; 
+
+.custom-cell .title {
+  display: inline-block;
   max-width: 6.2em;
   min-width: 6.2em;
   margin-right: 12px;
 }
-.custom-cell .context{
+
+.custom-cell .context {
   width: 100%;
-  display: inline-block; 
+  display: inline-block;
   overflow: hidden;
   vertical-align: middle;
 }

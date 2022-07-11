@@ -65,19 +65,20 @@ Page({
     })
   },
   selectItem(e) {
-    if (this.data.popupType == 'category'){
+    if (this.data.popupType == 'category') {
       this.setData({
         category: e.detail.value.id,
         category_name: e.detail.value.name,
         show: false,
       })
-    }
-    else if (this.data.popupType == 'stream'){
-      let custom_info = this.data.custom_info
-      custom_info = custom_info + `[${e.detail.value.name}]`
+    } else if (this.data.popupType == 'stream') {
+      let custom_info = this.data.custom_info ? this.data.custom_info: ""
+      if (e.detail.value.name){
+        custom_info = custom_info + `[${e.detail.value.name}]`
+      }
       this.setData({
         custom_info,
-        show:false,
+        show: false,
       })
     }
   },
@@ -145,9 +146,9 @@ Page({
       type: 'success',
       message: this.data.type == 'create' ? '创建成功' : '修改成功',
       duration: 1000,
-      onClose: () => {
-        wx.navigateBack()
-      },
+      // onClose: () => {
+      //   wx.navigateBack()
+      // },
     });
   },
   cancel() {
@@ -183,7 +184,7 @@ Page({
       if (this.data.charts.length) {
         data.charts = charts
       }
-      if (streams.length){
+      if (streams.length) {
         data.streams = streams
       }
     } else {
