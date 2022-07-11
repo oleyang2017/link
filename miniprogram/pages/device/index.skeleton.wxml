@@ -45,11 +45,11 @@
                         </view>
                       </view>
                     </scroll-view>
-                    <view>
-                      <view class="category-icon-container">
-                        <view class="fa fa-bars bars-icon sk-pseudo sk-pseudo-circle"></view>
-                      </view>
-                    </view>
+                    <!-- <view> -->
+                      <!-- <view class="category-icon-container"> -->
+                        <!-- <view class="iconfont icon-bars bars-icon sk-pseudo sk-pseudo-circle"></view> -->
+                      <!-- </view> -->
+                    <!-- </view> -->
                   </view>
                 </view>
               </view>

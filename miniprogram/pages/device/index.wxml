@@ -33,7 +33,7 @@
       </van-tab>
       <view slot="nav-right">
         <view class="category-icon-container" bindtap="showMask">
-          <view class="fa fa-bars bars-icon" />
+          <view class="iconfont icon-bars bars-icon" />
         </view>
       </view>
     </van-tabs>
@@ -53,12 +53,12 @@
         <view style="height: 1px; background-color: #e6e6e6;" />
         <navigator class="category-item" url="/pages/device/list/index" hover-class="none">
           <view class="name">全部设备</view>
-          <view class="count fa fa-th-large"></view>
+          <view class="count iconfont icon-quanbu"></view>
         </navigator>
         <navigator url="/pages/category/list/index">
           <view class="category-item">
             <view class="name">分类管理</view>
-            <view class="count fa fa-cog"></view>
+            <view class="count iconfont icon-cog"></view>
           </view>
         </navigator>
       </view>

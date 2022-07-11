@@ -42,7 +42,7 @@
   line-height: 88rpx;
 }
 .bars-icon{
-  display: inline-block;
+  display: initial;
   background-color: #d8d9da;
   color: #98999a;
   border-radius: 16rpx;

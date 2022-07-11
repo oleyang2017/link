@@ -1,0 +1,155 @@
+@font-face {
+  font-family: "iconfont";
+  src: url('/static/iconfont/iconfont.woff2?t=1657563546640') format('woff2'),
+       url('/static/iconfont/iconfont.woff?t=1657563546640') format('woff'),
+       url('/static/iconfont/iconfont.ttf?t=1657563546640') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-quanbu:before {
+  content: "\e6ff";
+}
+
+.icon-cog:before {
+  content: "\e6a1";
+}
+
+.icon-bars:before {
+  content: "\e8de";
+}
+
+.icon-diandaoshuai:before {
+  content: "\ea2d";
+}
+
+.icon-PHzhi:before {
+  content: "\ea2e";
+}
+
+.icon-hanyangliang:before {
+  content: "\ea2f";
+}
+
+.icon-shuiwei:before {
+  content: "\ea30";
+}
+
+.icon-kurong:before {
+  content: "\ea31";
+}
+
+.icon-zhuodu:before {
+  content: "\ea32";
+}
+
+.icon-rongjieyang:before {
+  content: "\ea33";
+}
+
+.icon-yali:before {
+  content: "\ea34";
+}
+
+.icon-xuanfuwu:before {
+  content: "\ea35";
+}
+
+.icon-liuliang:before {
+  content: "\ea36";
+}
+
+.icon-shuiwen:before {
+  content: "\ea37";
+}
+
+.icon-turangshuifen:before {
+  content: "\ea38";
+}
+
+.icon-turangshidu:before {
+  content: "\ea39";
+}
+
+.icon-fengsu:before {
+  content: "\ea3a";
+}
+
+.icon-dianyuandianya:before {
+  content: "\ea3b";
+}
+
+.icon-CO2nongdu:before {
+  content: "\ea3c";
+}
+
+.icon-daqiya:before {
+  content: "\ea3d";
+}
+
+.icon-guanghefushe:before {
+  content: "\ea3e";
+}
+
+.icon-jielou:before {
+  content: "\ea3f";
+}
+
+.icon-kongqiwendu:before {
+  content: "\ea40";
+}
+
+.icon-kongqishidu:before {
+  content: "\ea41";
+}
+
+.icon-fengxiang:before {
+  content: "\ea42";
+}
+
+.icon-jiangyuliang:before {
+  content: "\ea43";
+}
+
+.icon-loudianwendu:before {
+  content: "\ea44";
+}
+
+.icon-guangzhaoqiangdu:before {
+  content: "\ea45";
+}
+
+.icon-zhengfaliang:before {
+  content: "\ea46";
+}
+
+.icon-zongfushe:before {
+  content: "\ea47";
+}
+
+.icon-guangzhaoshijian:before {
+  content: "\ea48";
+}
+
+.icon-a-PM25:before {
+  content: "\ea49";
+}
+
+.icon-xiaoshijiangyuliang:before {
+  content: "\ea4a";
+}
+
+.icon-fengli:before {
+  content: "\ea4b";
+}
+
+.icon-liuhuaqing:before {
+  content: "\ea4c";
+}
+
