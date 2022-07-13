@@ -38,6 +38,7 @@ class Stream(BaseModel):
     show = models.BooleanField(default=False, verbose_name="首页显示")
     image = models.ImageField(null=True, blank=True, verbose_name="图片", upload_to="images/stream")
     icon = models.CharField(null=True, blank=True, max_length=32, verbose_name="icon名称")
+    color = models.CharField(null=True, blank=True, max_length=32, verbose_name="背景颜色")
 
     class Meta:
         db_table = "stream"

@@ -89,6 +89,7 @@ class StreamSerializer(BaseModelSerializer):
             "show",
             "icon",
             "image",
+            "color",
         )
         read_only_fields = ("id", "stream_id", "created_time", "update_time")
         validators = [
