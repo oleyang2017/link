@@ -1,6 +1,6 @@
 <view>
   <van-cell-group title="基础信息">
-    <van-field model:value="{{ name }}" label="数据流名称" placeholder="请输入数据流名称" border="{{ false }}" required />
+    <van-field model:value="{{ name }}" label="数据流名称" placeholder="请输入数据流名称" border="{{ false }}" required maxlength="8"/>
     <van-field model:value="{{ unit_name }}" label="单位名称" placeholder="请输入单位名称" border="{{ false }}" />
     <van-field model:value="{{ unit }}" label="单位" placeholder="请输入单位符号" border="{{ false }}" />
     <van-field value="{{ defaultQos }}" bindtap="openPopup" data-name="qos" label="QOS" border="{{ false }}" readonly required />
@@ -8,19 +8,68 @@
     <van-field wx:if="{{source != 'create_new_device'}}" value="{{ defaultDevice }}" bindtap="openPopup" data-name="device" label="所属设备" border="{{ false }}" readonly="{{type=='edit'}}" required />
     <van-field wx:if="{{type!='create'}}" value="{{ create_time }}" label="创建时间" border="{{ false }}" readonly />
   </van-cell-group>
+
+  <van-cell-group title="其他设置">
+    <view class="padding bg-white custom-cell" style="border-bottom: 1rpx solid #f6f8fa;">
+      <view class="title">首页显示</view>
+      <view class="context">
+        <van-switch checked="{{ show }}" bind:change="changeShow" size="16px" />
+      </view>
+    </view>
+    <view class="padding bg-white custom-cell" style="border-bottom: 1rpx solid #f6f8fa;">
+      <view class="title">图标</view>
+      <view class="context" bindtap="changeIconPopup">
+        <view class="iconfont {{icon}}" style="font-size: 20px;"></view>
+        <view wx:if="{{!icon}}" class="text-sm text-blue ">点击选择图标</view>
+      </view>
+    </view>
+    <view class="padding bg-white custom-cell">
+      <view class="title">背景颜色</view>
+      <view class="context" bindtap="changeColorPopup">
+        <view class="background-inline {{color}}"></view>
+        <view wx:if="{{!color}}" class="text-sm text-blue ">点击选择背景颜色</view>
+      </view>
+    </view>
+  </van-cell-group>
+
+  <van-cell-group title="效果预览" border="{{ false }}">
+    <view class="preview-container {{color}}">
+      <view class="iconfont {{icon}} icon" />
+      <view class="data">
+        <view> 30 <text style="font-size: 30rpx;">{{unit}}</text></view>
+        <view class="stream-info">{{defaultDevice}} {{ defaultDevice && name ? "-" : ""}} {{name}}</view>
+      </view>
+    </view>
+  </van-cell-group>
+
   <view class="padding-lr-xl padding-tb-lg">
     <van-button type="primary" color="#0081ff" disabled="{{!name}}" block bind:click="confirm">确认</van-button>
   </view>
   <view class="padding-lr-xl padding-bottom-xl">
     <van-button type="default" block bind:click="cancel">取消</van-button>
   </view>
-
   <van-icon name="delete-o" class="text-red text-xl" style="position: absolute; top: 16px; right: 16px" bindtap="delete" wx:if="{{type=='edit'}}" />
 
   <van-dialog id="van-dialog" />
   <van-toast id="van-toast" />
-  <van-popup show="{{ show }}" position="bottom" bind:close="openPopup">
+  <van-popup show="{{ showPopup }}" position="bottom" bind:close="openPopup">
     <van-picker columns="{{ selectList }}" value-key="name" default-index="{{defaultIndex}}" bind:confirm="changeSelect" bind:cancel="openPopup" title="{{title}}" show-toolbar />
+  </van-popup>
+
+  <van-popup show="{{ showIconPopup }}" position="bottom" bind:close="changeIconPopup">
+    <view style="max-height: 600rpx; padding: 40rpx 0;">
+      <view wx:for="{{ iconList }}" class="icon-card" data-value="{{item.value}}" bindtap="selectIcon">
+        <view class="icon-size iconfont {{item.value}}" />
+        <text class="icon-name">{{item.name}}</text>
+      </view>
+    </view>
+  </van-popup>
+
+  <van-popup show="{{ showColorPopup }}" position="bottom" bind:close="changeColorPopup">
+    <view style="max-height: 600rpx; padding: 40rpx 0;">
+      <view wx:for="{{ colorList }}" data-value="{{item}}" bindtap="selectColor" class="background-block {{item}}">
+      </view>
+    </view>
   </van-popup>
 
 </view>

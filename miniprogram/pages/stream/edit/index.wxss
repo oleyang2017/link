@@ -1,1 +1,85 @@
 /* pages/stream/edit/index.wxss */
+.custom-cell {
+  position: relative;
+  width: 100%;
+  display: flex;
+}
+
+.custom-cell .title {
+  display: inline-block;
+  max-width: 6.2em;
+  min-width: 6.2em;
+  margin-right: 12px;
+}
+
+.custom-cell .context {
+  width: 100%;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: middle;
+}
+.icon-card{
+  display: inline-block;
+  width: 33.3%;
+  text-align: center;
+  color: #98999a;
+  margin: 10px 0;
+}
+.icon-card .icon-size{
+  font-size: 48rpx;
+  padding-bottom: 10rpx;
+}
+.background-inline{
+  display: inline-block;
+  border-radius: 20rpx;
+  height: 40rpx;
+  width: 120rpx;
+}
+.background-block{
+  display: inline-block;
+  width: 335rpx;
+  margin: 20rpx;
+  height: 120rpx;
+  border-radius: 20rpx;
+}
+.demo{
+  position: relative;
+  display: inline-block;
+  width: 335rpx;
+  margin: 20rpx;
+  height: 120rpx;
+  border-radius: 20rpx;
+}
+.preview-container{
+  position: relative;
+  display: inline-block;
+  width: 335rpx;
+  margin: 20rpx;
+  height: 120rpx;
+  border-radius: 20rpx;
+  
+}
+.preview-container .icon{
+  font-size: 68rpx;
+  line-height: 120rpx;
+  display: inline-block;
+  width: 100rpx;
+  text-align: center;
+}
+.preview-container .data{
+  padding-top: 20rpx;
+  height: 120rpx;
+  font-size: 40rpx;
+  display: inline-block;
+  width: 230rpx;
+  vertical-align: top;
+  padding-left: 20rpx;
+}
+.preview-container .stream-info{
+  padding-top: 6rpx;
+  font-size: 24rpx;
+  max-width: 230rpx;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
