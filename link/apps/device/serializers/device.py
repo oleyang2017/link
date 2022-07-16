@@ -113,8 +113,15 @@ class DeviceDetailSerializer(BaseModelSerializer):
         try:
             with transaction.atomic():
                 instance = super(DeviceDetailSerializer, self).create(validated_data)
-                if validated_data.get("streams"):
-                    stream_list = validated_data.pop("streams")
+                # 这里不从validated_data，因为streams设置了read_only
+                # 如果不设置read_only会有嵌套创建的一系列问题，日后解决
+                # TODO 处理嵌套创建的问题：参考drf-writable-nested
+                if self.initial_data.get("streams"):
+                    stream_list = self.initial_data["streams"]
+                    if len(stream_list) > settings.MAX_STREAM_NUM:
+                        raise serializers.ValidationError("超过最大创建数！")
+                    if len(set([i["name"] for i in stream_list])) != len(stream_list):
+                        raise serializers.ValidationError("同一设备数据流名称不能重复！")
                     self.context["need_prem"] = False
                     for stream in stream_list:
                         stream["device"] = instance.id
