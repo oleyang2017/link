@@ -83,6 +83,7 @@ class StreamSerializer(BaseModelSerializer):
             "data_type",
             "data_type_name",
             "qos",
+            "unit",
             "unit_name",
             "created_time",
             "update_time",

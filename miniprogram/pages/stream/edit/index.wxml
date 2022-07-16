@@ -6,7 +6,7 @@
     <van-field value="{{ defaultQos }}" bindtap="openPopup" data-name="qos" label="QOS" border="{{ false }}" readonly required />
     <van-field value="{{ defaultType }}" bindtap="openPopup" data-name="type" label="数据类型" border="{{ false }}" readonly required />
     <van-field wx:if="{{source != 'create_new_device'}}" value="{{ defaultDevice }}" bindtap="openPopup" data-name="device" label="所属设备" border="{{ false }}" readonly="{{type=='edit'}}" required />
-    <van-field wx:if="{{type!='create'}}" value="{{ create_time }}" label="创建时间" border="{{ false }}" readonly />
+    <van-field wx:if="{{type!='create'}}" value="{{ created_time }}" label="创建时间" border="{{ false }}" readonly />
   </van-cell-group>
 
   <van-cell-group title="其他设置">
@@ -18,14 +18,14 @@
     </view>
     <view class="padding bg-white custom-cell" style="border-bottom: 1rpx solid #f6f8fa;">
       <view class="title">图标</view>
-      <view class="context" bindtap="changeIconPopup">
+      <view class="context" bindtap="openPopup" data-name="icon">
         <view class="iconfont {{icon}}" style="font-size: 20px;"></view>
         <view wx:if="{{!icon}}" class="text-sm text-blue ">点击选择图标</view>
       </view>
     </view>
     <view class="padding bg-white custom-cell">
       <view class="title">背景颜色</view>
-      <view class="context" bindtap="changeColorPopup">
+      <view class="context" bindtap="openPopup" data-name="color">
         <view class="background-inline {{color}}"></view>
         <view wx:if="{{!color}}" class="text-sm text-blue ">点击选择背景颜色</view>
       </view>
@@ -53,23 +53,25 @@
   <van-dialog id="van-dialog" />
   <van-toast id="van-toast" />
   <van-popup show="{{ showPopup }}" position="bottom" bind:close="openPopup">
-    <van-picker columns="{{ selectList }}" value-key="name" default-index="{{defaultIndex}}" bind:confirm="changeSelect" bind:cancel="openPopup" title="{{title}}" show-toolbar />
-  </van-popup>
-
-  <van-popup show="{{ showIconPopup }}" position="bottom" bind:close="changeIconPopup">
-    <view style="max-height: 600rpx; padding: 40rpx 0;">
+    <van-picker columns="{{ selectList }}" value-key="name" default-index="{{defaultIndex}}" bind:confirm="changeSelect" bind:cancel="openPopup" title="{{title}}" show-toolbar wx:if="{{popupType == 'qos' || popupType == 'type' ||popupType == 'device'}}"/>
+    <view style="max-height: 600rpx; padding: 40rpx 0;" wx:if="{{popupType=='icon'}}">
       <view wx:for="{{ iconList }}" class="icon-card" data-value="{{item.value}}" bindtap="selectIcon">
         <view class="icon-size iconfont {{item.value}}" />
         <text class="icon-name">{{item.name}}</text>
       </view>
     </view>
-  </van-popup>
-
-  <van-popup show="{{ showColorPopup }}" position="bottom" bind:close="changeColorPopup">
-    <view style="max-height: 600rpx; padding: 40rpx 0;">
+    <view style="max-height: 600rpx; padding: 40rpx 0;" wx:if="{{popupType=='color'}}">
       <view wx:for="{{ colorList }}" data-value="{{item}}" bindtap="selectColor" class="background-block {{item}}">
       </view>
     </view>
   </van-popup>
+
+  <!-- <van-popup show="{{ showIconPopup }}" position="bottom" bind:close="changeIconPopup" data-name="icon">
+    
+  </van-popup>
+
+  <van-popup show="{{ showColorPopup }}" position="bottom" bind:close="changeColorPopup" data-name="color">
+    
+  </van-popup> -->
 
 </view>

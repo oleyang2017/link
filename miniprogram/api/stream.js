@@ -13,7 +13,7 @@ export default {
   delete:(id) => { 
     return request(`api/streams/${id}/`, {}, "DELETE") 
   },
-  update: (data, needJWT = true, needLoading = false) => {
+  update: (data) => {
     return request(`api/streams/${data.id}/`, data, "PUT")
   },
 }
