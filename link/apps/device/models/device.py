@@ -5,6 +5,7 @@ from shortuuid.django_fields import ShortUUIDField
 
 from base.base_model import BaseModel
 from emqx.models.data import EMQXData
+from device.models.category import DeviceCategory
 
 
 class Device(BaseModel):
@@ -13,7 +14,7 @@ class Device(BaseModel):
     client_id = ShortUUIDField(length=12, verbose_name="客户端ID", unique=True)
     client_name = ShortUUIDField(length=12, verbose_name="客户端名称", unique=True)
     category = models.ForeignKey(
-        "device.DeviceCategory",
+        DeviceCategory,
         null=True,
         blank=True,
         related_name="devices",

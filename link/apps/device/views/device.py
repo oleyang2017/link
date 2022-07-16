@@ -1,23 +1,14 @@
-from datetime import datetime, timedelta
-
 from guardian.shortcuts import assign_perm, get_user_perms, get_objects_for_user
-from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
-from django_filters.rest_framework import DjangoFilterBackend
 
 from base.base_viewsets import BaseModelViewSet
-
-from .models import Chart, Device, Stream, Trigger, DeviceCategory
-from .serializers import (
-    ChartSerializer,
-    DeviceSerializer,
-    StreamSerializer,
-    TriggerSerializer,
-    DeviceDetailSerializer,
-    DeviceCategorySerializer,
-)
+from device.models.device import Device
+from device.serializers.chart import ChartSerializer
+from device.serializers.device import DeviceSerializer, DeviceDetailSerializer
+from device.serializers.stream import StreamSerializer
+from device.serializers.trigger import TriggerSerializer
 
 
 class DeviceViewSet(BaseModelViewSet):
@@ -96,60 +87,3 @@ class DeviceViewSet(BaseModelViewSet):
         device = self.get_object()
         perms = get_user_perms(request.user, device)
         return Response(perms)
-
-
-class CategoryViewSet(BaseModelViewSet):
-    serializer_class = DeviceCategorySerializer
-    lookup_field = "id"
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
-    ordering_fields = ["sequence", "created_time"]
-    ordering = ["sequence", "-created_time"]
-    queryset = DeviceCategory.objects
-
-    @action(methods=["put"], detail=False)
-    def sort(self, request, *args, **kwargs):
-        for cid in request.data:
-            category = DeviceCategory.objects.filter(id=cid, create_user=request.user).first()
-            if category:
-                category.sequence = request.data[cid]
-                category.save()
-        return Response({})
-
-
-class StreamViewSet(BaseModelViewSet):
-    serializer_class = StreamSerializer
-    lookup_field = "id"
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
-    filter_fields = ["device", "name", "data_type", "show"]
-    search_fields = ["device"]
-    queryset = Stream.objects
-
-
-class ChartViewSet(BaseModelViewSet):
-    lookup_field = "id"
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
-    filter_fields = ["device", "name"]
-    ordering_fields = ["sequence", "-created_time"]
-    ordering = ["sequence", "-created_time"]
-    queryset = Chart.objects
-    serializer_class = ChartSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(create_user=self.request.user)
-
-    @action(methods=["get"], detail=True)
-    def data(self, request, *args, **kwargs):
-        """
-        获取图表数据
-        """
-        start_time = self.request.query_params.get("start_time", datetime.now() + timedelta(days=7))
-        end_time = self.request.query_params.get("end_time", datetime.now())
-        # TODO: 从数据模型中取出前端所需要的dataset
-
-
-class TriggerViewSet(BaseModelViewSet):
-    serializer_class = TriggerSerializer
-    lookup_field = "id"
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
-    filter_fields = ("device", "stream")
-    queryset = Trigger.objects

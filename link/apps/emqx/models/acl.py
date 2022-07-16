@@ -2,7 +2,8 @@ from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 
-from device.models import Device, Stream
+from device.models.device import Device
+from device.models.stream import Stream
 
 
 class EMQXAcl(models.Model):
