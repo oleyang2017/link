@@ -48,3 +48,7 @@
   padding: 10px;
   min-height: calc(100vh - 230px);
 }
+.image{
+  width: 200rpx;
+  height: 200rpx;
+}

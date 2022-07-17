@@ -37,7 +37,7 @@ Page({
           hasCategory = true
         }
       }
-      if (device[i].create_user != uid) {
+      if (device[i].createUser != uid) {
         shareCategory.push(device[i])
       } else if (!hasCategory) {
         noCategory.push(device[i])

@@ -18,7 +18,7 @@
 <view class="device-detail-container bg-white {{showAll?'show-all':''}}">
   <view class="top-container">
     <view class="left">
-      <van-image src="{{image}}" fit="cover" width="100" height="100" />
+      <image src="{{ image ? image :'/static/images/default_device.png'}}" mode="aspectFill" class="image" />
     </view>
     <view class="right">
       <view class="padding-lr-xs text-xs">
@@ -26,11 +26,11 @@
       </view>
       <view class="padding-xs text-df">
         <text>设备编号：</text>
-        <text class="text-sm" bindlongtap="copy" data-value="{{client_name}}">{{client_name}}</text>
+        <text class="text-sm" bindlongtap="copy" data-value="{{clientName}}">{{clientName}}</text>
       </view>
       <view class="padding-xs text-df">
         <text>客户端ID：</text>
-        <text class="text-sm" bindlongtap="copy" data-value="{{client_id}}">{{client_id}}</text>
+        <text class="text-sm" bindlongtap="copy" data-value="{{clientId}}">{{clientId}}</text>
       </view>
       <view class="padding-xs text-df">
         <text>设备状态：</text>
@@ -44,11 +44,11 @@
       </view>
       <view class="padding-xs text-df">
         <text>创建时间：</text>
-        <text>{{create_time}}</text>
+        <text>{{createdTime}}</text>
       </view>
-      <view class="padding-xs text-df" wx:if="{{last_connect_time}}">
+      <view class="padding-xs text-df" wx:if="{{lastConnectTime}}">
         <text>连接时间：</text>
-        <text>{{last_connect_time}}</text>
+        <text>{{lastConnectTime}}</text>
       </view>
       <view class="padding-xs text-df">
         <text>设备说明：</text>

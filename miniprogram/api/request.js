@@ -1,6 +1,5 @@
-// const API_BASE_URL = 'http://192.168.0.102:8000/'
 const API_BASE_URL = 'http://127.0.0.1:8000/'
-// const API_BASE_URL = 'https://www.iotforfml.cn/'
+import {jsonToHump, jsonToUnderline} from '../utils/convertVarName'
 
 const request = (url, data, method) => {
   let _url = API_BASE_URL + url
@@ -12,7 +11,7 @@ const request = (url, data, method) => {
     wx.request({
       url: _url,
       method: method,
-      data: data,
+      data: jsonToUnderline(data),
       header: _header,
       success(response) {
         if (response.statusCode == 500) {
@@ -32,7 +31,7 @@ const request = (url, data, method) => {
             url: '/pages/device/index',
           })
         }
-        resolve(response.data)
+        resolve(jsonToHump(response.data))
       },
       fail(error) {
         wx.showToast({
@@ -52,7 +51,7 @@ const requestWithFile = (url, formData, filePath) => {
   }
   wx.uploadFile({
     url: _url,
-    formData: formData,
+    formData: jsonToUnderline(formData),
     header: _header,
     name: 'image',
     filePath: filePath,
@@ -72,7 +71,6 @@ const requestWithFile = (url, formData, filePath) => {
     },
   })
 }
-
 module.exports = {
   API_BASE_URL,
   request,

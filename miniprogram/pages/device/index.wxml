@@ -12,7 +12,7 @@
         <scroll-view style="height: calc(100vh);" scroll-y refresher-enabled refresher-triggered="{{refresh}}" bindrefresherrefresh="refresh">
           <view class="device-scroll-container">
               <view style="display: inline-block; width: 50%;" wx:for="{{item.device}}" wx:key="index" wx:for-item="item">
-                <device-item deviceId="{{item.id}}" index="{{index}}" name="{{item.name}}" status="{{item.status}}" image="{{item.image}}" customInfo="{{item.display_custom_info}}"/>
+                <device-item deviceId="{{item.id}}" index="{{index}}" name="{{item.name}}" status="{{item.status}}" image="{{item.image}}" customInfo="{{item.displayCustomInfo}}"/>
               </view>
             <block wx:if="{{item.device.length}}">
               <view class="text-blue text-df text-center padding-bottom-xl" style="width: 100%;padding-bottom: 240rpx;">
@@ -45,7 +45,7 @@
           <view class="category-item" wx:for="{{category}}" wx:key="id" data-id="{{item.id}}" wx:if="{{item.id}}" bindtap="changeCategory">
             <view wx:if="{{item.id}}">
               <view class="name">{{item.name}}</view>
-              <view class="count">{{item.device_count}}</view>
+              <view class="count">{{item.deviceCount}}</view>
             </view>
           </view>
         </scroll-view>

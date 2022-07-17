@@ -1,12 +1,12 @@
 <view>
   <van-cell-group title="基础信息">
     <van-field model:value="{{ name }}" label="数据流名称" placeholder="请输入数据流名称" border="{{ false }}" required maxlength="8"/>
-    <van-field model:value="{{ unit_name }}" label="单位名称" placeholder="请输入单位名称" border="{{ false }}" />
+    <van-field model:value="{{ unitName }}" label="单位名称" placeholder="请输入单位名称" border="{{ false }}"  maxlength="8"/>
     <van-field model:value="{{ unit }}" label="单位" placeholder="请输入单位符号" border="{{ false }}" />
     <van-field value="{{ defaultQos }}" bindtap="openPopup" data-name="qos" label="QOS" border="{{ false }}" readonly required />
     <van-field value="{{ defaultType }}" bindtap="openPopup" data-name="type" label="数据类型" border="{{ false }}" readonly required />
     <van-field wx:if="{{source != 'create_new_device'}}" value="{{ defaultDevice }}" bindtap="openPopup" data-name="device" label="所属设备" border="{{ false }}" readonly="{{type=='edit'}}" required />
-    <van-field wx:if="{{type!='create'}}" value="{{ created_time }}" label="创建时间" border="{{ false }}" readonly />
+    <van-field wx:if="{{type!='create'}}" value="{{ createdTime }}" label="创建时间" border="{{ false }}" readonly />
   </van-cell-group>
 
   <van-cell-group title="其他设置">
@@ -65,13 +65,4 @@
       </view>
     </view>
   </van-popup>
-
-  <!-- <van-popup show="{{ showIconPopup }}" position="bottom" bind:close="changeIconPopup" data-name="icon">
-    
-  </van-popup>
-
-  <van-popup show="{{ showColorPopup }}" position="bottom" bind:close="changeColorPopup" data-name="color">
-    
-  </van-popup> -->
-
 </view>

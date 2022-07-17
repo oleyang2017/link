@@ -6,6 +6,7 @@ const app = getApp()
 
 Page({
   data: {
+    needRefresh: false,
     type: 'edit',
     show: false,
     popupType: "category",
@@ -22,11 +23,10 @@ Page({
     this.setData({
       ...options
     })
+    this.getDetailInfo(this.data.id)
   },
   onShow: function () {
-    if (this.data.type == 'edit') {
-      this.getDetailInfo(this.data.id)
-    } else if (this.data.type == 'create') {
+    if (this.data.type == 'create') {
       // 因为在其他页面setData不会刷新页面，这里再set一次强制刷新页面
       this.setData({
         ...this.data
@@ -68,16 +68,16 @@ Page({
     if (this.data.popupType == 'category') {
       this.setData({
         category: e.detail.value.id,
-        category_name: e.detail.value.name,
+        categoryName: e.detail.value.name,
         show: false,
       })
     } else if (this.data.popupType == 'stream') {
-      let custom_info = this.data.custom_info ? this.data.custom_info: ""
+      let customInfo = this.data.customInfo ? this.data.customInfo: ""
       if (e.detail.value.name){
-        custom_info = custom_info + `[${e.detail.value.name}]`
+        customInfo = customInfo + `[${e.detail.value.name}]`
       }
       this.setData({
-        custom_info,
+        customInfo,
         show: false,
       })
     }
@@ -101,15 +101,15 @@ Page({
   },
   getDetailInfo(id) {
     deviceApi.detail(id).then((res) => {
-      let image_list = []
+      let imageList = []
       if (res.image) {
-        image_list = [{
+        imageList = [{
           url: res.image
         }]
       }
       this.setData({
         ...res,
-        image_list
+        imageList
       })
     })
   },
@@ -118,7 +118,7 @@ Page({
       file
     } = e.detail;
     this.setData({
-      image_list: [{
+      imageList: [{
         url: file.url
       }],
       filePath: file.url
@@ -126,7 +126,7 @@ Page({
   },
   deleteImage() {
     this.setData({
-      image_list: [],
+      imageList: [],
       filePath: null
     })
   },
@@ -146,9 +146,9 @@ Page({
       type: 'success',
       message: this.data.type == 'create' ? '创建成功' : '修改成功',
       duration: 1000,
-      // onClose: () => {
-      //   wx.navigateBack()
-      // },
+      onClose: () => {
+        wx.navigateBack()
+      },
     });
   },
   cancel() {
@@ -162,7 +162,7 @@ Page({
       streams,
       charts,
       filePath,
-      custom_info,
+      customInfo,
       desc,
       category
     } = this.data
@@ -177,8 +177,8 @@ Page({
     if (desc) {
       data.desc = desc
     }
-    if (custom_info) {
-      data.custom_info = custom_info
+    if (customInfo) {
+      data.customInfo = customInfo
     }
     if (this.data.type == 'create') {
       if (this.data.charts.length) {

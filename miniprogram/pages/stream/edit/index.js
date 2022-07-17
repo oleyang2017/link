@@ -17,7 +17,7 @@ Page({
     showPopup: false,
     title: '',
     qos: 0,
-    data_type: 'int',
+    dataType: 'int',
     defaultIndex: 0,
     defaultDeviceIndex: 0,
     defaultTypeIndex: 0,
@@ -38,7 +38,7 @@ Page({
           ...res,
         })
         for (let i = 0; i < this.data.typeList; i++) {
-          if (this.data.typeList[i].value == res.data_type) {
+          if (this.data.typeList[i].value == res.dataType) {
             this.setData({
               defaultTypeIndex: i,
               defaultType: this.data.typeList[i].name
@@ -46,7 +46,7 @@ Page({
           }
         }
         for (let i = 0; i < this.data.typeList; i++) {
-          if (this.data.qosList[i].value == res.data_type) {
+          if (this.data.qosList[i].value == res.dataType) {
             this.setData({
               defaultQosIndex: i,
               defaultQos: this.data.qosList[i].name
@@ -129,7 +129,7 @@ Page({
       })
     } else if (this.data.selectName == 'type') {
       this.setData({
-        data_type: this.data.typeList[index].value,
+        dataType: this.data.typeList[index].value,
         defaultType: this.data.typeList[index].name,
         show: false
       })
@@ -185,10 +185,10 @@ Page({
   generateData(){
     let data = {
       name: this.data.name,
-      unit_name: this.data.unit_name,
+      unitName: this.data.unitName,
       unit: this.data.unit,
       qos: this.data.qos,
-      data_type: this.data.data_type,
+      dataType: this.data.dataType,
       icon: this.data.icon,
       color: this.data.color,
       show: this.data.show,
