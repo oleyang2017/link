@@ -1,5 +1,6 @@
-const API_BASE_URL = 'http://127.0.0.1:8000/'
+const API_BASE_URL = 'https://www.iotforfml.cn/'
 import {jsonToHump, jsonToUnderline} from '../utils/convertVarName'
+import authApi from './auth'
 
 const request = (url, data, method) => {
   let _url = API_BASE_URL + url
@@ -27,16 +28,26 @@ const request = (url, data, method) => {
           })
         }
         else if (response.statusCode == 401) {
-          wx.navigateTo({
-            url: '/pages/device/index',
+           wx.login({
+            success (res) {
+              let payload = {code: res.code}
+              authApi.login(payload).then((resp)=>{
+                wx.setStorageSync('token', resp.access)
+                wx.setStorageSync('refresh', resp.refresh)
+                wx.setStorageSync('uid', resp.uid)
+                resolve(request(url, data, method))
+              })
+            }
           })
         }
-        resolve(jsonToHump(response.data))
+        else{
+          resolve(jsonToHump(response.data))
+        }
       },
       fail(error) {
         wx.showToast({
           title: '请求失败!',
-          duration: 2000
+          duration: 1000
         })
         reject(error)
       },
@@ -71,6 +82,7 @@ const requestWithFile = (url, formData, filePath) => {
     },
   })
 }
+
 module.exports = {
   API_BASE_URL,
   request,
