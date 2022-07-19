@@ -37,7 +37,6 @@ psycopg2==2.9.3
 psycopg2-binary==2.8.6
 PyJWT==1.7.1
 pytz==2022.1
-qcloud-python-sts==3.0.5
 redis==3.5.3
 requests==2.25.0
 shortuuid==1.0.8
@@ -45,7 +44,6 @@ six==1.15.0
 SQLAlchemy==1.4.39
 sqlparse==0.4.1
 supervisor==4.2.4
-tencentcloud-sdk-python==3.0.413
 tomli==2.0.1
 typing-extensions==4.2.0
 tzlocal==2.1
