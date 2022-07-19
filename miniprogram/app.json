@@ -1,7 +1,6 @@
 {
   "pages": [
     "pages/device/index",
-    "pages/login/index",
     "pages/category/list/index",
     "pages/category/detail/index",
     "pages/device/list/index",
