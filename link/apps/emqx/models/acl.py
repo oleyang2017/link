@@ -7,7 +7,7 @@ from device.models.stream import Stream
 
 
 class EMQXAcl(models.Model):
-    # EMQ权限控制表
+    # EMQX权限控制表
     ACCESS_CHOICE = (
         (1, "可订阅"),
         (2, "可发布"),

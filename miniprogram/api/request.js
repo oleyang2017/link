@@ -1,4 +1,5 @@
-const API_BASE_URL = 'https://www.iotforfml.cn/'
+const API_BASE_URL = 'https://www.iotforfml.cn'
+// const API_BASE_URL = 'http://127.0.0.1:8000'
 import {jsonToHump, jsonToUnderline} from '../utils/convertVarName'
 import authApi from './auth'
 
@@ -31,7 +32,7 @@ const request = (url, data, method) => {
            wx.login({
             success (res) {
               let payload = {code: res.code}
-              authApi.login(payload).then((resp)=>{
+              request('/api/auth/token/wx/', payload, 'POST').then((resp)=>{
                 wx.setStorageSync('token', resp.access)
                 wx.setStorageSync('refresh', resp.refresh)
                 wx.setStorageSync('uid', resp.uid)

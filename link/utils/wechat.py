@@ -1,4 +1,5 @@
 import json
+from typing import Tuple
 
 import requests
 from django.conf import settings
@@ -6,7 +7,7 @@ from rest_framework import exceptions
 from requests.exceptions import Timeout
 
 
-def code2openid(code: str) -> str:
+def code2openid(code: str) -> Tuple[str, str]:
     """
     将code转换成openid
     :param code: 小程序登录code
@@ -26,7 +27,7 @@ def code2openid(code: str) -> str:
     if rec.status_code == 200:
         rec = json.loads(rec.text)
         if rec.get("openid"):
-            return rec["openid"]
+            return rec["openid"], rec.get("unionid", "")
         else:
             raise exceptions.APIException(detail="登录失败", code=500)
     else:
