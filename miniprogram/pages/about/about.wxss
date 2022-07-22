@@ -1,0 +1,25 @@
+/* pages/about/about.wxss */
+.top-container{
+  background-color: #ffffff;
+  padding: 20rpx;
+
+}
+.avatar{
+  border-radius: 50%;
+  width: 120rpx;
+  height: 120rpx;
+}
+.user-info{
+  padding-left: 40rpx;
+  padding-top: 10rpx;
+  display: inline-block;
+  vertical-align: top;
+}
+.username{
+  font-size: 28rpx;
+  font-weight: 700;
+  padding-bottom: 10rpx;
+}
+.cell-container{
+  padding-top: 30rpx;
+}

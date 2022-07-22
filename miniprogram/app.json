@@ -6,10 +6,10 @@
     "pages/device/list/index",
     "pages/device/detail/index",
     "pages/device/edit/index",
-    "pages/index/index",
     "pages/stream/list/index",
     "pages/stream/edit/index",
-    "pages/trigger/list/index"
+    "pages/trigger/list/index",
+    "pages/about/about"
   ],
   "window": {
     "backgroundColor": "#f6f8fa",
@@ -20,19 +20,19 @@
   "tabBar": {
     "color": "#000000",
     "selectedColor": "#494949",
-    "list": [{
+    "list": [
+      {
         "pagePath": "pages/device/index",
         "text": "设备"
       },
       {
-        "pagePath": "pages/index/index",
-        "text": "测试页"
+        "pagePath": "pages/about/about",
+        "text": "我的"
       }
     ]
   },
   "networkTimeout": {
     "request": 10000
   },
-
   "sitemapLocation": "sitemap.json"
 }

@@ -1,6 +1,7 @@
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.exceptions import APIException, AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
@@ -11,6 +12,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from utils.wechat import code2openid
 
 from .models import UserProfile as User
+from .serializers import UserDetailSerializer
 
 
 @api_view(["post"])
@@ -42,30 +44,9 @@ def login_or_register_with_wx(request):
     raise APIException(detail="登录失败", code=500)
 
 
-@api_view(["get"])
-def get_tmp_secret(request):
-    config = {
-        "duration_seconds": 7200,
-        "secret_id": settings.T_CLOUD_SECRET_ID,
-        "secret_key": settings.T_CLOUD_SECRET_KEY,
-        "bucket": settings.T_CLOUD_BUCKET,
-        "region": settings.T_CLOUD_REGION,
-        "allow_prefix": f"{request.user.id}/*",
-        "allow_actions": [
-            # 简单上传
-            "name/cos:PutObject",
-            "name/cos:PostObject",
-            # 分片上传
-            "name/cos:InitiateMultipartUpload",
-            "name/cos:ListMultipartUploads",
-            "name/cos:ListParts",
-            "name/cos:UploadPart",
-            "name/cos:CompleteMultipartUpload",
-        ],
-    }
-    sts = Sts(config=config)
-    response = sts.get_credential()
-    response["Bucket"] = settings.T_CLOUD_BUCKET
-    response["Region"] = settings.T_CLOUD_REGION
-    response["Prefix"] = f"{request.user.id}/"
-    return Response(response)
+class UserViewSet(ReadOnlyModelViewSet):
+    serializer_class = UserDetailSerializer
+    queryset = User.objects
+
+    def get_queryset(self):
+        return User.objects.filter(id=self.request.user.id).all()

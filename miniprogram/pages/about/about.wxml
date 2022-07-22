@@ -1,0 +1,28 @@
+<!--pages/about/about.wxml-->
+<view>
+  <view>
+    <van-cell is-link center>
+      <view slot="title">
+        <image src="{{ avatar ? avatar :'/static/images/default_avatar.jpg'}}" mode="aspectFill" class="avatar" />
+        <view class="user-info">
+          <view class="username">{{username}}</view>
+          <view class="other">wx_fadfafdasfew</view>
+        </view>
+      </view>
+    </van-cell>
+  </view>
+
+  <view class="cell-container">
+    <van-cell-group>
+      <van-cell title="消息" is-link />
+      <van-cell title="分享" is-link />
+      <van-cell title="群组" is-link />
+    </van-cell-group>
+  </view>
+  <view class="cell-container">
+    <van-cell-group style="padding-top: 20rpx;">
+      <van-cell title="设置" is-link />
+    </van-cell-group>
+  </view>
+
+</view>

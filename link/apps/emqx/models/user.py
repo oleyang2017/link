@@ -1,8 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.dispatch import receiver
-from django.db.models.signals import post_save, post_delete
 from shortuuid.django_fields import ShortUUIDField
+from django.db.models.signals import post_save, post_delete
 
 
 class EMQXUser(models.Model):
@@ -32,6 +32,4 @@ def add_acl_stream(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=settings.AUTH_USER_MODEL, dispatch_uid="remove_emqx_user")
 def remove_acl_stream(sender, instance, **kwargs):
-    EMQXUser.objects.filter(
-        user=instance
-    ).delete()
+    EMQXUser.objects.filter(user=instance).delete()

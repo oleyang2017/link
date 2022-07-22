@@ -1,6 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 from shortuuid.django_fields import ShortUUIDField
+from django.contrib.auth.models import AbstractUser
 
 
 class UserProfile(AbstractUser):
@@ -9,7 +9,7 @@ class UserProfile(AbstractUser):
     """
 
     GENDER_CHOICES = (("0", "未知"), ("1", "男"), ("2", "女"))
-    username = ShortUUIDField(prefix="wx", max_length=128, length=16, unique=True)
+    username = ShortUUIDField(prefix="wx_", max_length=128, length=16, unique=True)
     mobile = models.CharField(verbose_name="手机号", max_length=20, unique=True, blank=True, null=True)
     wx_open_id = models.CharField(
         verbose_name="wx_openid", max_length=64, default="", blank=True, db_index=True
@@ -27,6 +27,7 @@ class UserProfile(AbstractUser):
     created_time = models.DateTimeField(verbose_name="创建日期", auto_now_add=True)
 
     class Meta(AbstractUser.Meta):
+        db_table = "auth_user"
         swappable = "AUTH_USER_MODEL"
         verbose_name = "用户"
         verbose_name_plural = verbose_name
