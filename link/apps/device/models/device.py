@@ -12,7 +12,6 @@ class Device(BaseModel):
     """设备"""
 
     client_id = ShortUUIDField(length=12, verbose_name="客户端ID", unique=True)
-    client_name = ShortUUIDField(length=12, verbose_name="客户端名称", unique=True)
     category = models.ForeignKey(
         DeviceCategory,
         null=True,
@@ -26,18 +25,21 @@ class Device(BaseModel):
     desc = models.TextField(blank=True, null=True, verbose_name="说明")
     status = models.BooleanField(default=False, verbose_name="设备状态")
     image = models.ImageField(null=True, blank=True, verbose_name="图片", upload_to="images/device")
+    image_url = models.CharField(max_length=32, null=True, blank=True, verbose_name="图片链接")
     is_super = models.BooleanField(default=False, verbose_name="权限设备")
     sequence = models.IntegerField(default=0, verbose_name="序列")
     last_connect_time = models.DateTimeField(verbose_name="最近连接时间", null=True, blank=True)
     custom_info = models.CharField(verbose_name="自定义展示信息", null=True, blank=True, max_length=64)
     # e.g 当前温度[stream_name]，当前湿度[stream_name]
-    token = ShortUUIDField(length=16, verbose_name="token")
 
     class Meta:
         db_table = "device"
         verbose_name = "设备"
         verbose_name_plural = verbose_name
-        permissions = (("control_device", "Can control device"),)
+        permissions = (
+            ("control_device", "Can control device"),
+            ("subscribe_topic", "Other users can subscribe the device topic"),
+        )
 
     def __str__(self):
         return self.name
@@ -53,7 +55,7 @@ class Device(BaseModel):
                     last_data = (
                         EMQXData.objects.filter(
                             client_id=self.client_id,
-                            topic__endswith=stream.stream_id,
+                            stream_id=stream.stream_id,
                         )
                         .order_by("-timestamp")
                         .first()

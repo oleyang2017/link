@@ -193,9 +193,13 @@ const qosList = [{
     value: 2
   }
 ]
+const deviceImageList = [
+  'IntelligentPower.png', 'EnergyConsumption.png', 'Internet.png', 'Wifi.png', 'DigitalCamera.png', 'CPU.png', 'EnvironmentalMonitoring.png', 'Devices.png', 'SmartWater.png', 'Research.png', 'NFCTechnology.png', 'Smartphone.png', 'WirelessHeadset.png', 'SmartTimer.png', 'MPPlayer.png', 'SmokeSensor.png', 'CCTV.png', 'SmartMicrowave.png', 'DroneDelivery.png', 'BluetoothSpeaker.png', 'EbookReader.png', 'SmartSIM.png', 'SmartMeter.png', 'HandheldConsole.png', 'GamingConsole.png', 'SmartWashingMachine.png', 'IntelligentEnergyControl.png', 'SmartHome.png', 'SmartGlasses.png', 'ElectricCar.png', 'SmartFridge.png', 'CDPlayer.png', 'WirelessPrinter.png', 'FitnessTracker.png', 'SmartWatch.png', 'ProcessingPower.png', 'SmartProductManagement.png', 'Mobility.png', 'Robotics.png', 'VRTechnology.png', 'SmartTV.png'
+]
 module.exports = {
   iconList,
   colorList,
   qosList,
   streamTypeList,
+  deviceImageList,
 }

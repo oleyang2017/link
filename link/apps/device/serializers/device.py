@@ -28,6 +28,7 @@ class DeviceSerializer(BaseModelSerializer):
             "image",
             "sequence",
             "create_user",
+            "image_url",
             "display_custom_info",
         )
         read_only_fields = (
@@ -64,7 +65,6 @@ class DeviceDetailSerializer(BaseModelSerializer):
         model = Device
         fields = (
             "id",
-            "client_name",
             "client_id",
             "category",
             "category_name",
@@ -79,7 +79,7 @@ class DeviceDetailSerializer(BaseModelSerializer):
             "streams",
             "charts",
             "triggers",
-            "token",
+            "image_url",
             "custom_info",
             "display_custom_info",
         )
