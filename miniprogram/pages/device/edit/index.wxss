@@ -19,3 +19,34 @@
   overflow: hidden;
   vertical-align: middle;
 }
+
+.image-choice-btn{
+  width: 160rpx;
+  height: 160rpx;
+  background-color: #f7f8fa;
+  color: #dcdee0;
+  font-size: 60rpx;
+  line-height: 160rpx;
+  vertical-align: center;
+  text-align: center;
+}
+
+.image-list-container{
+  max-height: 600rpx;
+}
+.image-list-item{
+  width: 25%;
+  height: 200rpx;
+  line-height: 200rpx;
+  vertical-align: middle;
+  display: inline-block;
+  text-align: center;
+}
+.image-list-item image{
+  width: 120rpx;
+  height: 120rpx;
+  line-height: 200rpx;
+  display: inline-block;
+  vertical-align:middle;
+  text-align: center;
+}

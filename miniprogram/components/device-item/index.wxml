@@ -1,5 +1,5 @@
 <view class="bg-white text-black card-container" bindtap="_toDeviceDetail" data-id="{{deviceId}}" style="{{index%2 ? 'margin-left: 2%; margin-right: 1%;': 'margin-right: 2%; margin-left: 1%;'}}">
-  <image src="{{ image ? image :'/static/images/default_device.png'}}" mode="aspectFill" class="image"></image>
+  <image src="{{deviceImage}}" mode="aspectFill" class="image"></image>
   <view class="status {{status ? 'online-status':'offline-status'}}">{{status?'在线':'离线'}}</view>
   <view style="display: inline-block; margin-left: 10rpx;vertical-align: top;">
     <view class="name">{{name}}</view>

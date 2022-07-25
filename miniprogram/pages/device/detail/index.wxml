@@ -18,7 +18,7 @@
 <view class="device-detail-container bg-white {{showAll?'show-all':''}}">
   <view class="top-container">
     <view class="left">
-      <image src="{{ image ? image :'/static/images/default_device.png'}}" mode="aspectFill" class="image" />
+      <image src="{{ !image && !imageUrl ? '/static/images/device/Devices.png' : image ? image : imageUrl}}" mode="aspectFill" class="image" />
     </view>
     <view class="right">
       <view class="padding-lr-xs text-xs">

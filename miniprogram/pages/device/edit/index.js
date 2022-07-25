@@ -2,14 +2,15 @@ import deviceApi from '../../../api/device'
 import categoryApi from '../../../api/category'
 import streamApi from '../../../api/stream'
 import Toast from '@vant/weapp//toast/toast'
+import { deviceImageList } from '../../../const'
 const app = getApp()
 
 Page({
   data: {
     needRefresh: false,
     type: 'edit',
-    show: false,
-    popupType: "category",
+    show: true,
+    popupType: "image",
     categoryList: [],
     categoryIndex: 0,
     charts: [],
@@ -17,6 +18,7 @@ Page({
     triggers: [],
     filePath: null,
     deleteStreams: [],
+    deviceImageList,
   },
 
   onLoad: function (options) {
@@ -121,13 +123,16 @@ Page({
       imageList: [{
         url: file.url
       }],
-      filePath: file.url
+      filePath: file.url,
+      image: file.url,
+      show: false,
     })
   },
   deleteImage() {
     this.setData({
       imageList: [],
-      filePath: null
+      filePath: null,
+      image: null,
     })
   },
   async confirm() {
@@ -164,12 +169,16 @@ Page({
       filePath,
       customInfo,
       desc,
-      category
+      category,
+      imageUrl,
     } = this.data
 
     let data = {
       name,
       filePath
+    }
+    if (imageUrl){
+      data.imageUrl = imageUrl
     }
     if (category) {
       data.category = category
@@ -219,4 +228,9 @@ Page({
       })
     }
   },
+  choiceImage(e){
+    this.setData({
+      imageUrl: `/static/images/device/${e.currentTarget.dataset.value}`, 
+      show:false})
+  }
 })

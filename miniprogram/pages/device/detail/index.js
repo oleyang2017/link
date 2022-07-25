@@ -18,6 +18,7 @@ Page({
       wx.setNavigationBarTitle({
         title: res.name
       })
+      
       this.setData({
         ...res
       })

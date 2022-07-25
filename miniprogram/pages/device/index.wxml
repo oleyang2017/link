@@ -12,7 +12,7 @@
         <scroll-view style="height: calc(100vh);" scroll-y refresher-enabled refresher-triggered="{{refresh}}" bindrefresherrefresh="refresh">
           <view class="device-scroll-container">
               <view style="display: inline-block; width: 50%;" wx:for="{{item.device}}" wx:key="index" wx:for-item="item">
-                <device-item deviceId="{{item.id}}" index="{{index}}" name="{{item.name}}" status="{{item.status}}" image="{{item.image}}" customInfo="{{item.displayCustomInfo}}"/>
+                <device-item deviceId="{{item.id}}" index="{{index}}" name="{{item.name}}" status="{{item.status}}" image="{{item.image}}" customInfo="{{item.displayCustomInfo}}" imageUrl="{{item.imageUrl}}"/>
               </view>
             <block wx:if="{{item.device.length}}">
               <view class="text-blue text-df text-center padding-bottom-xl" style="width: 100%;padding-bottom: 240rpx;">
