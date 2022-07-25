@@ -9,8 +9,8 @@ Page({
   data: {
     needRefresh: false,
     type: 'edit',
-    show: true,
-    popupType: "image",
+    show: false,
+    popupType: "category",
     categoryList: [],
     categoryIndex: 0,
     charts: [],
