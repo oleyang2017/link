@@ -2,7 +2,7 @@ import { request } from './request';
 
 export default {
   list: (params) => {
-    return request('/streams/', params, "GET")
+    return request('/api/streams/', params, "GET")
   },
   create:(params) => { 
     return request('/api/streams/', params, "POST") 
