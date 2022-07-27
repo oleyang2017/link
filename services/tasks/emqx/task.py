@@ -40,6 +40,7 @@ def save_emqx_data(request):
                 msg_id=msg_id,
                 client_id=client_id,
                 topic=topic,
+                stream_id=stream_id,
                 payload=str(payload),
                 timestamp=datetime.fromtimestamp(timestamp / 1000),
             )
