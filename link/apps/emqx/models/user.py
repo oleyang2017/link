@@ -10,6 +10,7 @@ class EMQXUser(models.Model):
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
+        related_name="emqx_user",
         verbose_name="创建人",
         on_delete=models.CASCADE,
         db_constraint=False,
