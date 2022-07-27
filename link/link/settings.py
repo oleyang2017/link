@@ -27,7 +27,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
 SECRET_KEY = "*ahhox%k)*#to$q2ms)kuqkg^74b0bm90=%1#8d^fbt84&p85q"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "*",
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "emqx",
     "user",
     "device",
+    "common",
     # 'action'
 ]
 
