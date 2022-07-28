@@ -1,5 +1,6 @@
 from django.db import models
 from shortuuid.django_fields import ShortUUIDField
+
 from base.base_model import BaseModel
 
 
@@ -17,6 +18,7 @@ class InviteLink(BaseModel):
     invite_type = models.CharField(choices=INVITE_TYPE_CHOICES, max_length=16, verbose_name="邀请类型")
     object_id = models.BigIntegerField(verbose_name="对象ID")
     permissions = models.JSONField(verbose_name="权限")
+    enable = models.BooleanField(default=True, verbose_name="开启")
 
     class Meta:
         db_table = "invite_link"

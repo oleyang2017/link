@@ -6,6 +6,7 @@ from common.models.invite_link import InviteLink
 
 class InviteRecord(BaseModel):
     """邀请记录"""
+
     INVITE_RESULT_CHOICES = (
         ("accept", "接受邀请"),
         ("reject", "拒绝邀请"),
@@ -20,7 +21,9 @@ class InviteRecord(BaseModel):
     )
     object_id = models.BigIntegerField(verbose_name="对象ID")
     permissions = models.JSONField(verbose_name="权限")
-    result = models.CharField(choices=INVITE_RESULT_CHOICES, max_length=16, verbose_name="邀请类型", null=False)
+    result = models.CharField(
+        choices=INVITE_RESULT_CHOICES, max_length=16, verbose_name="邀请类型", null=False
+    )
 
     class Meta:
         db_table = "invite_record"
