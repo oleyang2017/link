@@ -2,7 +2,8 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView, TokenObtainPairView
 
-from .views import UserViewSet, login_or_register_with_wx
+from user.views.wx_login import login_or_register_with_wx
+from user.views.user_profile import UserViewSet
 
 router = DefaultRouter()
 router.register("user", UserViewSet, basename="users")

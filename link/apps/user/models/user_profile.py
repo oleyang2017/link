@@ -19,7 +19,7 @@ class UserProfile(AbstractUser):
     )
     gender = models.CharField(verbose_name="性别", max_length=1, choices=GENDER_CHOICES, default="0")
     desc = models.TextField(verbose_name="个人介绍", blank=True, default="")
-    avatar = models.ImageField(verbose_name="头像", upload_to="avatar/", blank=True, null=True)
+    avatar = models.ImageField(verbose_name="头像", upload_to="images/avatar", blank=True, null=True)
     avatar_url = models.URLField(verbose_name="头像", blank=True, null=True)
     address = models.CharField(verbose_name="地址", max_length=128, default="", blank=True)
     # 目前没有打算通过用户名密码的方式登录，只有微信授权登录的方式，增加access_token方便以后不使用微信授权直接换取jwt
@@ -33,4 +33,4 @@ class UserProfile(AbstractUser):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.username
+        return f"user: {self.username}"

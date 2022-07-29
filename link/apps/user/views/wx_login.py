@@ -1,18 +1,11 @@
-from django.conf import settings
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.exceptions import APIException, AuthenticationFailed
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.exceptions import APIException
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from utils.wechat import code2openid
 
-from .models import UserProfile as User
-from .serializers import UserDetailSerializer
+from user.models.user_profile import UserProfile as User
 
 
 @api_view(["post"])
@@ -42,11 +35,3 @@ def login_or_register_with_wx(request):
             }
         )
     raise APIException(detail="登录失败", code=500)
-
-
-class UserViewSet(ReadOnlyModelViewSet):
-    serializer_class = UserDetailSerializer
-    queryset = User.objects
-
-    def get_queryset(self):
-        return User.objects.filter(id=self.request.user.id).all()
