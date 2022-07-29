@@ -20,8 +20,8 @@ class InviteRecord(BaseModel):
         verbose_name="邀请链接",
     )
     object_id = models.BigIntegerField(verbose_name="对象ID")
-    permissions = models.JSONField(verbose_name="权限")
-    result = models.CharField(
+    permissions = models.JSONField(verbose_name="权限", default=list)
+    operation = models.CharField(
         choices=INVITE_RESULT_CHOICES, max_length=16, verbose_name="邀请类型", null=False
     )
 
