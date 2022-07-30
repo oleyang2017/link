@@ -9,7 +9,13 @@
     "pages/stream/list/index",
     "pages/stream/edit/index",
     "pages/trigger/list/index",
-    "pages/about/about"
+    "pages/about/about",
+    "pages/invite/list/index",
+    "pages/invite/detail/index",
+    "pages/invite/edit/index",
+    "pages/group/list/index",
+    "pages/group/detail/index",
+    "pages/invite/recordDetail/index"
   ],
   "window": {
     "backgroundColor": "#f6f8fa",

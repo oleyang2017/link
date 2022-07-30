@@ -1,0 +1,37 @@
+<van-cell-group title="基础信息">
+  <van-cell title="邀请码" value="{{code}}" />
+  <van-cell title="最大邀请人数" value="{{count?count:'无限制'}}" />
+  <van-cell title="失效时间" value="{{endTime}}" />
+  <van-cell title="创建时间" value="{{createdTime}}" />
+  <van-cell title="邀请对象" is-link value="{{(inviteType=='device'?'设备：':'群组：') + objectInfo.name}}" link-type="navigateTo" url="{{(inviteType=='device'?'/pages/device/detail/index?id=':'/pages/group/detail/index?id=') + objectId}}" />
+</van-cell-group>
+
+<van-checkbox-group value="{{ permissions }}" wx:if="{{inviteType=='device'}}">
+  <van-cell-group title="权限">
+    <van-cell title="查看设备" value-class="value-class">
+      <van-checkbox slot="right-icon" name="view_device" shape="square" />
+    </van-cell>
+    <van-cell title="编辑设备">
+      <van-checkbox slot="right-icon" name="change_device" shape="square" />
+    </van-cell>
+    <van-cell title="删除设备">
+      <van-checkbox slot="right-icon" name="delete_device" shape="square" />
+    </van-cell>
+    <van-cell title="控制设备">
+      <van-checkbox slot="right-icon" name="control_device" shape="square" />
+    </van-cell>
+    <van-cell title="订阅设备数据">
+      <van-checkbox slot="right-icon" name="subscribe_topic" shape="square" />
+    </van-cell>
+  </van-cell-group>
+</van-checkbox-group>
+
+<van-cell-group title="授权记录">
+  <van-cell wx:for="{{records}}" wx:key="index" link-type="navigateTo" value="{{item.operation=='accept'?'接受':'拒绝'}}" is-link url="{{'/pages/invite/recordDetail/index?id='+item.id}}">
+    <view slot="title" class="invite-user-cell">
+      <image src="{{ item.userInfo.avatar_url ? item.userInfo.avatar_url :'/static/images/default_avatar.jpg'}}" mode="aspectFill" class="avatar" />
+      <view class="username">{{item.userInfo.username}}</view>
+    </view>
+  </van-cell>
+  <van-cell wx:if="{{!records.length}}" title="暂无用户接收邀请" />
+</van-cell-group>
