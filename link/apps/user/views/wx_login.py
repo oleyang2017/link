@@ -4,7 +4,6 @@ from rest_framework.exceptions import APIException
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from utils.wechat import code2openid
-
 from user.models.user_profile import UserProfile as User
 
 

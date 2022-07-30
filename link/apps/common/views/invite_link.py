@@ -29,18 +29,19 @@ class InviteLinkViewSet(BaseModelViewSet):
             return InviteLinkDetailSerializer
 
     def retrieve(self, request, *args, **kwargs):
+        # 这里不处理权限，邀请链接是可以公开访问的
         instance = get_object_or_404(InviteLink, **kwargs)
         serializer = InviteLinkDetailSerializer(instance, context={"request": request})
         return Response(serializer.data)
 
     @action(methods=["get"], detail=True)
-    def record_list(self, request, *args, **kwargs):
+    def record_list(self, *args, **kwargs):
         link = self.get_object()
         serializer = InviteRecordSerializer(link.invite_records, many=True)
         return Response(serializer.data)
 
     @action(methods=["post"], detail=True)
-    def action(self, request, *args, **kwargs):
+    def action(self, *args, **kwargs):
         link = get_object_or_404(InviteLink, **kwargs)
         operation = self.request.data.get("operation")
 

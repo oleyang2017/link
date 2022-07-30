@@ -45,3 +45,5 @@ class InviteLink(BaseModel):
         record = InviteRecord.objects.filter(create_user=user, invite_link=self).first()
         if record:
             raise ValidationError(f"你已{record.get_result_display()}")
+        if user == self.create_user:
+            raise ValidationError("无法执行操作")

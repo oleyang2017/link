@@ -2,8 +2,7 @@ from rest_framework import serializers
 
 from emqx.models.user import EMQXUser
 from base.base_serializers import BaseModelSerializer
-
-from user.models import UserProfile
+from user.models.user_profile import UserProfile
 
 
 class UserDetailSerializer(BaseModelSerializer):
