@@ -33,7 +33,6 @@ class DeviceViewSet(BaseModelViewSet):
         current_user = self.request.user
         device = serializer.save(create_user=current_user)
         assign_perm("control_device", current_user, device)
-        assign_perm("add_device", current_user, device)
         assign_perm("view_device", current_user, device)
         assign_perm("change_device", current_user, device)
         assign_perm("delete_device", current_user, device)

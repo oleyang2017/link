@@ -18,7 +18,7 @@ from common.serializers.invite_record import InviteRecordSerializer
 class InviteLinkViewSet(BaseModelViewSet):
     serializer_class = InviteLinkSerializer
     lookup_field = "id"
-    filter_fields = ["code", "invite_type"]
+    filter_fields = ["code", "invite_type", "object_id"]
     filter_backends = (DjangoFilterBackend, OrderingFilter)
     queryset = InviteLink.objects
 
@@ -41,7 +41,7 @@ class InviteLinkViewSet(BaseModelViewSet):
         return Response(serializer.data)
 
     @action(methods=["post"], detail=True)
-    def action(self, *args, **kwargs):
+    def invite_user(self, *args, **kwargs):
         link = get_object_or_404(InviteLink, **kwargs)
         operation = self.request.data.get("operation")
 

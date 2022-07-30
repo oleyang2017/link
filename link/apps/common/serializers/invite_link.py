@@ -19,7 +19,7 @@ class InviteLinkSerializer(BaseModelSerializer):
 class InviteLinkDetailSerializer(BaseModelSerializer):
     create_user = serializers.SerializerMethodField(read_only=True)
     invited_count = serializers.SerializerMethodField(read_only=True)
-    record = serializers.SerializerMethodField(read_only=True)
+    records = serializers.SerializerMethodField(read_only=True)
     object_info = serializers.SerializerMethodField(read_only=True)
 
     @staticmethod
@@ -44,7 +44,7 @@ class InviteLinkDetailSerializer(BaseModelSerializer):
     def get_invited_count(obj):
         return obj.invite_records.count()
 
-    def get_record(self, obj):
+    def get_records(self, obj):
         # 如果是所有者返回所有的记录，否则只返回自己的记录
         if self.context["request"].user != obj.create_user:
             record = obj.invite_records.filter(create_user=self.context["request"].user).first()
@@ -95,6 +95,6 @@ class InviteLinkDetailSerializer(BaseModelSerializer):
             "enable",
             "create_user",
             "invited_count",
-            "record",
+            "records",
             "object_info",
         )
