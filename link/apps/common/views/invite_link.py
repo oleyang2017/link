@@ -41,7 +41,7 @@ class InviteLinkViewSet(BaseModelViewSet):
         return Response(serializer.data)
 
     @action(methods=["post"], detail=True)
-    def invite_user(self, *args, **kwargs):
+    def share(self, *args, **kwargs):
         link = get_object_or_404(InviteLink, **kwargs)
         operation = self.request.data.get("operation")
 

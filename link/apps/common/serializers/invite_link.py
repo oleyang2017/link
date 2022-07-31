@@ -11,6 +11,12 @@ from common.serializers.invite_record import InviteRecordSerializer
 
 
 class InviteLinkSerializer(BaseModelSerializer):
+    invited_count = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_invited_count(obj):
+        return obj.invite_records.count()
+
     class Meta:
         model = InviteLink
         fields = "__all__"
@@ -49,7 +55,7 @@ class InviteLinkDetailSerializer(BaseModelSerializer):
         if self.context["request"].user != obj.create_user:
             record = obj.invite_records.filter(create_user=self.context["request"].user).first()
             if record:
-                return InviteRecordSerializer(instance=record, many=True).data
+                return [InviteRecordSerializer(instance=record, many=False).data]
         else:
             return InviteRecordSerializer(obj.invite_records, many=True).data
         return []
