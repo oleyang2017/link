@@ -4,6 +4,7 @@
 .avatar{
   width: 48rpx;
   height: 48rpx;
+  border-radius: 50%;
 }
 .username{
   padding-left: 20rpx;

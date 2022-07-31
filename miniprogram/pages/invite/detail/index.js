@@ -1,70 +1,52 @@
-import inviteApi from '../../../api/invite'
+import inviteApi from '../../../api/invite';
+import Dialog from '@vant/weapp//dialog/dialog';
 
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-    
+    canShare: true,
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad(options) {
-    let id = options.id
-    inviteApi.detail(id).then((res)=>{
-      this.setData({...res})
+    this.setData({
+      ...options
+    })
+    this.getInviteInfo(options.id)
+  },
+
+  getInviteInfo(id) {
+    inviteApi.detail(id).then((res) => {
+      let now = new Date()
+      if (!res.enable || (res.count > 0 && res.count <= res.invitedCount) || (res.endTime && new Date(res.endTime) < now)) {
+        res.canShare = false
+      } else {
+        res.canShare = true
+      }
+      this.setData({
+        ...res
+      })
     })
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  close() {
+    Dialog.confirm({
+        message: '关闭链接后，已分享出去的链接将不可再接受邀请，且不可再打开',
+      })
+      .then(() => {
+        inviteApi.update({
+          id: this.data.id,
+          enable: false,
+        }).then((res) => {
+          this.setData({
+            ...res
+          })
+        })
+      })
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+  onShareAppMessage(e) {
+    return {
+      title: this.data.inviteType == 'device' ? '分享设备给你' : '邀请你加入群组',
+      path: `/pages/invite/share/index?id=${this.data.id}&type=share&code=${this.data.code}`,
+      imageUrl: '/static/images/share.png'
+    }
   }
 })

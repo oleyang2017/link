@@ -1,0 +1,30 @@
+.top-container{
+  text-align: center;
+}
+
+.avatar{
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+}
+.username{
+  padding-top: 20rpx;
+}
+.image-container{
+  background-color: #ffffff;
+  width: 100%;
+  height: calc(100vh);
+  text-align: center;
+  padding:  100px 0;
+}
+.image-container image{
+  width: 600rpx;
+  height: 600rpx;
+}
+.group-name{
+  line-height: 66rpx;
+  height: 66rpx;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 36rpx;
+}

@@ -1,0 +1,33 @@
+<view class="top-container" wx:if="{{!records.length}}">
+  <image src="{{ createUser.avatarUrl ? createUser.avatarUrl :'/static/images/default_avatar.jpg'}}" mode="aspectFill" class="avatar" />
+  <view class="username">{{createUser.username}}</view>
+  <text>{{inviteType=='device' ? '分享了一个设备给你' : '邀请你加入群组'}}</text>
+  <view>
+    <view wx:if="{{inviteType=='device'}}">
+      <view>接受邀请后你将获得该设备的以下权限</view>
+      <van-tag wx:for="{{permissions}}" wx:key="index" style="padding-right:5px;" type="primary">{{permissionsMap[item]}}</van-tag>
+    </view>
+    <view wx:if="{{inviteType=='group'}}">
+      <view class="padding">
+        <view class="group-name">{{objectInfo.name}}: </view>
+        <view class="cu-avatar-group">
+          <view class="cu-avatar round" wx:for="{{objectInfo.members}}" wx:key="index" style="background-image:url({{item.avatarUrl ? item.avatarUrl :'/static/images/default_avatar.jpg'}});"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+<view wx:else class="image-container">
+  <image src="{{records[0].operation=='accept' ? '/static/images/accept_share.png' : '/static/images/reject_share.png'}}" mode="aspectFill" />
+  <view class="text-gray text-df">你已经{{records[0].operation=='accept' ?'接受':'拒绝'}}邀请，<navigator class="text-blue" open-type="reLaunch" url="/pages/device/index" style="display: inline-block;" hover-class="none">返回首页</navigator>
+  </view>
+</view>
+
+<view wx:if="{{canOperate}}">
+  <view style="width: 100%; padding: 15px 5% 10px;">
+    <van-button round type="primary" block bind:click="onClick" data-value="accept">接受邀请</van-button>
+  </view>
+  <view style="width: 100%; padding: 0 5%;">
+    <van-button round type="danger" block bind:click="onClick" data-value="reject">拒绝邀请</van-button>
+  </view>
+</view>

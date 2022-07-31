@@ -15,8 +15,8 @@
   <view class="cell-container">
     <van-cell-group>
       <van-cell title="消息" is-link />
-      <van-cell title="分享" is-link />
-      <van-cell title="群组" is-link />
+      <van-cell title="分享" is-link url="/pages/invite/list/index"/>
+      <van-cell title="群组" is-link url="/pages/group/list/index"/>
     </van-cell-group>
   </view>
   <view class="cell-container">

@@ -15,7 +15,8 @@
     "pages/invite/edit/index",
     "pages/group/list/index",
     "pages/group/detail/index",
-    "pages/invite/recordDetail/index"
+    "pages/invite/recordDetail/index",
+    "pages/invite/share/index"
   ],
   "window": {
     "backgroundColor": "#f6f8fa",

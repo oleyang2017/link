@@ -26,12 +26,23 @@
   </van-cell-group>
 </van-checkbox-group>
 
-<van-cell-group title="授权记录">
-  <van-cell wx:for="{{records}}" wx:key="index" link-type="navigateTo" value="{{item.operation=='accept'?'接受':'拒绝'}}" is-link url="{{'/pages/invite/recordDetail/index?id='+item.id}}">
-    <view slot="title" class="invite-user-cell">
-      <image src="{{ item.userInfo.avatar_url ? item.userInfo.avatar_url :'/static/images/default_avatar.jpg'}}" mode="aspectFill" class="avatar" />
-      <view class="username">{{item.userInfo.username}}</view>
-    </view>
-  </van-cell>
-  <van-cell wx:if="{{!records.length}}" title="暂无用户接收邀请" />
-</van-cell-group>
+<view style="padding-bottom:80px">
+  <van-cell-group title="授权记录">
+    <van-cell wx:for="{{records}}" wx:key="index" link-type="navigateTo" value="{{item.operation=='accept'?'接受':'拒绝'}}" is-link url="{{'/pages/invite/recordDetail/index?id='+item.id}}">
+      <view slot="title" class="invite-user-cell">
+        <image src="{{ item.userInfo.avatarUrl ? item.userInfo.avatarUrl :'/static/images/default_avatar.jpg'}}" mode="aspectFill" class="avatar" />
+        <view class="username">{{item.userInfo.username}}</view>
+      </view>
+    </van-cell>
+    <van-cell wx:if="{{!records.length}}" title="暂无用户接收邀请" />
+  </van-cell-group>
+  <view style="width: 100%; padding: 15px 5% 0;" wx:if="{{enable}}">
+    <van-button round type="danger" disabled="{{!canShare}}" block bind:click="close">关闭邀请链接</van-button>
+  </view>
+</view>
+
+<view style="position: fixed;bottom: 30px;width: 100%; padding: 0 5%;">
+  <van-button round type="info" disabled="{{!canShare}}" block open-type="share">分享</van-button>
+</view>
+
+<van-dialog id="van-dialog" />

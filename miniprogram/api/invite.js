@@ -16,7 +16,7 @@ export default {
   update: (data) => {
     return request(`/api/invite_links/${data.id}/`, data, "PUT")
   },
-  inviteUser: (data) => {
-    return request(`/api/invite_links/${data.id}/invite_user/`, data, "POST")
+  share: (data) => {
+    return request(`/api/invite_links/${data.id}/share/`, data, "POST")
   },
 }
