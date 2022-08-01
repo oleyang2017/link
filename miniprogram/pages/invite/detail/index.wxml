@@ -31,7 +31,7 @@
     <van-cell wx:for="{{records}}" wx:key="index" link-type="navigateTo" value="{{item.operation=='accept'?'接受':'拒绝'}}" is-link url="{{'/pages/invite/recordDetail/index?id='+item.id}}">
       <view slot="title" class="invite-user-cell">
         <image src="{{ item.userInfo.avatarUrl ? item.userInfo.avatarUrl :'/static/images/default_avatar.jpg'}}" mode="aspectFill" class="avatar" />
-        <view class="username">{{item.userInfo.username}}</view>
+        <view class="username">{{item.userInfo.nickname}}</view>
       </view>
     </van-cell>
     <van-cell wx:if="{{!records.length}}" title="暂无用户接收邀请" />

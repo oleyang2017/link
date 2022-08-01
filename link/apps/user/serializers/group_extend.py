@@ -12,7 +12,7 @@ class GroupSerializer(BaseModelSerializer):
     @staticmethod
     def get_members(obj):
         members = []
-        for user in obj.user_set.values("username", "avatar", "avatar_url").all():
+        for user in obj.user_set.values("username", "nickname", "avatar", "avatar_url").all():
             members.append(user)
         return members
 

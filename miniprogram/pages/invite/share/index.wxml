@@ -1,6 +1,6 @@
 <view class="top-container" wx:if="{{!records.length}}">
   <image src="{{ createUser.avatarUrl ? createUser.avatarUrl :'/static/images/default_avatar.jpg'}}" mode="aspectFill" class="avatar" />
-  <view class="username">{{createUser.username}}</view>
+  <view class="username">{{createUser.nickname}}</view>
   <text>{{inviteType=='device' ? '分享了一个设备给你' : '邀请你加入群组'}}</text>
   <view>
     <view wx:if="{{inviteType=='device'}}">

@@ -5,8 +5,8 @@
       <view slot="title">
         <image src="{{ avatar ? avatar :'/static/images/default_avatar.jpg'}}" mode="aspectFill" class="avatar" />
         <view class="user-info">
-          <view class="username">{{username}}</view>
-          <view class="other">wx_fadfafdasfew</view>
+          <view class="username">{{nickname}}</view>
+          <view class="other">{{username}}</view>
         </view>
       </view>
     </van-cell>

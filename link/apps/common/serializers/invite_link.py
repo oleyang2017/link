@@ -34,6 +34,7 @@ class InviteLinkDetailSerializer(BaseModelSerializer):
         return {
             "id": user.id,
             "username": user.username,
+            "nickname": user.nickname,
             "avatar_url": user.avatar_url,
         }
 

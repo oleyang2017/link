@@ -12,7 +12,7 @@ class InviteRecordSerializer(BaseModelSerializer):
     def get_user_info(obj):
         user_info = (
             UserProfile.objects.filter(id=obj.create_user_id)
-            .values("username", "avatar", "avatar_url")
+            .values("username", "nickname", "avatar", "avatar_url")
             .first()
         )
         return user_info

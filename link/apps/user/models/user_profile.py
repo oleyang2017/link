@@ -10,6 +10,7 @@ class UserProfile(AbstractUser):
 
     GENDER_CHOICES = (("0", "未知"), ("1", "男"), ("2", "女"))
     username = ShortUUIDField(prefix="wx_", max_length=128, length=16, unique=True)
+    nickname = models.CharField(verbose_name="昵称", max_length=12, default="微信用户")
     mobile = models.CharField(verbose_name="手机号", max_length=20, unique=True, blank=True, null=True)
     wx_open_id = models.CharField(
         verbose_name="wx_openid", max_length=64, default="", blank=True, db_index=True
