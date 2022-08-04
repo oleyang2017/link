@@ -1,6 +1,7 @@
-import paho.mqtt.client as mqtt
-import random
 import time
+import random
+
+import paho.mqtt.client as mqtt
 
 CLIENT_ID = "your device client_id"
 USERNAME = "your emqx username"
