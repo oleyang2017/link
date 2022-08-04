@@ -10,6 +10,7 @@ STREAM_ID_LIST = ["your device strame_ids"]
 SERVER_URL = "127.0.0.1"
 PORT = 1883
 
+
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
 
@@ -21,8 +22,10 @@ def on_connect(client, userdata, flags, rc):
         # 订阅其他人分享给自己且有数据订阅权限的设备topic:
         # client.subscribe(f"/{OTHER_USERNAME}/{OTHER_CLIENT_ID}/#")
 
+
 def on_message(client, userdata, msg):
     print(f"{msg.topic} -> {msg.payload}")
+
 
 client = mqtt.Client(client_id=CLIENT_ID)
 client.username_pw_set(username=USERNAME, password=PASSWORD)
