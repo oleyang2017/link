@@ -15,10 +15,10 @@ services:
 
 
   emqx:
-    image: "emqx/emqx:latest"
+    image: "emqx/emqx:4.4.4"
     restart: always
     container_name: "link_emqx"
-    links: 
+    links:
       - pgsql
       - backend
     depends_on:
@@ -32,6 +32,7 @@ services:
       - "EMQX_LOADED_PLUGINS=emqx_dashboard,emqx_auth_pgsql,emqx_exhook"
       - "EMQX_ALLOW_ANONYMOUS=false"
       - "EMQX_ACL_NOMATCH=deny"
+      - "EMQX_ACL_FILE=''"
       - "EMQX_ACL_DENY_ACTION=disconnect"
       - "EMQX_AUTH__PGSQL__SERVER=link_pgsql:5432"
       - "EMQX_AUTH__PGSQL__USERNAME=admin"
