@@ -203,6 +203,15 @@ const permissionsMap = {
   control_device: "控制设备",
   subscribe_topic: "订阅设备数据",
 }
+const inviteTypeList = [{
+    name: '设备',
+    value: 'device'
+  },
+  {
+    name: '群组',
+    value: 'group'
+  },
+]
 module.exports = {
   iconList,
   colorList,
@@ -210,4 +219,5 @@ module.exports = {
   streamTypeList,
   deviceImageList,
   permissionsMap,
+  inviteTypeList,
 }

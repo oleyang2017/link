@@ -174,21 +174,17 @@ Page({
     } = this.data
 
     let data = {
+      id,
       name,
-      filePath
+      streams,
+      charts,
+      filePath,
+      customInfo,
+      desc,
+      category,
+      imageUrl,
     }
-    if (imageUrl){
-      data.imageUrl = imageUrl
-    }
-    if (category) {
-      data.category = category
-    }
-    if (desc) {
-      data.desc = desc
-    }
-    if (customInfo) {
-      data.customInfo = customInfo
-    }
+
     if (this.data.type == 'create') {
       if (this.data.charts.length) {
         data.charts = charts
