@@ -40,9 +40,11 @@
         value="{{ currentDate }}"
         min-date="{{ minDate }}"
         max-date="{{ maxDate }}"
+        data-name="time"
         bind:confirm="onConfirmTime"
+        bind:cancel="openPopup"
       />
-    <van-picker columns="{{ deviceList }}" show-toolbar value-key="name" bind:confirm="onConfirmObj" wx:if="{{choiceType=='object'}}"/>
-    <van-picker columns="{{ inviteTypeList }}" show-toolbar value-key="name" bind:confirm="onConfirmType" wx:if="{{choiceType=='type'}}"/>
+    <van-picker columns="{{ deviceList }}" show-toolbar value-key="name" bind:confirm="onConfirmObj" bind:cancel="openPopup" data-name="object" wx:if="{{choiceType=='object'}}"/>
+    <van-picker columns="{{ inviteTypeList }}" show-toolbar value-key="name" bind:confirm="onConfirmType" bind:cancel="openPopup" data-name="type" wx:if="{{choiceType=='type'}}"/>
   </van-popup>
 </view>

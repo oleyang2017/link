@@ -1,7 +1,7 @@
 <van-cell-group title="基础信息">
   <van-cell title="邀请码" value="{{code}}" />
   <van-cell title="最大邀请人数" value="{{count?count:'无限制'}}" />
-  <van-cell title="失效时间" value="{{endTime}}" />
+  <van-cell title="失效时间" value="{{endTime?endTime:'无限制'}}" />
   <van-cell title="创建时间" value="{{createdTime}}" />
   <van-cell title="邀请对象" is-link value="{{(inviteType=='device'?'设备：':'群组：') + objectInfo.name}}" link-type="navigateTo" url="{{(inviteType=='device'?'/pages/device/detail/index?id=':'/pages/group/detail/index?id=') + objectId}}" />
 </van-cell-group>

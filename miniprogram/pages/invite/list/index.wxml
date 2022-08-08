@@ -12,7 +12,7 @@
   </block>
   <block wx:else>
     <view class="text-blue text-df text-center padding-bottom-xl padding-top-xl">
-      <navigator wx:if="{{item.name !='共享设备'}}" url="/pages/invite/edit/index?type=create&objectId=4" hover-class="none">点击创建更多邀请连接</navigator>
+      <navigator wx:if="{{item.name !='共享设备'}}" url="/pages/invite/edit/index" hover-class="none">点击创建更多邀请连接</navigator>
     </view>
   </block>
 
