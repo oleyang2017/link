@@ -8,14 +8,11 @@
 
 <van-checkbox-group value="{{ permissions }}" wx:if="{{inviteType=='device'}}">
   <van-cell-group title="权限">
-    <van-cell title="查看设备" value-class="value-class">
+    <van-cell title="查看设备">
       <van-checkbox slot="right-icon" name="view_device" shape="square" />
     </van-cell>
     <van-cell title="编辑设备">
       <van-checkbox slot="right-icon" name="change_device" shape="square" />
-    </van-cell>
-    <van-cell title="删除设备">
-      <van-checkbox slot="right-icon" name="delete_device" shape="square" />
     </van-cell>
     <van-cell title="控制设备">
       <van-checkbox slot="right-icon" name="control_device" shape="square" />
@@ -37,12 +34,12 @@
     <van-cell wx:if="{{!records.length}}" title="暂无用户接收邀请" />
   </van-cell-group>
   <view style="width: 100%; padding: 15px 5% 0;" wx:if="{{enable}}">
-    <van-button round type="danger" disabled="{{!canShare}}" block bind:click="close">关闭邀请链接</van-button>
+    <van-button type="danger" disabled="{{!canShare}}" block bind:click="close">关闭邀请链接</van-button>
   </view>
 </view>
 
 <view style="position: fixed;bottom: 30px;width: 100%; padding: 0 5%;">
-  <van-button round type="info" disabled="{{!canShare}}" block open-type="share">分享</van-button>
+  <van-button type="info" disabled="{{!canShare}}" block open-type="share">分享</van-button>
 </view>
 
 <van-dialog id="van-dialog" />

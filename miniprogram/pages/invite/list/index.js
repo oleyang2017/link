@@ -2,20 +2,12 @@ import inviteApi from '../../../api/invite'
 
 Page({
 
-  /**
-   * 页面的初始数据
-   */
   data: {
     inviteList: []
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
+  onShow(){
     this.getInviteList()
   },
-
   getInviteList(){
     inviteApi.list().then((res)=>{
       var now = new Date();

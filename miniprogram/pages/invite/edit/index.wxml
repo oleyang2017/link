@@ -1,2 +1,48 @@
-<!--pages/invite/edit/index.wxml-->
-<text>pages/invite/edit/index.wxml</text>
+
+<view>
+  <van-cell-group title="基础信息">
+    <van-field model:value="{{ count }}" label="邀请人数" type="number" placeholder="设置最大邀请人数" border="{{ false }}" />
+    <van-field value="{{ endTime }}" label="结束时间" bindtap="openPopup" data-name="time" placeholder="设置邀请结束时间" border="{{ false }}" readonly/>
+    <van-field value="{{ disInviteType }}" label="邀请类型" bindtap="openPopup" data-name="type" placeholder="选择邀请类型" border="{{ false }}" required readonly/>
+    <van-field value="{{ disObjName }}" bindtap="openPopup" data-name="object" label="邀请对象" border="{{ false }}" readonly required />
+  </van-cell-group>
+
+  <van-checkbox-group value="{{ permissions }}" wx:if="{{inviteType == 'device'}}" bind:change="onChangePerm">
+  <van-cell-group title="设置权限">
+    <van-cell title="查看设备">
+      <van-checkbox slot="right-icon" name="view_device" shape="square"/>
+    </van-cell>
+    <van-cell title="编辑设备" clickable>
+      <van-checkbox slot="right-icon" name="change_device" shape="square"/>
+    </van-cell>
+    <van-cell title="控制设备" clickable>
+      <van-checkbox slot="right-icon" name="control_device" shape="square"/>
+    </van-cell>
+    <van-cell title="订阅设备数据" clickable>
+      <van-checkbox slot="right-icon" name="subscribe_topic" shape="square"/>
+    </van-cell>
+  </van-cell-group>
+</van-checkbox-group>
+
+  <view class="padding-lr-xl padding-tb-lg">
+    <van-button type="primary" color="#0081ff" disabled="{{!inviteType || !objectId}}" block bind:click="confirm">确认</van-button>
+  </view>
+  <view class="padding-lr-xl padding-bottom-xl">
+    <van-button type="default" block bind:click="cancel">取消</van-button>
+  </view>
+  <van-icon name="delete-o" class="text-red text-xl" style="position: absolute; top: 16px; right: 16px" bindtap="delete" wx:if="{{type=='edit'}}" />
+
+  <van-dialog id="van-dialog" />
+  <van-toast id="van-toast" />
+  <van-popup show="{{ showPopup }}" position="bottom" bind:close="openPopup">
+      <van-datetime-picker
+        wx:if="{{choiceType=='time'}}"
+        value="{{ currentDate }}"
+        min-date="{{ minDate }}"
+        max-date="{{ maxDate }}"
+        bind:confirm="onConfirmTime"
+      />
+    <van-picker columns="{{ deviceList }}" show-toolbar value-key="name" bind:confirm="onConfirmObj" wx:if="{{choiceType=='object'}}"/>
+    <van-picker columns="{{ inviteTypeList }}" show-toolbar value-key="name" bind:confirm="onConfirmType" wx:if="{{choiceType=='type'}}"/>
+  </van-popup>
+</view>

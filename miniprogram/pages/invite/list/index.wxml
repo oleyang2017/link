@@ -2,10 +2,18 @@
   <view class="text-gray text-sm padding-sm padding-left tip">
     <text>点击进入详情，蓝色可分享，灰色不可再使用</text>
   </view>
-  <van-cell title="{{item.code}}" is-link wx:for="{{inviteList}}" wx:key="id" link-type="navigateTo" url="{{'/pages/invite/detail/index?id='+item.id}}" title-class="{{item.canShare?'text-blue':'text-gray'}}"/>
+  <van-cell title="{{item.code}}" is-link wx:for="{{inviteList}}" wx:key="id" link-type="navigateTo" url="{{'/pages/invite/detail/index?id='+item.id}}" title-class="{{item.canShare?'text-blue':'text-gray'}}" />
 
-  <van-empty wx:if="{{!inviteList.length}}" description="暂无数据！" />
-  <navigator url="/pages/invite/edit/index">
-    <van-icon name="add" color="#0081ff" size="40px" style="position: fixed; bottom: 60px; right:40px" />
-  </navigator>
+  <block wx:if="{{!inviteList.length}}">
+    <van-empty>
+      <text class="text-gray text-df padding-top-xl text-center">暂无数据！</text>
+      <navigator class="text-blue padding-left-sm" url="/pages/invite/edit/index?type=create" style="display: inline-block;" hover-class="none">点击创建</navigator>
+    </van-empty>
+  </block>
+  <block wx:else>
+    <view class="text-blue text-df text-center padding-bottom-xl padding-top-xl">
+      <navigator wx:if="{{item.name !='共享设备'}}" url="/pages/invite/edit/index?type=create&objectId=4" hover-class="none">点击创建更多邀请连接</navigator>
+    </view>
+  </block>
+
 </view>
