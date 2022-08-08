@@ -27,7 +27,10 @@ class DeviceViewSet(BaseModelViewSet):
             return DeviceDetailSerializer
 
     def get_queryset(self):
-        return get_objects_for_user(self.request.user, perms="view_device", klass=Device)
+        q_set = get_objects_for_user(self.request.user, perms="view_device", klass=Device)
+        if self.request.query_params.get("only_creator", False):
+            q_set = q_set.filter(create_user=self.request.user)
+        return q_set
 
     def perform_create(self, serializer):
         current_user = self.request.user

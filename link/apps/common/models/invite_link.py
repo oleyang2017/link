@@ -16,7 +16,7 @@ class InviteLink(BaseModel):
     )
 
     code = ShortUUIDField(length=8, verbose_name="邀请码", unique=True, db_index=True)
-    end_time = models.DateTimeField(verbose_name="邀请结束时间")
+    end_time = models.DateTimeField(verbose_name="邀请结束时间", null=True, blank=True)
     count = models.IntegerField(verbose_name="邀请人数", default=0)
     invite_type = models.CharField(choices=INVITE_TYPE_CHOICES, max_length=16, verbose_name="邀请类型")
     object_id = models.BigIntegerField(verbose_name="对象ID")
