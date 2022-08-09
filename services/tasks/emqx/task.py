@@ -5,6 +5,12 @@ from services.database.db import db
 from services.database.models import Stream, EmqxData
 from services.tasks.celery_app import celery_app
 
+str2convert = {
+    "float": float,
+    "int": int,
+    "bool": bool,
+    "char": str,
+}
 
 @celery_app.task
 def on_published(request):
@@ -22,19 +28,12 @@ def save_emqx_data(request):
     timestamp = int(request["message"]["timestamp"])
     data_type = None
     try:
-        _, _, stream_id = topic.split("/")
+        *_, stream_id = topic.split("/")
         data_type = (
             db.session.query(Stream.data_type).filter(Stream.stream_id == stream_id).scalar()
         )
         if data_type:
-            if data_type == "float":
-                payload = float(payload)
-            if data_type == "int":
-                payload = int(payload)
-            if data_type == "bool":
-                payload = bool(payload)
-            if data_type == "char":
-                payload = str(payload, encoding="utf-8")
+            payload = str2convert[data_type](payload)
             data = EmqxData(
                 node=node,
                 msg_id=msg_id,
@@ -47,6 +46,6 @@ def save_emqx_data(request):
             db.session.add(data)
             db.session.commit()
     except ValueError:
-        logger.warning(f"数据格式不正确:  {payload} -> {data_type}")
+        logger.warning(f"数据格式不正确: {payload}: {type(payload)} -> {data_type}")
     except Exception:
         logger.exception("save data field")
