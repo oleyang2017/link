@@ -19,11 +19,11 @@ const char* ssid = "your wifi ssid";
 const char* pwd = "your wifi password";
 const char* server_host = "127.0.0.1";   // mqtt服务器地址
 const int   port = 1883;  // mqtt服务端口号
-const char* username = "your device username"  // mqtt登录名
-const char* password = "your device password"  // mqtt登录密码
-const char* client_id = "your device client_id" // mqtt设备client_id
-const char* tem_topic = "your publish topic"   // 温度topic
-const char* hum_topic = "your publish topic"   // 湿度topic
+const char* username = "your device username";  // mqtt登录名
+const char* password = "your device password";  // mqtt登录密码
+const char* client_id = "your device client_id"; // mqtt设备client_id
+const char* tem_topic = "your publish topic";   // 温度topic
+const char* hum_topic = "your publish topic";   // 湿度topic
 const int pinDHT11 = 2;  // DHT11 DATA引脚
 
 
