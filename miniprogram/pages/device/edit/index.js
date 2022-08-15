@@ -25,7 +25,9 @@ Page({
     this.setData({
       ...options
     })
-    this.getDetailInfo(this.data.id)
+    if (options.id){
+      this.getDetailInfo(this.data.id)
+    }
   },
   onShow: function () {
     if (this.data.type == 'create') {
