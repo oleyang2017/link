@@ -38,12 +38,12 @@ class InviteLink(BaseModel):
         if operation == "accept":
             if self.end_time and self.end_time < now:
                 raise ValidationError("邀请链接已过期")
-            if self.count and self.count >= self.invite_records.count():
+            if self.count and self.count <= self.invite_records.filter(operation="accept").count():
                 raise ValidationError("邀请人数已达上限")
             if not self.enable:
                 raise ValidationError("邀请链接已不可使用")
         record = InviteRecord.objects.filter(create_user=user, invite_link=self).first()
         if record:
-            raise ValidationError(f"你已{record.get_result_display()}")
+            raise ValidationError(f"你已{record.get_operation_display()}")
         if user == self.create_user:
             raise ValidationError("无法执行操作")

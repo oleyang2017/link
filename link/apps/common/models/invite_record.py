@@ -7,7 +7,7 @@ from common.models.invite_link import InviteLink
 class InviteRecord(BaseModel):
     """邀请记录"""
 
-    INVITE_RESULT_CHOICES = (
+    OPERATION_CHOICES = (
         ("accept", "接受邀请"),
         ("reject", "拒绝邀请"),
     )
@@ -22,7 +22,7 @@ class InviteRecord(BaseModel):
     object_id = models.BigIntegerField(verbose_name="对象ID")
     permissions = models.JSONField(verbose_name="权限", default=list)
     operation = models.CharField(
-        choices=INVITE_RESULT_CHOICES, max_length=16, verbose_name="邀请类型", null=False
+        choices=OPERATION_CHOICES, max_length=16, verbose_name="邀请类型", null=False
     )
 
     class Meta:
@@ -31,4 +31,4 @@ class InviteRecord(BaseModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return f"邀请记录: {self.create_user} - {self.code} - {self.result}"
+        return f"邀请记录: {self.create_user} - {self.code} - {self.operation}"
