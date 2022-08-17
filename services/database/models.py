@@ -1,24 +1,42 @@
 # coding: utf-8
-from sqlalchemy import Boolean, CheckConstraint, Column, DateTime, Float, ForeignKey, Index, Integer, SmallInteger, String, Text, UniqueConstraint, text
-from sqlalchemy.dialects.postgresql import INET, JSONB
+from sqlalchemy import (
+    Text,
+    Float,
+    Index,
+    Column,
+    String,
+    Boolean,
+    Integer,
+    DateTime,
+    ForeignKey,
+    SmallInteger,
+    CheckConstraint,
+    UniqueConstraint,
+    text,
+)
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.dialects.postgresql import INET, JSONB
 
 Base = declarative_base()
 metadata = Base.metadata
 
 
 class AuthGroup(Base):
-    __tablename__ = 'auth_group'
+    __tablename__ = "auth_group"
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('auth_group_id_seq'::regclass)"))
+    id = Column(
+        Integer, primary_key=True, server_default=text("nextval('auth_group_id_seq'::regclass)")
+    )
     name = Column(String(150), nullable=False, unique=True)
 
 
 class AuthUser(Base):
-    __tablename__ = 'auth_user'
+    __tablename__ = "auth_user"
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('auth_user_id_seq'::regclass)"))
+    id = Column(
+        Integer, primary_key=True, server_default=text("nextval('auth_user_id_seq'::regclass)")
+    )
     password = Column(String(128), nullable=False)
     last_login = Column(DateTime(True))
     is_superuser = Column(Boolean, nullable=False)
@@ -42,7 +60,7 @@ class AuthUser(Base):
 
 
 class Chart(Base):
-    __tablename__ = 'chart'
+    __tablename__ = "chart"
 
     id = Column(Integer, primary_key=True, server_default=text("nextval('chart_id_seq'::regclass)"))
     created_time = Column(DateTime(True), nullable=False)
@@ -58,20 +76,22 @@ class Chart(Base):
 
 
 class ChartStream(Base):
-    __tablename__ = 'chart_streams'
-    __table_args__ = (
-        UniqueConstraint('chart_id', 'stream_id'),
-    )
+    __tablename__ = "chart_streams"
+    __table_args__ = (UniqueConstraint("chart_id", "stream_id"),)
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('chart_streams_id_seq'::regclass)"))
+    id = Column(
+        Integer, primary_key=True, server_default=text("nextval('chart_streams_id_seq'::regclass)")
+    )
     chart_id = Column(Integer, nullable=False, index=True)
     stream_id = Column(Integer, nullable=False, index=True)
 
 
 class Device(Base):
-    __tablename__ = 'device'
+    __tablename__ = "device"
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('device_id_seq'::regclass)"))
+    id = Column(
+        Integer, primary_key=True, server_default=text("nextval('device_id_seq'::regclass)")
+    )
     created_time = Column(DateTime(True), nullable=False)
     update_time = Column(DateTime(True), nullable=False)
     client_id = Column(String(12), nullable=False, unique=True)
@@ -90,9 +110,13 @@ class Device(Base):
 
 
 class DeviceCategory(Base):
-    __tablename__ = 'device_category'
+    __tablename__ = "device_category"
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('device_category_id_seq'::regclass)"))
+    id = Column(
+        Integer,
+        primary_key=True,
+        server_default=text("nextval('device_category_id_seq'::regclass)"),
+    )
     created_time = Column(DateTime(True), nullable=False)
     update_time = Column(DateTime(True), nullable=False)
     name = Column(String(8), nullable=False)
@@ -102,27 +126,33 @@ class DeviceCategory(Base):
 
 
 class DjangoContentType(Base):
-    __tablename__ = 'django_content_type'
-    __table_args__ = (
-        UniqueConstraint('app_label', 'model'),
-    )
+    __tablename__ = "django_content_type"
+    __table_args__ = (UniqueConstraint("app_label", "model"),)
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('django_content_type_id_seq'::regclass)"))
+    id = Column(
+        Integer,
+        primary_key=True,
+        server_default=text("nextval('django_content_type_id_seq'::regclass)"),
+    )
     app_label = Column(String(100), nullable=False)
     model = Column(String(100), nullable=False)
 
 
 class DjangoMigration(Base):
-    __tablename__ = 'django_migrations'
+    __tablename__ = "django_migrations"
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('django_migrations_id_seq'::regclass)"))
+    id = Column(
+        Integer,
+        primary_key=True,
+        server_default=text("nextval('django_migrations_id_seq'::regclass)"),
+    )
     app = Column(String(255), nullable=False)
     name = Column(String(255), nullable=False)
     applied = Column(DateTime(True), nullable=False)
 
 
 class DjangoSession(Base):
-    __tablename__ = 'django_session'
+    __tablename__ = "django_session"
 
     session_key = Column(String(40), primary_key=True, index=True)
     session_data = Column(Text, nullable=False)
@@ -130,9 +160,11 @@ class DjangoSession(Base):
 
 
 class EmqxAcl(Base):
-    __tablename__ = 'emqx_acl'
+    __tablename__ = "emqx_acl"
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('emqx_acl_id_seq'::regclass)"))
+    id = Column(
+        Integer, primary_key=True, server_default=text("nextval('emqx_acl_id_seq'::regclass)")
+    )
     allow = Column(Integer, nullable=False)
     ipaddr = Column(String(60), nullable=False)
     username = Column(String(100), nullable=False)
@@ -142,9 +174,11 @@ class EmqxAcl(Base):
 
 
 class EmqxData(Base):
-    __tablename__ = 'emqx_data'
+    __tablename__ = "emqx_data"
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('emqx_data_id_seq'::regclass)"))
+    id = Column(
+        Integer, primary_key=True, server_default=text("nextval('emqx_data_id_seq'::regclass)")
+    )
     node = Column(String(32), nullable=False)
     msg_id = Column(String(64), nullable=False)
     client_id = Column(String(64), nullable=False, index=True)
@@ -155,9 +189,11 @@ class EmqxData(Base):
 
 
 class EmqxLog(Base):
-    __tablename__ = 'emqx_log'
+    __tablename__ = "emqx_log"
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('emqx_log_id_seq'::regclass)"))
+    id = Column(
+        Integer, primary_key=True, server_default=text("nextval('emqx_log_id_seq'::regclass)")
+    )
     node = Column(String(32), nullable=False)
     ip = Column(INET, nullable=False)
     port = Column(String(8), nullable=False)
@@ -167,21 +203,23 @@ class EmqxLog(Base):
 
 
 class EmqxUser(Base):
-    __tablename__ = 'emqx_user'
+    __tablename__ = "emqx_user"
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('emqx_user_id_seq'::regclass)"))
+    id = Column(
+        Integer, primary_key=True, server_default=text("nextval('emqx_user_id_seq'::regclass)")
+    )
     username = Column(String(12), nullable=False, unique=True)
     password = Column(String(12), nullable=False)
     user_id = Column(Integer, nullable=False, index=True)
 
 
 class Stream(Base):
-    __tablename__ = 'stream'
-    __table_args__ = (
-        UniqueConstraint('device_id', 'name'),
-    )
+    __tablename__ = "stream"
+    __table_args__ = (UniqueConstraint("device_id", "name"),)
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('stream_id_seq'::regclass)"))
+    id = Column(
+        Integer, primary_key=True, server_default=text("nextval('stream_id_seq'::regclass)")
+    )
     created_time = Column(DateTime(True), nullable=False)
     update_time = Column(DateTime(True), nullable=False)
     stream_id = Column(String(22), nullable=False, unique=True)
@@ -200,9 +238,11 @@ class Stream(Base):
 
 
 class Trigger(Base):
-    __tablename__ = 'trigger'
+    __tablename__ = "trigger"
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('trigger_id_seq'::regclass)"))
+    id = Column(
+        Integer, primary_key=True, server_default=text("nextval('trigger_id_seq'::regclass)")
+    )
     created_time = Column(DateTime(True), nullable=False)
     update_time = Column(DateTime(True), nullable=False)
     trigger_id = Column(String(22), nullable=False, unique=True)
@@ -220,128 +260,210 @@ class Trigger(Base):
 
 
 class AuthPermission(Base):
-    __tablename__ = 'auth_permission'
-    __table_args__ = (
-        UniqueConstraint('content_type_id', 'codename'),
-    )
+    __tablename__ = "auth_permission"
+    __table_args__ = (UniqueConstraint("content_type_id", "codename"),)
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('auth_permission_id_seq'::regclass)"))
+    id = Column(
+        Integer,
+        primary_key=True,
+        server_default=text("nextval('auth_permission_id_seq'::regclass)"),
+    )
     name = Column(String(255), nullable=False)
-    content_type_id = Column(ForeignKey('django_content_type.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
+    content_type_id = Column(
+        ForeignKey("django_content_type.id", deferrable=True, initially="DEFERRED"),
+        nullable=False,
+        index=True,
+    )
     codename = Column(String(100), nullable=False)
 
-    content_type = relationship('DjangoContentType')
+    content_type = relationship("DjangoContentType")
 
 
 class AuthUserGroup(Base):
-    __tablename__ = 'auth_user_groups'
-    __table_args__ = (
-        UniqueConstraint('userprofile_id', 'group_id'),
+    __tablename__ = "auth_user_groups"
+    __table_args__ = (UniqueConstraint("userprofile_id", "group_id"),)
+
+    id = Column(
+        Integer,
+        primary_key=True,
+        server_default=text("nextval('auth_user_groups_id_seq'::regclass)"),
+    )
+    userprofile_id = Column(
+        ForeignKey("auth_user.id", deferrable=True, initially="DEFERRED"),
+        nullable=False,
+        index=True,
+    )
+    group_id = Column(
+        ForeignKey("auth_group.id", deferrable=True, initially="DEFERRED"),
+        nullable=False,
+        index=True,
     )
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('auth_user_groups_id_seq'::regclass)"))
-    userprofile_id = Column(ForeignKey('auth_user.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
-    group_id = Column(ForeignKey('auth_group.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
-
-    group = relationship('AuthGroup')
-    userprofile = relationship('AuthUser')
+    group = relationship("AuthGroup")
+    userprofile = relationship("AuthUser")
 
 
 class DjangoAdminLog(Base):
-    __tablename__ = 'django_admin_log'
-    __table_args__ = (
-        CheckConstraint('action_flag >= 0'),
-    )
+    __tablename__ = "django_admin_log"
+    __table_args__ = (CheckConstraint("action_flag >= 0"),)
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('django_admin_log_id_seq'::regclass)"))
+    id = Column(
+        Integer,
+        primary_key=True,
+        server_default=text("nextval('django_admin_log_id_seq'::regclass)"),
+    )
     action_time = Column(DateTime(True), nullable=False)
     object_id = Column(Text)
     object_repr = Column(String(200), nullable=False)
     action_flag = Column(SmallInteger, nullable=False)
     change_message = Column(Text, nullable=False)
-    content_type_id = Column(ForeignKey('django_content_type.id', deferrable=True, initially='DEFERRED'), index=True)
-    user_id = Column(ForeignKey('auth_user.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
+    content_type_id = Column(
+        ForeignKey("django_content_type.id", deferrable=True, initially="DEFERRED"), index=True
+    )
+    user_id = Column(
+        ForeignKey("auth_user.id", deferrable=True, initially="DEFERRED"),
+        nullable=False,
+        index=True,
+    )
 
-    content_type = relationship('DjangoContentType')
-    user = relationship('AuthUser')
+    content_type = relationship("DjangoContentType")
+    user = relationship("AuthUser")
 
 
 class TriggerLog(Base):
-    __tablename__ = 'trigger_log'
+    __tablename__ = "trigger_log"
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('trigger_log_id_seq'::regclass)"))
+    id = Column(
+        Integer, primary_key=True, server_default=text("nextval('trigger_log_id_seq'::regclass)")
+    )
     result = Column(Text, nullable=False)
     success = Column(Boolean, nullable=False)
     value = Column(String(32), nullable=False)
     create_date = Column(DateTime(True), nullable=False)
-    device_id = Column(ForeignKey('device.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
-    stream_id = Column(ForeignKey('stream.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
-    trigger_id = Column(ForeignKey('trigger.id', deferrable=True, initially='DEFERRED'), index=True)
+    device_id = Column(
+        ForeignKey("device.id", deferrable=True, initially="DEFERRED"), nullable=False, index=True
+    )
+    stream_id = Column(
+        ForeignKey("stream.id", deferrable=True, initially="DEFERRED"), nullable=False, index=True
+    )
+    trigger_id = Column(ForeignKey("trigger.id", deferrable=True, initially="DEFERRED"), index=True)
 
-    device = relationship('Device')
-    stream = relationship('Stream')
-    trigger = relationship('Trigger')
+    device = relationship("Device")
+    stream = relationship("Stream")
+    trigger = relationship("Trigger")
 
 
 class AuthGroupPermission(Base):
-    __tablename__ = 'auth_group_permissions'
-    __table_args__ = (
-        UniqueConstraint('group_id', 'permission_id'),
+    __tablename__ = "auth_group_permissions"
+    __table_args__ = (UniqueConstraint("group_id", "permission_id"),)
+
+    id = Column(
+        Integer,
+        primary_key=True,
+        server_default=text("nextval('auth_group_permissions_id_seq'::regclass)"),
+    )
+    group_id = Column(
+        ForeignKey("auth_group.id", deferrable=True, initially="DEFERRED"),
+        nullable=False,
+        index=True,
+    )
+    permission_id = Column(
+        ForeignKey("auth_permission.id", deferrable=True, initially="DEFERRED"),
+        nullable=False,
+        index=True,
     )
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('auth_group_permissions_id_seq'::regclass)"))
-    group_id = Column(ForeignKey('auth_group.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
-    permission_id = Column(ForeignKey('auth_permission.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
-
-    group = relationship('AuthGroup')
-    permission = relationship('AuthPermission')
+    group = relationship("AuthGroup")
+    permission = relationship("AuthPermission")
 
 
 class AuthUserUserPermission(Base):
-    __tablename__ = 'auth_user_user_permissions'
-    __table_args__ = (
-        UniqueConstraint('userprofile_id', 'permission_id'),
+    __tablename__ = "auth_user_user_permissions"
+    __table_args__ = (UniqueConstraint("userprofile_id", "permission_id"),)
+
+    id = Column(
+        Integer,
+        primary_key=True,
+        server_default=text("nextval('auth_user_user_permissions_id_seq'::regclass)"),
+    )
+    userprofile_id = Column(
+        ForeignKey("auth_user.id", deferrable=True, initially="DEFERRED"),
+        nullable=False,
+        index=True,
+    )
+    permission_id = Column(
+        ForeignKey("auth_permission.id", deferrable=True, initially="DEFERRED"),
+        nullable=False,
+        index=True,
     )
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('auth_user_user_permissions_id_seq'::regclass)"))
-    userprofile_id = Column(ForeignKey('auth_user.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
-    permission_id = Column(ForeignKey('auth_permission.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
-
-    permission = relationship('AuthPermission')
-    userprofile = relationship('AuthUser')
+    permission = relationship("AuthPermission")
+    userprofile = relationship("AuthUser")
 
 
 class GuardianGroupobjectpermission(Base):
-    __tablename__ = 'guardian_groupobjectpermission'
+    __tablename__ = "guardian_groupobjectpermission"
     __table_args__ = (
-        UniqueConstraint('group_id', 'permission_id', 'object_pk'),
-        Index('guardian_gr_content_ae6aec_idx', 'content_type_id', 'object_pk')
+        UniqueConstraint("group_id", "permission_id", "object_pk"),
+        Index("guardian_gr_content_ae6aec_idx", "content_type_id", "object_pk"),
     )
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('guardian_groupobjectpermission_id_seq'::regclass)"))
+    id = Column(
+        Integer,
+        primary_key=True,
+        server_default=text("nextval('guardian_groupobjectpermission_id_seq'::regclass)"),
+    )
     object_pk = Column(String(255), nullable=False)
-    content_type_id = Column(ForeignKey('django_content_type.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
-    group_id = Column(ForeignKey('auth_group.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
-    permission_id = Column(ForeignKey('auth_permission.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
+    content_type_id = Column(
+        ForeignKey("django_content_type.id", deferrable=True, initially="DEFERRED"),
+        nullable=False,
+        index=True,
+    )
+    group_id = Column(
+        ForeignKey("auth_group.id", deferrable=True, initially="DEFERRED"),
+        nullable=False,
+        index=True,
+    )
+    permission_id = Column(
+        ForeignKey("auth_permission.id", deferrable=True, initially="DEFERRED"),
+        nullable=False,
+        index=True,
+    )
 
-    content_type = relationship('DjangoContentType')
-    group = relationship('AuthGroup')
-    permission = relationship('AuthPermission')
+    content_type = relationship("DjangoContentType")
+    group = relationship("AuthGroup")
+    permission = relationship("AuthPermission")
 
 
 class GuardianUserobjectpermission(Base):
-    __tablename__ = 'guardian_userobjectpermission'
+    __tablename__ = "guardian_userobjectpermission"
     __table_args__ = (
-        UniqueConstraint('user_id', 'permission_id', 'object_pk'),
-        Index('guardian_us_content_179ed2_idx', 'content_type_id', 'object_pk')
+        UniqueConstraint("user_id", "permission_id", "object_pk"),
+        Index("guardian_us_content_179ed2_idx", "content_type_id", "object_pk"),
     )
 
-    id = Column(Integer, primary_key=True, server_default=text("nextval('guardian_userobjectpermission_id_seq'::regclass)"))
+    id = Column(
+        Integer,
+        primary_key=True,
+        server_default=text("nextval('guardian_userobjectpermission_id_seq'::regclass)"),
+    )
     object_pk = Column(String(255), nullable=False)
-    content_type_id = Column(ForeignKey('django_content_type.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
-    permission_id = Column(ForeignKey('auth_permission.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
-    user_id = Column(ForeignKey('auth_user.id', deferrable=True, initially='DEFERRED'), nullable=False, index=True)
+    content_type_id = Column(
+        ForeignKey("django_content_type.id", deferrable=True, initially="DEFERRED"),
+        nullable=False,
+        index=True,
+    )
+    permission_id = Column(
+        ForeignKey("auth_permission.id", deferrable=True, initially="DEFERRED"),
+        nullable=False,
+        index=True,
+    )
+    user_id = Column(
+        ForeignKey("auth_user.id", deferrable=True, initially="DEFERRED"),
+        nullable=False,
+        index=True,
+    )
 
-    content_type = relationship('DjangoContentType')
-    permission = relationship('AuthPermission')
-    user = relationship('AuthUser')
+    content_type = relationship("DjangoContentType")
+    permission = relationship("AuthPermission")
+    user = relationship("AuthUser")
