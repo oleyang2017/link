@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.validators import ValidationError
 from django.contrib.auth.models import Group
 
 from device.models.device import Device
@@ -63,11 +64,15 @@ class InviteLinkDetailSerializer(BaseModelSerializer):
 
     def update(self, instance, validated_data):
         # 只允许修改enable信息
-        if "enable" in validated_data:
-            validated_data = {"enable": validated_data["enable"]}
-        else:
-            validated_data = {}
-        return super(InviteLinkDetailSerializer, self).update(instance, validated_data)
+        if not instance.enable:
+            raise ValidationError("已关闭的邀请链接不可以修改")
+        data = {}
+        for k in ["enable", "last_update_user"]:
+            if k in validated_data:
+                data[k] = validated_data.pop(k)
+        if validated_data:
+            raise ValidationError("邀请链接不可修改非enable之外的信息")
+        return super(InviteLinkDetailSerializer, self).update(instance, data)
 
     def create(self, validated_data):
         invite_type = validated_data["invite_type"]
