@@ -8,8 +8,6 @@ Page({
   data: {
     type: 'edit',
     source: '',
-    typeList: streamTypeList,
-    qosList: qosList,
     iconList: iconList,
     colorList: colorList,
     selectList: [],
@@ -17,13 +15,9 @@ Page({
     showPopup: false,
     title: '',
     qos: 0,
-    dataType: 'int',
+    dataType: 'number',
     defaultIndex: 0,
     defaultDeviceIndex: 0,
-    defaultTypeIndex: 0,
-    defaultQosIndex: 0,
-    defaultQos: '0',
-    defaultType: '整型（int）',
     color: "bg-blue",
     icon: "icon-kongqiwendu",
   },
@@ -83,28 +77,12 @@ Page({
   },
   openPopup(e) {
     let editStatusNotOpen = ["qos", "type", "device"]
-    if (e.currentTarget.dataset.name == 'qos') {
-      this.setData({
-        selectName: e.currentTarget.dataset.name,
-        selectList: this.data.qosList,
-        title: 'QOS',
-        defaultIndex: this.data.defaultQosIndex
-      })
-    } else if (e.currentTarget.dataset.name == 'type') {
-      this.setData({
-        selectName: e.currentTarget.dataset.name,
-        selectList: this.data.typeList,
-        title: '数据类型',
-        defaultIndex: this.data.defaultTypeIndex
-      })
-    } else if (e.currentTarget.dataset.name == 'device') {
-      this.setData({
-        selectName: e.currentTarget.dataset.name,
-        selectList: this.data.deviceList,
-        title: '所属设备',
-        defaultIndex: this.data.defaultDeviceIndex
-      })
-    }
+    this.setData({
+      selectName: e.currentTarget.dataset.name,
+      selectList: this.data.deviceList,
+      title: '所属设备',
+      defaultIndex: this.data.defaultDeviceIndex
+    })
     if (!(editStatusNotOpen.includes(e.currentTarget.dataset.name) && this.data.type == 'edit')){
       this.setData({
         showPopup: !this.data.showPopup,

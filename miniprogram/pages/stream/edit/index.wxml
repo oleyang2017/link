@@ -3,8 +3,8 @@
     <van-field model:value="{{ name }}" label="数据流名称" placeholder="请输入数据流名称" border="{{ false }}" required maxlength="8"/>
     <van-field model:value="{{ unitName }}" label="单位名称" placeholder="请输入单位名称" border="{{ false }}"  maxlength="8"/>
     <van-field model:value="{{ unit }}" label="单位" placeholder="请输入单位符号" border="{{ false }}" />
-    <van-field value="{{ defaultQos }}" bindtap="openPopup" data-name="qos" label="QOS" border="{{ false }}" readonly required />
-    <van-field value="{{ defaultType }}" bindtap="openPopup" data-name="type" label="数据类型" border="{{ false }}" readonly required />
+    <!-- <van-field value="{{ defaultQos }}" bindtap="openPopup" data-name="qos" label="QOS" border="{{ false }}" readonly required /> -->
+    <!-- <van-field value="{{ defaultType }}" bindtap="openPopup" data-name="type" label="数据类型" border="{{ false }}" readonly required /> -->
     <van-field wx:if="{{source != 'create_new_device'}}" value="{{ defaultDevice }}" bindtap="openPopup" data-name="device" label="所属设备" border="{{ false }}" readonly="{{type=='edit'}}" required />
     <van-field wx:if="{{type!='create'}}" value="{{ createdTime }}" label="创建时间" border="{{ false }}" readonly />
   </van-cell-group>
@@ -53,7 +53,7 @@
   <van-dialog id="van-dialog" />
   <van-toast id="van-toast" />
   <van-popup show="{{ showPopup }}" position="bottom" bind:close="openPopup">
-    <van-picker columns="{{ selectList }}" value-key="name" default-index="{{defaultIndex}}" bind:confirm="changeSelect" bind:cancel="openPopup" title="{{title}}" show-toolbar wx:if="{{popupType == 'qos' || popupType == 'type' ||popupType == 'device'}}"/>
+    <van-picker columns="{{ deviceList }}" value-key="name" default-index="{{defaultIndex}}" bind:confirm="changeSelect" bind:cancel="openPopup" title="{{title}}" show-toolbar wx:if="{{popupType == 'device'}}"/>
     <view style="max-height: 600rpx; padding: 40rpx 0;" wx:if="{{popupType=='icon'}}">
       <view wx:for="{{ iconList }}" class="icon-card" data-value="{{item.value}}" bindtap="selectIcon">
         <view class="icon-size iconfont {{item.value}}" />

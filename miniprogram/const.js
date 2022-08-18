@@ -163,36 +163,6 @@ const colorList = [
   "bg-gradual-pink",
   "bg-gradual-blue",
 ]
-const streamTypeList = [{
-    name: '整型（int）',
-    value: 'int'
-  },
-  {
-    name: '浮点型（float）',
-    value: 'float'
-  },
-  {
-    name: '布尔型（bool）',
-    value: 'bool'
-  },
-  {
-    name: '字符型（char）',
-    value: 'char'
-  }
-]
-const qosList = [{
-    name: '0',
-    value: 0
-  },
-  {
-    name: '1',
-    value: 1
-  },
-  {
-    name: '2',
-    value: 2
-  }
-]
 const deviceImageList = [
   'IntelligentPower.png', 'EnergyConsumption.png', 'Internet.png', 'Wifi.png', 'DigitalCamera.png', 'CPU.png', 'EnvironmentalMonitoring.png', 'Devices.png', 'SmartWater.png', 'Research.png', 'NFCTechnology.png', 'Smartphone.png', 'WirelessHeadset.png', 'SmartTimer.png', 'MPPlayer.png', 'SmokeSensor.png', 'CCTV.png', 'SmartMicrowave.png', 'DroneDelivery.png', 'BluetoothSpeaker.png', 'EbookReader.png', 'SmartSIM.png', 'SmartMeter.png', 'HandheldConsole.png', 'GamingConsole.png', 'SmartWashingMachine.png', 'IntelligentEnergyControl.png', 'SmartHome.png', 'SmartGlasses.png', 'ElectricCar.png', 'SmartFridge.png', 'CDPlayer.png', 'WirelessPrinter.png', 'FitnessTracker.png', 'SmartWatch.png', 'ProcessingPower.png', 'SmartProductManagement.png', 'Mobility.png', 'Robotics.png', 'VRTechnology.png', 'SmartTV.png'
 ]
@@ -215,8 +185,6 @@ const inviteTypeList = [{
 module.exports = {
   iconList,
   colorList,
-  qosList,
-  streamTypeList,
   deviceImageList,
   permissionsMap,
   inviteTypeList,
