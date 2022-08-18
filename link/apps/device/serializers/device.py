@@ -118,7 +118,7 @@ class DeviceDetailSerializer(BaseModelSerializer):
                 # TODO 处理嵌套创建的问题：参考drf-writable-nested
                 if self.initial_data.get("streams"):
                     stream_list = self.initial_data["streams"]
-                    if len(stream_list) > settings.MAX_STREAM_NUM:
+                    if settings.MAX_STREAM_NUM and len(stream_list) > settings.MAX_STREAM_NUM:
                         raise serializers.ValidationError("超过最大创建数！")
                     if len(set([i["name"] for i in stream_list])) != len(stream_list):
                         raise serializers.ValidationError("同一设备数据流名称不能重复！")
