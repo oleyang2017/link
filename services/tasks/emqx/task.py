@@ -2,15 +2,9 @@ from datetime import datetime
 
 from loguru import logger
 from services.database.db import db
-from services.database.models import Stream, EmqxData
+from services.database.models import EmqxData
 from services.tasks.celery_app import celery_app
 
-str2convert = {
-    "float": float,
-    "int": int,
-    "bool": bool,
-    "char": str,
-}
 
 @celery_app.task
 def on_published(request):
@@ -28,24 +22,30 @@ def save_emqx_data(request):
     timestamp = int(request["message"]["timestamp"])
     data_type = None
     try:
-        *_, stream_id = topic.split("/")
-        data_type = (
-            db.session.query(Stream.data_type).filter(Stream.stream_id == stream_id).scalar()
+        items = topic.split("/")
+        if len(items) != 3 or not items[-1] or client_id != items[1]:
+            return
+
+        payload = check_and_convert_payload(payload)
+        data = EmqxData(
+            node=node,
+            msg_id=msg_id,
+            client_id=client_id,
+            topic=topic,
+            stream_id=items[-1],
+            payload=payload,
+            timestamp=datetime.fromtimestamp(timestamp / 1000),
         )
-        if data_type:
-            payload = str2convert[data_type](payload)
-            data = EmqxData(
-                node=node,
-                msg_id=msg_id,
-                client_id=client_id,
-                topic=topic,
-                stream_id=stream_id,
-                payload=str(payload),
-                timestamp=datetime.fromtimestamp(timestamp / 1000),
-            )
-            db.session.add(data)
-            db.session.commit()
+        db.session.add(data)
+        db.session.commit()
     except ValueError:
         logger.warning(f"数据格式不正确: {payload}: {type(payload)} -> {data_type}")
     except Exception:
         logger.exception("save data field")
+
+
+def check_and_convert_payload(payload: str) -> str:
+    if payload.isdigit():
+        return payload
+    payload = float(payload)
+    return str(round(payload, 2))

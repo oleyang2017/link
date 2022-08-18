@@ -14,12 +14,7 @@ class Stream(BaseModel):
         (1, "1"),
         (2, "2"),
     )
-    DATA_TYPE_CHOICE = (
-        ("int", "整型"),
-        ("float", "浮点型"),
-        ("bool", "布尔型"),
-        ("char", "字符型"),
-    )
+    DATA_TYPE_CHOICE = (("number", "数值"),)
     stream_id = ShortUUIDField(db_index=True, unique=True, verbose_name="数据流ID")
     name = models.CharField(max_length=16, verbose_name="名称")
     device = models.ForeignKey(
@@ -33,7 +28,7 @@ class Stream(BaseModel):
     unit = models.CharField(max_length=8, blank=True, default="", verbose_name="单位")
     qos = models.IntegerField(choices=QOS_CHOICE, default=0, verbose_name="Qos")
     data_type = models.CharField(
-        max_length=8, default="int", choices=DATA_TYPE_CHOICE, verbose_name="数据类型"
+        max_length=8, default="number", choices=DATA_TYPE_CHOICE, verbose_name="数据类型"
     )
     show = models.BooleanField(default=False, verbose_name="首页显示")
     image = models.ImageField(null=True, blank=True, verbose_name="图片", upload_to="images/stream")
