@@ -53,12 +53,6 @@ class StreamSerializer(BaseModelSerializer):
 
     def create(self, validated_data):
         device = validated_data.get("device")
-        if not device:
-            raise serializers.ValidationError("请选择绑定的设备!")
-        if not self.context["request"].user.has_perm("change_device", device) and self.context.get(
-            "need_prem", True
-        ):
-            raise serializers.ValidationError("没有修改该设备的权限!")
         if settings.MAX_STREAM_NUM:
             if device.streams.count() >= settings.MAX_STREAM_NUM:
                 raise serializers.ValidationError("超过每个设备最多可绑定数量！")
