@@ -4,6 +4,7 @@ from guardian.shortcuts import assign_perm
 from rest_framework.test import APITestCase
 
 from device.models.device import Device
+from device.models.stream import Stream
 from device.models.category import DeviceCategory
 from user.models.user_profile import UserProfile
 
@@ -126,3 +127,29 @@ class DeviceAPITestCase(APITestCase):
         assign_perm("change_device", self.user2, device)
         response = self.client.put(f"/api/devices/{device_id}/", {"name": 3})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_device_streams(self):
+        response = self.client.post("/api/devices/", {"name": 1}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        device_id = response.data.get("id")
+        device = Device.objects.filter(id=device_id).first()
+        Stream.objects.create(create_user=self.user, device=device, name="1")
+        Stream.objects.create(create_user=self.user, device=device, name="2")
+        response = self.client.get(f"/api/devices/{device_id}/streams/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_device_delete(self):
+        response = self.client.post("/api/devices/", {"name": 1}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        device_id = response.data.get("id")
+        response = self.client.delete(f"/api/devices/{device_id}/")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        response = self.client.post("/api/devices/", {"name": 1}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        device_id = response.data.get("id")
+        device = Device.objects.filter(id=device_id).first()
+        assign_perm("view_device", self.user2, device)
+        self.client.force_authenticate(user=self.user2)
+        response = self.client.delete(f"/api/devices/{device_id}/")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
