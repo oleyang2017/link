@@ -10,7 +10,7 @@ from user.models.user_profile import UserProfile
 
 class DeviceModelTestCase(TestCase):
     def setUp(self):
-        self.user = UserProfile.objects.create(username="test_user")
+        self.user = UserProfile.objects.create(username="test_device_user")
 
     def test_create_device(self):
         categroy = DeviceCategory.objects.create(name="c", create_user=self.user)
@@ -20,8 +20,8 @@ class DeviceModelTestCase(TestCase):
 
 class DeviceAPITestCase(APITestCase):
     def setUp(self):
-        self.user = UserProfile.objects.create(username="test_list_view1")
-        self.user2 = UserProfile.objects.create(username="test_list_view2")
+        self.user = UserProfile.objects.create(username="test_device_api_user")
+        self.user2 = UserProfile.objects.create(username="test_device_api_user_2")
         self.client.force_authenticate(user=self.user)
         for i in range(5):
             device = Device.objects.create(name=f"{i}", create_user=self.user)
