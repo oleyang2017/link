@@ -49,21 +49,11 @@ class DeviceViewSet(BaseModelViewSet):
     def perform_destroy(self, instance):
         if not self.request.user.has_perm("delete_device", instance):
             raise PermissionDenied("你没有删除该设备的权限")
-        else:
-            instance.delete()
+        return super(DeviceViewSet, self).perform_destroy(instance)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = DeviceDetailSerializer(instance, context={"request": request})
-        return Response(serializer.data)
-
-    @action(methods=["post"], detail=True)
-    def upload(self, request, *args, **kwargs):
-        # 微信小程序上传文件是post方式，单独处理
-        device = self.get_object()
-        serializer = self.get_serializer(device, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
         return Response(serializer.data)
 
     @action(methods=["get"], detail=True)
