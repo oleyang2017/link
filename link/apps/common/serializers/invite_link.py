@@ -28,6 +28,7 @@ class InviteLinkDetailSerializer(BaseModelSerializer):
     invited_count = serializers.SerializerMethodField(read_only=True)
     records = serializers.SerializerMethodField(read_only=True)
     object_info = serializers.SerializerMethodField(read_only=True)
+    permissions = serializers.JSONField(required=True)
 
     @staticmethod
     def get_create_user(obj):
@@ -61,6 +62,15 @@ class InviteLinkDetailSerializer(BaseModelSerializer):
         else:
             return InviteRecordSerializer(obj.invite_records, many=True).data
         return []
+
+    def validate(self, attrs):
+        if (
+            attrs.get("invite_type") == "device"
+            and attrs.get("permissions", []) != ["subscribe_deivce"]
+            and "view_device" not in attrs.get("permissions", [])
+        ):
+            raise serializers.ValidationError("设备权限必须有可查看的权限")
+        return super(InviteLinkDetailSerializer, self).validate(attrs)
 
     def update(self, instance, validated_data):
         # 只允许修改enable信息
