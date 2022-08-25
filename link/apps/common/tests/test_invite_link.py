@@ -112,14 +112,64 @@ class InviteLinkAPITestCase(APITestCase):
         device = Device.objects.create(name="device", create_user=self.user)
         device2 = Device.objects.create(name="device2", create_user=self.user2)
         response = self.client.post(
-            "/api/invite_links/", {"object_id": device.id, "invite_type": "device"}
+            "/api/invite_links/",
+            {"object_id": device.id, "invite_type": "device", "permissions": []},
+            format="json",
         )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["non_field_errors"][0], "设备权限必须有可查看的权限")
+
         response = self.client.post(
-            "/api/invite_links/", {"object_id": device2.id, "invite_type": "device"}
+            "/api/invite_links/",
+            {"object_id": device.id, "invite_type": "device", "permissions": ["change_deivce"]},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["non_field_errors"][0], "设备权限必须有可查看的权限")
+
+        response = self.client.post(
+            "/api/invite_links/",
+            {"object_id": device2.id, "invite_type": "device", "permissions": ["view_device"]},
+            format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data[0], "设备不存在")
+
+        response = self.client.post(
+            "/api/invite_links/",
+            {"object_id": device.id, "invite_type": "device", "permissions": ["view_device"]},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        response = self.client.post(
+            "/api/invite_links/",
+            {"object_id": device.id, "invite_type": "device", "permissions": ["subscribe_deivce"]},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        response = self.client.post(
+            "/api/invite_links/",
+            {
+                "object_id": device.id,
+                "invite_type": "device",
+                "permissions": ["view_device", "subscribe_deivce"],
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        response = self.client.post(
+            "/api/invite_links/",
+            {
+                "object_id": device.id,
+                "invite_type": "device",
+                "permissions": ["view_device", "change_deivce"],
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_update_invite_link(self):
         unable_link = InviteLink.objects.create(
