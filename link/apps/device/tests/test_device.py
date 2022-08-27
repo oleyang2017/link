@@ -1,6 +1,6 @@
 from django.test import TestCase
 from rest_framework import status
-from guardian.shortcuts import assign_perm
+from guardian.shortcuts import assign_perm, get_objects_for_user
 from rest_framework.test import APITestCase
 
 from device.models.device import Device
@@ -33,9 +33,10 @@ class DeviceAPITestCase(APITestCase):
     def test_device_list(self):
         response = self.client.get("/api/devices/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        count = Device.objects.filter(create_user=self.user).count()
         for i in response.data:
             self.assertEqual(i.get("create_user"), self.user.id)
-        self.assertEqual(len(response.data), 5)
+        self.assertEqual(len(response.data), count)
 
         # 分享设备
         assign_perm("view_device", self.user, self.share_device)
@@ -44,14 +45,48 @@ class DeviceAPITestCase(APITestCase):
         self.assertEqual(len(response.data), 6)
 
         # 按设备分类筛选
-        categroy = DeviceCategory.objects.create(name="2", create_user=self.user)
-        device = Device.objects.create(name="c", category=categroy, create_user=self.user)
+        category = DeviceCategory.objects.create(name="2", create_user=self.user)
+        device = Device.objects.create(name="c", category=category, create_user=self.user)
         assign_perm("view_device", self.user, device)
-        response = self.client.get("/api/devices/", {"category": categroy.id})
+        response = self.client.get("/api/devices/", {"category": category.id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         for i in response.data:
-            self.assertEqual(i.get("category"), categroy.id)
+            self.assertEqual(i.get("category"), category.id)
+
+        # 只获取自己创建的设备
+        assign_perm("view_device", self.user, self.share_device)
+        response = self.client.get("/api/devices/", {"owner": True})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        count = Device.objects.filter(create_user=self.user).count()
+        for i in response.data:
+            self.assertEqual(i.get("create_user"), self.user.id)
+        self.assertEqual(len(response.data), count)
+        # 权限过滤
+        assign_perm("change_device", self.user, self.share_device)
+        assign_perm("change_device", self.user, device)
+        perms = ["change_device"]
+        response = self.client.get("/api/devices/", {"perms": perms})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        count = len(get_objects_for_user(self.user, perms=perms, klass=Device))
+        self.assertEqual(len(response.data), count)
+
+        perms = ["subscribe_topic", "view_device"]
+        response = self.client.get("/api/devices/", {"perms": perms}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        count = len(get_objects_for_user(self.user, perms=perms, klass=Device))
+        self.assertEqual(len(response.data), count)
+
+        perms = ["change_device"]
+        response = self.client.get(
+            "/api/devices/",
+            {"perms": perms, "owner": True},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        count = len(
+            get_objects_for_user(self.user, perms=perms, klass=Device).filter(create_user=self.user)
+        )
+        self.assertEqual(len(response.data), count)
 
     def test_create_device(self):
         response = self.client.post("/api/devices/", {"name": 1})
