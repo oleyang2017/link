@@ -5,7 +5,16 @@ import {
 
 export default {
   list: (params) => {
-    return request('/api/devices/', params, "GET")
+    let url = "/api/devices/"
+    if(params && "perms" in params){
+      url = "/api/devices/?"
+      for(let i = 0; i<params.perms.length; i++){
+        url += `perms=${params.perms[i]}&`
+      }
+      url = url.substring(0, url.length-1)
+      delete params.perms
+    }
+    return request(url, params, "GET")
   },
   create: (data) => {
     if (data.filePath) {

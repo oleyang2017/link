@@ -31,7 +31,7 @@ Page({
     this.setData({
       ...options
     })
-    deviceApi.list({onlyCreator:true}).then((res) => {
+    deviceApi.list({owner:true}).then((res) => {
       if (this.data.objectId && this.data.inviteType == 'device') {
         for (let i = 0; i < res.length; i++) {
           if (res[i].id == this.data.objectId) {
