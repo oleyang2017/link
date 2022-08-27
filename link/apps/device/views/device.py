@@ -18,8 +18,6 @@ class DeviceViewSet(BaseModelViewSet):
     ordering_fields = ["sequence", "created_time"]
     ordering = ["sequence", "-created_time"]
 
-    # queryset = Device.objects
-
     def get_serializer_class(self):
         if self.request.method == "GET":
             return DeviceSerializer
@@ -27,8 +25,10 @@ class DeviceViewSet(BaseModelViewSet):
             return DeviceDetailSerializer
 
     def get_queryset(self):
-        q_set = get_objects_for_user(self.request.user, perms="view_device", klass=Device)
-        if self.request.query_params.get("only_creator", False):
+        perms = self.request.query_params.getlist("perms", ["view_device"])
+        is_owner = self.request.query_params.get("owner", False)
+        q_set = get_objects_for_user(self.request.user, perms=perms, klass=Device)
+        if is_owner:
             q_set = q_set.filter(create_user=self.request.user)
         return q_set
 
