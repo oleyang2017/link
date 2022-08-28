@@ -2,7 +2,9 @@ import deviceApi from '../../../api/device'
 import categoryApi from '../../../api/category'
 import streamApi from '../../../api/stream'
 import Toast from '@vant/weapp//toast/toast'
-import { deviceImageList } from '../../../const'
+import {
+  deviceImageList
+} from '../../../const'
 const app = getApp()
 
 Page({
@@ -25,7 +27,7 @@ Page({
     this.setData({
       ...options
     })
-    if (options.id){
+    if (options.id) {
       this.getDetailInfo(this.data.id)
     }
   },
@@ -76,8 +78,8 @@ Page({
         show: false,
       })
     } else if (this.data.popupType == 'stream') {
-      let customInfo = this.data.customInfo ? this.data.customInfo: ""
-      if (e.detail.value.name){
+      let customInfo = this.data.customInfo ? this.data.customInfo : ""
+      if (e.detail.value.name) {
         customInfo = customInfo + `[${e.detail.value.name}]`
       }
       this.setData({
@@ -176,7 +178,6 @@ Page({
     } = this.data
 
     let data = {
-      id,
       name,
       streams,
       charts,
@@ -186,13 +187,17 @@ Page({
       category,
       imageUrl,
     }
+    data = Object.keys(data).filter((key) => data[key] !== null && data[key] !== undefined).reduce((acc, key) => ({
+      ...acc,
+      [key]: data[key]
+    }), {});
 
     if (this.data.type == 'create') {
-      if (this.data.charts.length) {
-        data.charts = charts
+      if (charts.length == 0) {
+        delete data.charts
       }
-      if (streams.length) {
-        data.streams = streams
+      if (streams.length == 0) {
+        delete data.streams
       }
     } else {
       data.id = id
@@ -226,9 +231,10 @@ Page({
       })
     }
   },
-  choiceImage(e){
+  choiceImage(e) {
     this.setData({
-      imageUrl: `/static/images/device/${e.currentTarget.dataset.value}`, 
-      show:false})
+      imageUrl: `/static/images/device/${e.currentTarget.dataset.value}`,
+      show: false
+    })
   }
 })
