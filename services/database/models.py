@@ -235,6 +235,7 @@ class Stream(Base):
     create_user_id = Column(Integer, nullable=False, index=True)
     device_id = Column(Integer, nullable=False, index=True)
     last_update_user_id = Column(Integer, index=True)
+    save_data = Column(Boolean, nullable=False)
 
 
 class Trigger(Base):
