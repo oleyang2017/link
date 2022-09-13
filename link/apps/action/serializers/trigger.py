@@ -3,8 +3,8 @@ from django.conf import settings
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
+from action.models.trigger import Trigger
 from base.base_serializers import BaseModelSerializer
-from device.models.trigger import Trigger
 
 
 class TriggerSerializer(BaseModelSerializer):

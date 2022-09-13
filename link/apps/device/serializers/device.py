@@ -7,7 +7,7 @@ from base.base_serializers import BaseModelSerializer
 from device.models.category import DeviceCategory
 from device.serializers.chart import ChartSerializer
 from device.serializers.stream import StreamSerializer
-from device.serializers.trigger import TriggerSerializer
+from action.serializers.trigger import TriggerSerializer
 
 
 class DeviceSerializer(BaseModelSerializer):

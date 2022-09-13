@@ -8,7 +8,7 @@ from device.models.device import Device
 from device.serializers.chart import ChartSerializer
 from device.serializers.device import DeviceSerializer, DeviceDetailSerializer
 from device.serializers.stream import StreamSerializer
-from device.serializers.trigger import TriggerSerializer
+from action.serializers.trigger import TriggerSerializer
 
 
 class DeviceViewSet(BaseModelViewSet):
@@ -54,6 +54,15 @@ class DeviceViewSet(BaseModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = DeviceDetailSerializer(instance, context={"request": request})
+        return Response(serializer.data)
+
+    @action(methods=["post"], detail=True)
+    def upload(self, request, *args, **kwargs):
+        # 微信小程序上传文件是post方式，单独处理
+        device = self.get_object()
+        serializer = self.get_serializer(device, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
         return Response(serializer.data)
 
     @action(methods=["get"], detail=True)
