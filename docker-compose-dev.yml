@@ -1,0 +1,50 @@
+services:
+
+  emqx:
+    image: "emqx/emqx:4.4.4"
+    restart: always
+    container_name: "link_emqx"
+    links:
+      - pgsql
+    depends_on:
+      - pgsql
+    ports:
+      - "18083:18083"
+      - "8083:8083"
+      - "1883:1883"
+      - "4369:4369"
+    environment:
+      - "EMQX_LOADED_PLUGINS=emqx_dashboard,emqx_auth_pgsql,emqx_exhook"
+      - "EMQX_ALLOW_ANONYMOUS=false"
+      - "EMQX_ACL_NOMATCH=deny"
+      - "EMQX_ACL_FILE=''"
+      - "EMQX_ACL_DENY_ACTION=disconnect"
+      - "EMQX_AUTH__PGSQL__SERVER=link_pgsql:5432"
+      - "EMQX_AUTH__PGSQL__USERNAME=admin"
+      - "EMQX_AUTH__PGSQL__PASSWORD=admin"
+      - "EMQX_AUTH__PGSQL__PASSWORD_HASH=plain"
+      - "EMQX_AUTH__PGSQL__DATABASE=link"
+      - "EMQX_AUTH__PGSQL__AUTH_QUERY=select emqx_user.password from emqx_user join device on device.create_user_id = emqx_user.user_id and device.client_id = '%c' where username = '%u' limit 1"
+      - "EMQX_AUTH__PGSQL__SUPER_QUERY=select is_super from device where client_id = '%c' limit 1"
+      - "EMQX_AUTH__PGSQL__ACL_QUERY=select allow, ipaddr, username, clientid, access, topic from emqx_acl where ipaddr = '%a' or username = '%u' or username = '$all' or clientid = '%c'"
+      - "EMQX_EXHOOK__SERVER__DEFAULT__URL=http://localhost:4010"
+
+  redis:
+    image: "redis:latest"
+    container_name: "link_redis"
+    restart: always
+    ports:
+      - "6379:6379"
+
+  pgsql:
+    image: "postgres:12"
+    container_name: "link_pgsql"
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_USER: "admin"
+      POSTGRES_DB: "link"
+    volumes:
+      - "./data-dev/pg:/var/lib/postgresql/data"
