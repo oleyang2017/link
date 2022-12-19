@@ -1,7 +1,4 @@
-from django.db import transaction
-from django.conf import settings
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
 
 from action.models.trigger import Trigger
 from base.base_serializers import BaseModelSerializer
@@ -12,7 +9,7 @@ class TriggerSerializer(BaseModelSerializer):
         model = Trigger
         fields = "__all__"
 
-    def is_valid(self, raise_exception=False):
+    def is_valid(self, raise_exception=True):
         if self.initial_data.get("trigger_type"):
             trigger_type = self.initial_data.get("trigger_type")
             if trigger_type == "action" and not self.initial_data.get("action"):
@@ -23,7 +20,7 @@ class TriggerSerializer(BaseModelSerializer):
                 raise serializers.ValidationError("'url'为必填项")
             if trigger_type == "email" and not self.context.get("request").user.email:
                 raise serializers.ValidationError("请先绑定邮箱")
-        return super(TriggerSerializer, self).is_valid(raise_exception)
+        return super(TriggerSerializer, self).is_valid()
 
     def update(self, instance, validated_data):
         if "device" in validated_data:

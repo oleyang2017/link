@@ -7,7 +7,6 @@ from base.base_serializers import BaseModelSerializer
 from device.models.category import DeviceCategory
 from device.serializers.chart import ChartSerializer
 from device.serializers.stream import StreamSerializer
-from action.serializers.trigger import TriggerSerializer
 
 
 class DeviceSerializer(BaseModelSerializer):
@@ -46,7 +45,6 @@ class DeviceSerializer(BaseModelSerializer):
 class DeviceDetailSerializer(BaseModelSerializer):
     streams = StreamSerializer(many=True, required=False, read_only=True)
     charts = ChartSerializer(many=True, required=False, read_only=True)
-    triggers = TriggerSerializer(many=True, required=False, read_only=True)
     category_name = serializers.SerializerMethodField(read_only=True)
     display_custom_info = serializers.SerializerMethodField(read_only=True)
 
@@ -78,7 +76,6 @@ class DeviceDetailSerializer(BaseModelSerializer):
             "last_connect_time",
             "streams",
             "charts",
-            "triggers",
             "image_url",
             "custom_info",
             "display_custom_info",
@@ -93,7 +90,7 @@ class DeviceDetailSerializer(BaseModelSerializer):
             "last_connect_time",
         )
 
-    def is_valid(self, raise_exception=False):
+    def is_valid(self, raise_exception=True):
         if self.initial_data.get("category"):
             category = DeviceCategory.objects.filter(
                 id=self.initial_data["category"],
@@ -101,7 +98,7 @@ class DeviceDetailSerializer(BaseModelSerializer):
             ).first()
             if not category:
                 raise serializers.ValidationError("设备分类不存在！")
-        return super(DeviceDetailSerializer, self).is_valid(raise_exception)
+        return super(DeviceDetailSerializer, self).is_valid()
 
     def create(self, validated_data):
         if settings.MAX_DEVICE_NUM:

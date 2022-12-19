@@ -8,7 +8,6 @@ from device.models.device import Device
 from device.serializers.chart import ChartSerializer
 from device.serializers.device import DeviceSerializer, DeviceDetailSerializer
 from device.serializers.stream import StreamSerializer
-from action.serializers.trigger import TriggerSerializer
 
 
 class DeviceViewSet(BaseModelViewSet):
@@ -75,12 +74,6 @@ class DeviceViewSet(BaseModelViewSet):
     def charts(self, request, *args, **kwargs):
         device = self.get_object()
         serializer = ChartSerializer(device.charts, many=True)
-        return Response(serializer.data)
-
-    @action(methods=["get"], detail=True)
-    def triggers(self, request, *args, **kwargs):
-        device = self.get_object()
-        serializer = TriggerSerializer(device.triggers, many=True)
         return Response(serializer.data)
 
     @action(methods=["get"], detail=True)

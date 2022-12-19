@@ -86,6 +86,8 @@ WSGI_APPLICATION = "link.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
