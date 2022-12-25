@@ -15,6 +15,10 @@ Page({
     this.getCategory()
   },
 
+  onShow: function(e){
+    this.refresh()
+  },
+
   showMask: function () {
     this.setData({
       showMask: !this.data.showMask

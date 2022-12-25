@@ -27,6 +27,9 @@ Page({
     this.setData({
       ...options
     })
+    if(options.category){
+      this.getCategory()
+    }
     if (options.id) {
       this.getDetailInfo(this.data.id)
     }
@@ -62,7 +65,8 @@ Page({
       item.defaultIndex = item.id
       if (item.id == this.data.category) {
         this.setData({
-          categoryIndex: index
+          categoryIndex: index,
+          categoryName: item.name,
         })
       }
     });
