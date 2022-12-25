@@ -6,7 +6,7 @@ Page({
     category: [],
     showMask: false,
     active: '',
-    popupHeight: '100px',
+    popupHeight: '0px',
     refresh: false,
     showSkeleton: true,
   },
@@ -67,7 +67,7 @@ Page({
       categoryCount,
       refresh: false,
       showSkeleton: false,
-      popupHeight: categoryCount * 36 > 260 ? '260px' : categoryCount * 36 + 'px'
+      popupHeight: (categoryCount * 36) > 260 ? '260px' : categoryCount * 36 + 'px'
     })
   },
   changeCategory(e) {

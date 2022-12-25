@@ -50,3 +50,11 @@
   vertical-align:middle;
   text-align: center;
 }
+.custom-tag{
+  display: inline-block;
+  padding: 2rpx 6rpx;
+  margin: 6rpx;
+  border-radius: 6rpx;
+  text-align: center;
+  align-items: center;
+}

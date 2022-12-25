@@ -1,11 +1,3 @@
-<wxs module="fn">
-  module.exports = {
-    tagColor: function () {
-      colorList = ['#0081ff', '#6739b6', '#8799a3', '#1cbbb4', '#e54d42', '#f37b1d', '#8dc63f', '#9c26b0', '#e03997', '#fbbd08']
-      return colorList[Math.round(Math.random() * 10)]
-    },
-  }
-</wxs>
 <page-meta background-color='#ffffff' />
 <view class="padding-lr-sm padding-top-xs bg-white">
   <text class="text-bold text-black text-xxl ">{{name}}</text>
@@ -39,7 +31,7 @@
       <view class="padding-xs text-df">
         <text>数据流：</text>
         <view style="display: inline-block">
-          <van-tag wx:for="{{streams}}" wx:key="id" color="{{fn.tagColor()}}" class="margin-xs">{{item.name}}</van-tag>
+          <view wx:for="{{streams}}" wx:key="id" class="stream-tag {{item.color}}">{{item.name}}</view>
         </view>
       </view>
       <view class="padding-xs text-df">
