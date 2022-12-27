@@ -1,7 +1,7 @@
 from django.db import models
 
 from base.base_model import BaseModel
-from common.models.invite_link import InviteLink
+from invite.models.invite_link import InviteLink
 
 
 class InviteRecord(BaseModel):

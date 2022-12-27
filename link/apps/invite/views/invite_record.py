@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 
-from common.models.invite_record import InviteRecord
-from common.serializers.invite_record import InviteRecordSerializer
+from invite.models.invite_record import InviteRecord
+from invite.serializers.invite_record import InviteRecordSerializer
 
 
 class InviteRecordViewSet(ViewSet):

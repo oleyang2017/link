@@ -5,10 +5,10 @@ from django.contrib.auth.models import Group
 from device.models.device import Device
 from base.base_serializers import BaseModelSerializer
 from user.models.group_extend import GroupExtend
-from common.models.invite_link import InviteLink
+from invite.models.invite_link import InviteLink
 from device.serializers.device import DeviceSerializer
 from user.serializers.group_extend import GroupSerializer
-from common.serializers.invite_record import InviteRecordSerializer
+from invite.serializers.invite_record import InviteRecordSerializer
 
 
 class InviteLinkSerializer(BaseModelSerializer):

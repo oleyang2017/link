@@ -32,7 +32,7 @@ class InviteLink(BaseModel):
         return f"邀请码: {self.code}"
 
     def check_can_join(self, operation, user):
-        from common.models.invite_record import InviteRecord
+        from invite.models.invite_record import InviteRecord
 
         now = datetime.now()
         if operation == "accept":

@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from user.models.user_profile import UserProfile
-from common.models.invite_link import InviteLink
-from common.models.invite_record import InviteRecord
+from invite.models.invite_link import InviteLink
+from invite.models.invite_record import InviteRecord
 
 
 class InviteRecordModelTestCase(TestCase):

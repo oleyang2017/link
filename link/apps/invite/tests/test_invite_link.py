@@ -8,8 +8,8 @@ from rest_framework.exceptions import ValidationError
 
 from device.models.device import Device
 from user.models.user_profile import UserProfile
-from common.models.invite_link import InviteLink
-from common.models.invite_record import InviteRecord
+from invite.models.invite_link import InviteLink
+from invite.models.invite_record import InviteRecord
 
 
 class InviteLinkModelTestCase(TestCase):

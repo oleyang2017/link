@@ -1,7 +1,7 @@
 from rest_framework.routers import DefaultRouter
 
-from common.views.invite_link import InviteLinkViewSet
-from common.views.invite_record import InviteRecordViewSet
+from invite.views.invite_link import InviteLinkViewSet
+from invite.views.invite_record import InviteRecordViewSet
 
 router = DefaultRouter()
 

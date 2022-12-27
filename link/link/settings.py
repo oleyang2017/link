@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     "emqx",
     "user",
     "device",
-    "common",
+    "invite",
     # 'action'
 ]
 

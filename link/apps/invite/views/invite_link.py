@@ -9,10 +9,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from user.models import GroupExtend
 from base.base_viewsets import BaseModelViewSet
 from device.models.device import Device
-from common.models.invite_link import InviteLink
-from common.models.invite_record import InviteRecord
-from common.serializers.invite_link import InviteLinkSerializer, InviteLinkDetailSerializer
-from common.serializers.invite_record import InviteRecordSerializer
+from invite.models.invite_link import InviteLink
+from invite.models.invite_record import InviteRecord
+from invite.serializers.invite_link import InviteLinkSerializer, InviteLinkDetailSerializer
+from invite.serializers.invite_record import InviteRecordSerializer
 
 
 class InviteLinkViewSet(BaseModelViewSet):
