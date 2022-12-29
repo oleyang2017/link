@@ -61,7 +61,7 @@
       </view>
     </view>
     <view style="max-height: 600rpx; padding: 40rpx 0;" wx:if="{{popupType=='color'}}">
-      <view wx:for="{{ colorList }}" data-value="{{item}}" bindtap="selectColor" class="background-block {{item}}">
+      <view wx:for="{{ colorList }}" wx:key="index" data-value="{{item}}" bindtap="selectColor" class="background-block {{item}}">
       </view>
     </view>
   </van-popup>
