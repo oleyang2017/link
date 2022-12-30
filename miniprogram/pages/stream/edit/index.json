@@ -8,9 +8,9 @@
     "van-icon": "@vant/weapp/icon/index",
     "van-dialog": "@vant/weapp/dialog/index",
     "van-toast": "@vant/weapp/toast/index",
-    "van-switch": "@vant/weapp/switch/index"
-  },
-  "disableScroll": true
+    "van-switch": "@vant/weapp/switch/index",
+    "ec-canvas": "../../../components/ec-canvas/ec-canvas"
+  }
 }
 
 

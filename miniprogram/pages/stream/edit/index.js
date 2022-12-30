@@ -1,9 +1,78 @@
 import streamApi from '../../../api/stream'
 import deviceApi from '../../../api/device'
+import * as echarts from '../../../components/ec-canvas/echarts';
 import Dialog from '@vant/weapp//dialog/dialog'
 import Toast from '@vant/weapp//toast/toast'
-import { colorList, iconList, streamTypeList, qosList } from '../../../const'
+import theme from '../../../components/ec-canvas/default-theme'
+import {
+  colorList,
+  iconList,
+} from '../../../const'
 
+function initChart(canvas, width, height, dpr) {
+  echarts.registerTheme('default', theme)
+  const chart = echarts.init(canvas, "default", {
+    width: width,
+    height: height,
+    devicePixelRatio: dpr // 像素
+  });
+  canvas.setChart(chart);
+  var option = {
+    title: {
+      text: '测试下面legend的红色区域不应被裁剪',
+      left: 'center'
+    },
+    legend: {
+      data: ['A', 'B', 'C'],
+      top: 50,
+      left: 'center',
+      backgroundColor: 'red',
+      z: 100
+    },
+    grid: {
+      containLabel: true
+    },
+    tooltip: {
+      show: true,
+      trigger: 'axis'
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+      // show: false
+    },
+    yAxis: {
+      x: 'center',
+      type: 'value',
+      splitLine: {
+        lineStyle: {
+          type: 'dashed'
+        }
+      }
+      // show: false
+    },
+    series: [{
+      name: 'A',
+      type: 'line',
+      smooth: true,
+      data: [18, 36, 65, 30, 78, 40, 33]
+    }, {
+      name: 'B',
+      type: 'line',
+      smooth: true,
+      data: [12, 50, 51, 35, 70, 30, 20]
+    }, {
+      name: 'C',
+      type: 'line',
+      smooth: true,
+      data: [10, 30, 31, 50, 40, 20, 10]
+    }]
+  };
+
+  chart.setOption(option);
+  return chart;
+}
 Page({
   data: {
     type: 'edit',
@@ -20,6 +89,12 @@ Page({
     defaultDeviceIndex: 0,
     color: "bg-blue",
     icon: "icon-kongqiwendu",
+    show: false,
+    showChart: true,
+    themeInput: { maxHeight: 200},
+    ec: {
+      onInit: initChart
+    }
   },
 
   onLoad: function (options) {
@@ -70,7 +145,7 @@ Page({
       })
     })
   },
-  changeIconPopup(e){
+  changeIconPopup(e) {
     this.setData({
       showIconPopup: !this.data.showIconPopup
     })
@@ -83,12 +158,12 @@ Page({
       title: '所属设备',
       defaultIndex: this.data.defaultDeviceIndex
     })
-    if (!(editStatusNotOpen.includes(e.currentTarget.dataset.name) && this.data.type == 'edit')){
+    if (!(editStatusNotOpen.includes(e.currentTarget.dataset.name) && this.data.type == 'edit')) {
       this.setData({
         showPopup: !this.data.showPopup,
       })
     }
-    if (e.currentTarget.dataset.name){
+    if (e.currentTarget.dataset.name) {
       this.setData({
         popupType: e.currentTarget.dataset.name,
       })
@@ -160,7 +235,7 @@ Page({
       wx.navigateBack()
     }
   },
-  generateData(){
+  generateData() {
     let data = {
       name: this.data.name,
       unitName: this.data.unitName,
@@ -171,11 +246,10 @@ Page({
       color: this.data.color,
       show: this.data.show,
     }
-    if (this.data.type == 'edit'){
+    if (this.data.type == 'edit') {
       data.id = this.data.id
       data.device = this.data.device
-    }
-    else if (this.data.type == 'create' && this.data.source != 'create_new_device'){
+    } else if (this.data.type == 'create' && this.data.source != 'create_new_device') {
       data.device = this.data.device
     }
     return data
@@ -187,13 +261,20 @@ Page({
       show: detail
     });
   },
-  selectIcon(e){
+  changeShowChart({
+    detail
+  }) {
+    this.setData({
+      showChart: detail
+    });
+  },
+  selectIcon(e) {
     this.setData({
       icon: e.currentTarget.dataset.value,
       showPopup: false
     })
   },
-  selectColor(e){
+  selectColor(e) {
     this.setData({
       color: e.currentTarget.dataset.value,
       showPopup: false
@@ -220,4 +301,6 @@ Page({
         })
       })
   },
+  
+
 })
