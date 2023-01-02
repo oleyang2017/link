@@ -3,19 +3,25 @@
     <van-field model:value="{{ name }}" label="数据流名称" placeholder="请输入数据流名称" border="{{ false }}" required maxlength="8" />
     <van-field model:value="{{ unitName }}" label="单位名称" placeholder="请输入单位名称" border="{{ false }}" maxlength="8" />
     <van-field model:value="{{ unit }}" label="单位" placeholder="请输入单位符号" border="{{ false }}" />
+    <view class="padding bg-white custom-cell">
+        <view class="title">保存数据</view>
+        <view class="context">
+          <van-switch checked="{{ saveData }}" bind:change="handleSwitch" data-value="saveData" size="16px" />
+        </view>
+      </view>
     <van-field wx:if="{{source != 'create_new_device'}}" value="{{ defaultDevice }}" bindtap="openPopup" data-name="device" label="所属设备" border="{{ false }}" readonly="{{type=='edit'}}" required />
     <van-field wx:if="{{type!='create'}}" value="{{ createdTime }}" label="创建时间" border="{{ false }}" readonly />
   </van-cell-group>
 
   <van-cell-group title="其他设置">
-    <view class="padding bg-white custom-cell" style="border-bottom: 1rpx solid #f6f8fa;">
+    <view class="padding bg-white custom-cell">
       <view class="title">首页显示</view>
       <view class="context">
-        <van-switch checked="{{ show }}" bind:change="changeShow" size="16px" />
+        <van-switch checked="{{ show }}" bind:change="handleSwitch" data-value="show" size="16px" />
       </view>
     </view>
     <block wx:if="{{ show }}">
-      <view class="padding bg-white custom-cell" style="border-bottom: 1rpx solid #f6f8fa;">
+      <view class="padding bg-white custom-cell">
         <view class="title">图标</view>
         <view class="context" bindtap="openPopup" data-name="icon">
           <view class="iconfont {{icon}}" style="font-size: 20px;"></view>
@@ -48,18 +54,18 @@
     <view class="padding bg-white custom-cell" style="border-bottom: 1rpx solid #f6f8fa;">
       <view class="title">显示历史数据</view>
       <view class="context">
-        <van-switch checked="{{ showChart }}" bind:change="changeShowChart" size="16px" />
+        <van-switch checked="{{ showChart }}" bind:change="handleSwitch" data-value="showChart" size="16px" />
         <view class="text-gray text-sm">开启后系统将会保存上传的历史数据</view>
       </view>
     </view>
     <block wx:if="{{showChart}}">
       <van-field model:value="{{ chartName }}" label="图表名称" placeholder="请输入图表名称" border="{{ false }}" />
       <van-field model:value="{{ chartTitle }}" label="图表标题" placeholder="请输入图表标题" border="{{ false }}" />
-      <van-field model:value="{{ chartSettings }}" label="自定义主题" placeholder="请输入图表自定义设置" type="textarea" autosize="{{ themeInput }}" border="{{ false }}" />
+      <van-field model:value="{{ chartSettings }}" label="自定义主题" placeholder="请输入图表自定义设置" type="textarea" autosize="{{ themeInputStyle }}" border="{{ false }}" />
       <view class="padding bg-white custom-cell">
         <view class="title">效果预览</view>
         <view style="height: 400rpx; width: 750rpx;">
-          <ec-canvas id="chart-demo" canvas-id="chart-demo-canvas" ec="{{ ec }}"></ec-canvas>
+          <ec-canvas type="2d" id="chart-demo" canvas-id="chart-demo-canvas" ec="{{ ec }}"></ec-canvas>
         </view>
       </view>
     </block>
@@ -78,13 +84,13 @@
   <van-popup show="{{ showPopup }}" position="bottom" bind:close="openPopup">
     <van-picker columns="{{ deviceList }}" value-key="name" default-index="{{defaultIndex}}" bind:confirm="changeSelect" bind:cancel="openPopup" title="{{title}}" show-toolbar wx:if="{{popupType == 'device'}}" />
     <view style="max-height: 600rpx; padding: 40rpx 0;" wx:if="{{popupType=='icon'}}">
-      <view wx:for="{{ iconList }}" class="icon-card" data-value="{{item.value}}" bindtap="selectIcon">
+      <view wx:for="{{ iconList }}" class="icon-card" data-type="icon" data-value="{{item.value}}" bindtap="handleShowPopup">
         <view class="icon-size iconfont {{item.value}}" />
         <text class="icon-name">{{item.name}}</text>
       </view>
     </view>
     <view style="max-height: 600rpx; padding: 40rpx 0;" wx:if="{{popupType=='color'}}">
-      <view wx:for="{{ colorList }}" wx:key="index" data-value="{{item}}" bindtap="selectColor" class="background-block {{item}}">
+      <view wx:for="{{ colorList }}" wx:key="index" data-type="color" data-value="{{item}}" bindtap="handleShowPopup" class="background-block {{item}}">
       </view>
     </view>
   </van-popup>

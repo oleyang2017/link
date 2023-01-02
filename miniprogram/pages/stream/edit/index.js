@@ -90,14 +90,18 @@ Page({
     color: "bg-blue",
     icon: "icon-kongqiwendu",
     show: false,
-    showChart: true,
-    themeInput: { maxHeight: 200},
+    saveData: false,
+    showChart: false,
+    themeInputStyle: {
+      maxHeight: 200
+    },
     ec: {
       onInit: initChart
     }
   },
 
   onLoad: function (options) {
+    console.log(options)
     this.setData({
       ...options
     })
@@ -106,27 +110,6 @@ Page({
         this.setData({
           ...res,
         })
-        for (let i = 0; i < this.data.typeList; i++) {
-          if (this.data.typeList[i].value == res.dataType) {
-            this.setData({
-              defaultTypeIndex: i,
-              defaultType: this.data.typeList[i].name
-            })
-          }
-        }
-        for (let i = 0; i < this.data.typeList; i++) {
-          if (this.data.qosList[i].value == res.dataType) {
-            this.setData({
-              defaultQosIndex: i,
-              defaultQos: this.data.qosList[i].name
-            })
-          }
-        }
-      })
-    }
-    if (options.type) {
-      this.setData({
-        type: options.type
       })
     }
     deviceApi.list().then((res) => {
@@ -145,11 +128,7 @@ Page({
       })
     })
   },
-  changeIconPopup(e) {
-    this.setData({
-      showIconPopup: !this.data.showIconPopup
-    })
-  },
+
   openPopup(e) {
     let editStatusNotOpen = ["qos", "type", "device"]
     this.setData({
@@ -254,32 +233,29 @@ Page({
     }
     return data
   },
-  changeShow({
-    detail
-  }) {
+
+  handleSwitch(e) {
+    let field = e.currentTarget.dataset.value
+    let result = e.detail
     this.setData({
-      show: detail
+      [field]: result
+    });
+    if(field === 'showChart' && result == true){
+      this.setData({
+        saveData: true
+      });
+    }
+  },
+
+  handleShowPopup(e){
+    let type = e.currentTarget.dataset.type
+    let value = e.currentTarget.dataset.value
+    this.setData({
+      [type]: value,
+      showPopup: false
     });
   },
-  changeShowChart({
-    detail
-  }) {
-    this.setData({
-      showChart: detail
-    });
-  },
-  selectIcon(e) {
-    this.setData({
-      icon: e.currentTarget.dataset.value,
-      showPopup: false
-    })
-  },
-  selectColor(e) {
-    this.setData({
-      color: e.currentTarget.dataset.value,
-      showPopup: false
-    })
-  },
+
   cancel() {
     wx.navigateBack()
   },
@@ -301,6 +277,6 @@ Page({
         })
       })
   },
-  
+
 
 })
