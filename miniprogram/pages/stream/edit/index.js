@@ -4,77 +4,12 @@ import * as echarts from '../../../components/ec-canvas/echarts';
 import Dialog from '@vant/weapp//dialog/dialog'
 import Toast from '@vant/weapp//toast/toast'
 import theme from '../../../components/ec-canvas/default-theme'
+import option from '../../../components/ec-canvas/default-option'
 import {
   colorList,
   iconList,
 } from '../../../const'
 
-function initChart(canvas, width, height, dpr) {
-  echarts.registerTheme('default', theme)
-  const chart = echarts.init(canvas, "default", {
-    width: width,
-    height: height,
-    devicePixelRatio: dpr // 像素
-  });
-  canvas.setChart(chart);
-  var option = {
-    title: {
-      text: "图表标题",
-      left: "center",
-      textStyle:{
-        fontSize :14
-      },
-      top: "bottom",
-      subtext: "图表名称"
-    },
-    // legend: {
-    //   data: ['A'],
-    //   top: 50,
-    //   left: 'center',
-    //   backgroundColor: 'red',
-    //   z: 100
-    // },
-    grid: {
-      containLabel: true
-    },
-    tooltip: {
-      show: true,
-      trigger: 'axis'
-    },
-    xAxis: {
-      type: 'time',
-      boundaryGap: false,
-      data: [
-        '2023-01-01 00:00:00', 
-        '2023-01-01 01:00:00', 
-        '2023-01-01 02:00:00', 
-        '2023-01-01 03:00:00',
-        '2023-01-01 04:00:00',
-        '2023-01-01 05:00:00',
-        '2023-01-01 06:00:00',
-        '2023-01-01 07:00:00',
-      ],
-    },
-    yAxis: {
-      x: 'center',
-      type: 'value',
-      splitLine: {
-        lineStyle: {
-          type: 'dashed'
-        }
-      }
-    },
-    series: [{
-      name: 'A',
-      type: 'line',
-      smooth: true,
-      data: [18, 36, 65, 30, 78, 40, 33]
-    }]
-  };
-
-  chart.setOption(option);
-  return chart;
-}
 Page({
   data: {
     type: 'edit',
@@ -94,20 +29,21 @@ Page({
     show: false,
     saveData: false,
     showChart: true,
+    dataZoom: true,
     themeInputStyle: {
       maxHeight: 200
     },
     ec: {
-      onInit: initChart
+      lazyLoad: true
     },
     windowWidth: 320,
   },
-
+  
   onLoad: function (options) {
     var res = wx.getSystemInfoSync();
     this.setData({
       ...options,
-      windowWidth: res.windowWidth - 30
+      windowWidth: res.windowWidth
     })
     if (options.id) {
       streamApi.detail(options.id).then((res) => {
@@ -131,7 +67,34 @@ Page({
         deviceList: res
       })
     })
-  
+  },
+
+  onReady: function () {
+    // 获取组件
+    this.ecComponent = this.selectComponent('#chart-demo');
+    this.ecComponent.init((canvas, width, height, dpr) =>{
+      echarts.registerTheme('default', theme)
+      const chart = echarts.init(canvas, "default", {
+        width: width,
+        height: height,
+        devicePixelRatio: dpr
+      });
+      let base = +new Date(2023, 1, 1);
+      let oneDay = 24 * 3600 * 1000;
+      let data = [[base, Math.random() * 900]];
+      for (let i = 1; i < 200; i++) {
+        let now = new Date((base += oneDay));
+        data.push([+now, Math.round((Math.random() - 0.5) * 20 + data[i - 1][1])]);
+      }
+      option.series[0].data = data
+      if(this.data.dataZoom){
+        delete option.grid.bottom
+      }
+      option.yAxis.name = this.data.name
+      canvas.setChart(chart);
+      chart.setOption(option);
+      return chart;
+    })
   },
 
   openPopup(e) {
