@@ -1,14 +1,17 @@
 import streamApi from '../../../api/stream'
 import deviceApi from '../../../api/device'
-import * as echarts from '../../../components/ec-canvas/echarts';
 import Dialog from '@vant/weapp//dialog/dialog'
 import Toast from '@vant/weapp//toast/toast'
-import theme from '../../../components/ec-canvas/default-theme'
-import option from '../../../components/ec-canvas/default-option'
+import defaultTheme from '../../../components/ec-canvas/default-theme'
+import * as echarts from '../../../components/ec-canvas/echarts'
+import defaultOption from '../../../components/ec-canvas/default-option'
+import { deepCopy } from '../../../utils/deepCopy'
 import {
   colorList,
-  iconList,
+  iconList
 } from '../../../const'
+
+let chart = null
 
 Page({
   data: {
@@ -28,19 +31,19 @@ Page({
     icon: "icon-kongqiwendu",
     show: false,
     saveData: false,
-    showChart: true,
-    dataZoom: true,
+    showChart: false,
+    dataZoom: false,
     themeInputStyle: {
-      maxHeight: 200
+      maxHeight: 100
     },
     ec: {
       lazyLoad: true
     },
     windowWidth: 320,
   },
-  
+
   onLoad: function (options) {
-    var res = wx.getSystemInfoSync();
+    var res = wx.getSystemInfoSync()
     this.setData({
       ...options,
       windowWidth: res.windowWidth
@@ -70,31 +73,69 @@ Page({
   },
 
   onReady: function () {
+    if (this.data.showChart){
+      this.initChart()
+    }
+  },
+
+  initChart() {
     // 获取组件
-    this.ecComponent = this.selectComponent('#chart-demo');
-    this.ecComponent.init((canvas, width, height, dpr) =>{
+    this.ecComponent = this.selectComponent('#chart-demo')
+    this.ecComponent.init((canvas, width, height, dpr) => {
+      let theme = deepCopy(defaultTheme)
+      if (this.data.chartTheme){
+        theme = this.data.chartTheme
+      }
       echarts.registerTheme('default', theme)
-      const chart = echarts.init(canvas, "default", {
+      chart = echarts.init(canvas, "default", {
         width: width,
         height: height,
         devicePixelRatio: dpr
-      });
-      let base = +new Date(2023, 1, 1);
-      let oneDay = 24 * 3600 * 1000;
-      let data = [[base, Math.random() * 900]];
-      for (let i = 1; i < 200; i++) {
-        let now = new Date((base += oneDay));
-        data.push([+now, Math.round((Math.random() - 0.5) * 20 + data[i - 1][1])]);
-      }
-      option.series[0].data = data
-      if(this.data.dataZoom){
-        delete option.grid.bottom
-      }
-      option.yAxis.name = this.data.name
-      canvas.setChart(chart);
-      chart.setOption(option);
-      return chart;
+      })
+      let options = this.generateOption()
+      canvas.setChart(chart)
+      chart.setOption(options)
+      return chart
     })
+  },
+
+  refreshChart() {
+    if (this.data.showChart){
+      let options = this.generateOption()
+      chart.setOption(options, { notMerge: true })
+      chart.resize()
+      return chart
+    }
+   
+  },
+
+  changeChartTheme(e){
+    if(e.detail.value){
+      try {
+        const customTheme = JSON.parse(e.detail.value)
+        this.ecComponent.init((canvas, width, height, dpr) => {
+          echarts.registerTheme('custom', customTheme)
+          chart = echarts.init(canvas, "custom", {
+            width: width,
+            height: height,
+            devicePixelRatio: dpr
+          })
+          let options = this.generateOption()
+          canvas.setChart(chart)
+          chart.setOption(options)
+          return chart
+        })
+      } catch (e) {
+        Toast({
+          type: 'fail',
+          message: '主题设置失败',
+          duration: 1000,
+        })
+      }
+    }
+    else{
+      this.initChart()
+    }
   },
 
   openPopup(e) {
@@ -116,10 +157,11 @@ Page({
       })
     }
   },
+
   changeSelect(e) {
     const {
       index
-    } = e.detail;
+    } = e.detail
     if (this.data.selectName == 'qos') {
       this.setData({
         qos: this.data.qosList[index].value,
@@ -143,44 +185,7 @@ Page({
       showPopup: false
     })
   },
-  confirm() {
-    let data = this.generateData()
-    if (this.data.type == 'edit') {
-      streamApi.update(data).then(() => {
-        Toast({
-          type: 'success',
-          message: '修改成功',
-          duration: 1000,
-          onClose: () => {
-            wx.navigateBack()
-          },
-        });
-      })
-    } else if (this.data.type == 'create' && this.data.source != 'create_new_device') {
-      streamApi.create(data).then(() => {
-        Toast({
-          type: 'success',
-          message: '创建成功',
-          duration: 1000,
-          onClose: () => {
-            wx.navigateBack()
-          },
-        });
-      })
-    } else if (this.data.type == 'create' && this.data.source == 'create_new_device') {
-      let pages = getCurrentPages()
-      let prevPage = pages[pages.length - 2]
-      let streamList = prevPage.data.streams
-      if (this.data.id) {
-        data.id = this.data.id
-      }
-      streamList.push(data)
-      prevPage.setData({
-        stream: streamList
-      })
-      wx.navigateBack()
-    }
-  },
+
   generateData() {
     let data = {
       name: this.data.name,
@@ -201,31 +206,99 @@ Page({
     return data
   },
 
+  generateOption() {
+    let option = deepCopy(defaultOption)
+    let base = +new Date(2023, 1, 1)
+    let oneDay = 24 * 3600 * 1000
+    let data = [
+      [base, Math.random() * 900]
+    ]
+    for (let i = 1; i < 200; i++) {
+      let now = new Date((base += oneDay))
+      data.push([+now, Math.round((Math.random() - 0.5) * 20 + data[i - 1][1])])
+    }
+    option.series[0].data = data
+    option.series[0].name = this.data.name
+    if (this.data.dataZoom) {
+      delete option.grid.bottom
+    } else {
+      delete option.dataZoom
+    }
+    option.tooltip.valueFormatter = (value) => value.toFixed(2) + ` ${this.data.unit}`
+    option.yAxis.name = this.data.name + (this.data.unit ? `(${this.data.unit})`: '')
+    return option
+  },
+
   handleSwitch(e) {
     let field = e.currentTarget.dataset.value
     let result = e.detail
     this.setData({
       [field]: result
-    });
-    if(field === 'showChart' && result == true){
+    })
+    if (field === 'showChart' && result == true) {
       this.setData({
         saveData: true
-      });
+      })
+      this.initChart()
+    }
+    if (field === 'dataZoom') {
+      this.refreshChart()
+
     }
   },
 
-  handleShowPopup(e){
+  handleShowPopup(e) {
     let type = e.currentTarget.dataset.type
     let value = e.currentTarget.dataset.value
     this.setData({
       [type]: value,
       showPopup: false
-    });
+    })
   },
 
   cancel() {
     wx.navigateBack()
   },
+
+  confirm() {
+    let data = this.generateData()
+    if (this.data.type == 'edit') {
+      streamApi.update(data).then(() => {
+        Toast({
+          type: 'success',
+          message: '修改成功',
+          duration: 1000,
+          onClose: () => {
+            wx.navigateBack()
+          },
+        })
+      })
+    } else if (this.data.type == 'create' && this.data.source != 'create_new_device') {
+      streamApi.create(data).then(() => {
+        Toast({
+          type: 'success',
+          message: '创建成功',
+          duration: 1000,
+          onClose: () => {
+            wx.navigateBack()
+          },
+        })
+      })
+    } else if (this.data.type == 'create' && this.data.source == 'create_new_device') {
+      let pages = getCurrentPages()
+      let prevPage = pages[pages.length - 2]
+      let streamList = prevPage.data.streams
+      if (this.data.id) {
+        data.id = this.data.id
+      }
+      streamList.push(data)
+      prevPage.setData({
+        stream: streamList
+      })
+      wx.navigateBack()
+    }
+  },
+
   delete() {
     Dialog.confirm({
         title: '警告！',
@@ -244,6 +317,5 @@ Page({
         })
       })
   },
-
 
 })

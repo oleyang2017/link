@@ -1,6 +1,7 @@
 var option = {
   tooltip: {
     trigger: 'axis',
+    valueFormatter: (value) => value.toFixed(2)
   },
   xAxis: {
     name: '时间',
@@ -24,7 +25,7 @@ var option = {
   ],
   series: [
     {
-      name: 'Fake Data',
+      name: 'Mock Data',
       type: 'line',
       smooth: true,
       symbol: 'none',
@@ -34,7 +35,7 @@ var option = {
   ],
   grid: {
     top : 40,
-    bottom: 40, // 如果开启缩放会导致画面重叠要移除此配置，
+    bottom: 40,
   },
 }
 

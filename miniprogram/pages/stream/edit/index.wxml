@@ -1,8 +1,8 @@
 <view>
   <van-cell-group title="基础信息">
-    <van-field model:value="{{ name }}" label="数据流名称" placeholder="请输入数据流名称" border="{{ false }}" required maxlength="8" />
+    <van-field model:value="{{ name }}" label="数据流名称" placeholder="请输入数据流名称" border="{{ false }}" required maxlength="8" bind:blur="refreshChart" />
     <van-field model:value="{{ unitName }}" label="单位名称" placeholder="请输入单位名称" border="{{ false }}" maxlength="8" />
-    <van-field model:value="{{ unit }}" label="单位" placeholder="请输入单位符号" border="{{ false }}" />
+    <van-field model:value="{{ unit }}" label="单位" placeholder="请输入单位符号" border="{{ false }}" bind:blur="refreshChart" />
     <view class="bg-white custom-cell">
       <view class="title">保存数据</view>
       <view class="context">
@@ -51,23 +51,25 @@
   </van-cell-group>
 
   <van-cell-group title="图表设置">
-    <view class="bg-white custom-cell" style="border-bottom: 1rpx solid #f6f8fa;">
+    <view class="bg-white custom-cell">
       <view class="title">显示历史数据</view>
       <view class="context">
         <van-switch checked="{{ showChart }}" bind:change="handleSwitch" data-value="showChart" size="16px" />
         <view class="text-gray text-sm">开启后系统将会保存上传的历史数据</view>
       </view>
     </view>
-    <view class="bg-white custom-cell">
-      <view class="title">开启缩放</view>
-      <view class="context">
-        <van-switch checked="{{ dataZoom }}" bind:change="handleSwitch" data-value="dataZoom" size="16px" />
-      </view>
-    </view>
+
     <block wx:if="{{showChart}}">
+      <view class="bg-white custom-cell">
+        <view class="title">开启缩放</view>
+        <view class="context">
+          <van-switch checked="{{ dataZoom }}" bind:change="handleSwitch" data-value="dataZoom" size="16px" />
+        </view>
+      </view>
       <van-field model:value="{{ chartName }}" label="图表名称" placeholder="请输入图表名称" border="{{ false }}" />
       <van-field model:value="{{ chartTitle }}" label="图表标题" placeholder="请输入图表标题" border="{{ false }}" />
-      <van-field model:value="{{ chartSettings }}" label="自定义主题" placeholder="请输入图表自定义设置" type="textarea" autosize="{{ themeInputStyle }}" border="{{ false }}" />
+      <van-field model:value="{{ chartTheme }}" label="自定义主题" placeholder="请输入自定义主题" type="textarea" autosize="{{ themeInputStyle }}" border="{{ false }}" bind:blur="changeChartTheme" />
+      <view class="bg-white text-gray text-sm" style="padding-left: 115px;">可以通过echarts官网自定义主题，复制json格式</view>
       <view class="bg-white">
         <view class="bg-white custom-cell">效果预览</view>
         <view style="height: 200px; width: {{windowWidth}}px;">
