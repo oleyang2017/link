@@ -1,10 +1,8 @@
 from django.shortcuts import get_object_or_404
-from guardian.shortcuts import assign_perm, get_user_perms, get_objects_for_user
-from rest_framework.filters import OrderingFilter
+from guardian.shortcuts import assign_perm
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
-from django_filters.rest_framework import DjangoFilterBackend
 
 from user.models import GroupExtend
 from base.base_viewsets import BaseModelViewSet
@@ -19,7 +17,6 @@ class InviteLinkViewSet(BaseModelViewSet):
     serializer_class = InviteLinkSerializer
     lookup_field = "id"
     filter_fields = ["code", "invite_type", "object_id"]
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
     queryset = InviteLink.objects
 
     def get_serializer_class(self):

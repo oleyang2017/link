@@ -1,9 +1,6 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.status import HTTP_201_CREATED
-from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
-from django_filters.rest_framework import DjangoFilterBackend
 
 from invite.models.invite_record import InviteRecord
 from invite.serializers.invite_record import InviteRecordSerializer
@@ -12,8 +9,7 @@ from invite.serializers.invite_record import InviteRecordSerializer
 class InviteRecordViewSet(ViewSet):
     serializer_class = InviteRecordSerializer
     lookup_field = "_id"
-    filter_fields = ["code", "invite_link"]
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filterset_fields = ["code", "invite_link"]
     queryset = InviteRecord.objects
 
     def retrieve(self, request, _id):

@@ -13,7 +13,7 @@ from device.serializers.stream import StreamSerializer
 class DeviceViewSet(BaseModelViewSet):
     lookup_field = "id"
     serializer_class = DeviceSerializer
-    filter_fields = ["category"]
+    filterset_fields = ["category", ]
     ordering_fields = ["sequence", "created_time"]
     ordering = ["sequence", "-created_time"]
 

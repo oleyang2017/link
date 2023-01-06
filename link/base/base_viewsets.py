@@ -1,12 +1,9 @@
 from rest_framework import viewsets
 from django.db.models.query import QuerySet
-from rest_framework.filters import OrderingFilter
-from django_filters.rest_framework import DjangoFilterBackend
 
 
 class BaseModelViewSet(viewsets.ModelViewSet):
     lookup_field = "id"
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
     ordering_fields = ["created_time"]
     ordering = ["-created_time"]
 
