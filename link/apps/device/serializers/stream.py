@@ -3,12 +3,15 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from device.models.stream import Stream
+from device.models.chart import Chart
 from base.base_serializers import BaseModelSerializer
+from device.serializers.chart import ChartInfoSerializer
 
 
 class StreamSerializer(BaseModelSerializer):
     device_name = serializers.SerializerMethodField(read_only=True)
     data_type_name = serializers.SerializerMethodField(read_only=True)
+    chart_info = serializers.SerializerMethodField(read_only=True)
 
     @staticmethod
     def get_device_name(obj):
@@ -23,6 +26,11 @@ class StreamSerializer(BaseModelSerializer):
         获取数据类型名称
         """
         return obj.get_data_type_display()
+
+    @staticmethod
+    def get_chart_info(obj):
+        chart = Chart.objects.filter(device=obj.device, streams=obj).first()
+        return ChartInfoSerializer(chart).data if chart else {}
 
     class Meta:
         model = Stream
@@ -44,6 +52,8 @@ class StreamSerializer(BaseModelSerializer):
             "image",
             "color",
             "save_data",
+            "show_chart",
+            "chart_info"
         )
         read_only_fields = ("id", "stream_id", "created_time", "update_time")
         validators = [

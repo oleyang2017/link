@@ -35,6 +35,7 @@ class Stream(BaseModel):
     icon = models.CharField(null=True, blank=True, max_length=32, verbose_name="icon名称")
     color = models.CharField(null=True, blank=True, max_length=32, verbose_name="背景颜色")
     save_data = models.BooleanField(default=True, verbose_name="保存数据")
+    show_chart = models.BooleanField(default=False, verbose_name="显示图表")
 
     class Meta:
         db_table = "stream"

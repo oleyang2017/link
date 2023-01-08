@@ -33,7 +33,8 @@ class ChartSerializer(BaseModelSerializer):
             "update_time",
             "device",
             "device_name",
-            "custom_settings",
+            "theme",
+            "option",
             "title",
             "chart_id",
             "streams",
@@ -77,3 +78,24 @@ class ChartSerializer(BaseModelSerializer):
                     if stream.data_type == "char_data":
                         raise serializers.ValidationError("字符型的数据流不可以用于图表显示")
         return super(ChartSerializer, self).update(instance, validated_data)
+
+
+class ChartInfoSerializer(BaseModelSerializer):
+    class Meta:
+        model = Chart
+        read_only_fields = (
+            "id",
+            "name",
+            "created_time",
+            "create_user",
+            "last_update_user",
+            "update_time",
+            "theme",
+            "option",
+            "title",
+            "chart_id",
+        )
+        exclude = (
+            "device",
+            "streams",
+        )
