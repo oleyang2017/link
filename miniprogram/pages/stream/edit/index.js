@@ -5,7 +5,9 @@ import Toast from '@vant/weapp//toast/toast'
 import defaultTheme from '../../../components/ec-canvas/default-theme'
 import * as echarts from '../../../components/ec-canvas/echarts'
 import defaultOption from '../../../components/ec-canvas/default-option'
-import { deepCopy } from '../../../utils/deepCopy'
+import {
+  deepCopy
+} from '../../../utils/deepCopy'
 import {
   colorList,
   iconList
@@ -32,17 +34,17 @@ Page({
     show: false,
     saveData: false,
     showChart: false,
-    dataZoom: false,
     themeInputStyle: {
       maxHeight: 100
     },
+    chartInfo: {},
     ec: {
       lazyLoad: true
     },
     windowWidth: 320,
   },
 
-  onLoad: function (options) {
+  onLoad(options) {
     var res = wx.getSystemInfoSync()
     this.setData({
       ...options,
@@ -72,8 +74,8 @@ Page({
     })
   },
 
-  onReady: function () {
-    if (this.data.showChart){
+  onReady() {
+    if (this.data.showChart) {
       this.initChart()
     }
   },
@@ -83,8 +85,12 @@ Page({
     this.ecComponent = this.selectComponent('#chart-demo')
     this.ecComponent.init((canvas, width, height, dpr) => {
       let theme = deepCopy(defaultTheme)
-      if (this.data.chartTheme){
-        theme = this.data.chartTheme
+      if (this.data.chartInfo.theme) {
+        try {
+          theme = JSON.parse(this.data.chartInfo.theme)
+        } catch {
+          console.log("theme dumps error")
+        }
       }
       echarts.registerTheme('default', theme)
       chart = echarts.init(canvas, "default", {
@@ -99,42 +105,40 @@ Page({
     })
   },
 
-  refreshChart() {
-    if (this.data.showChart){
-      let options = this.generateOption()
-      chart.setOption(options, { notMerge: true })
-      chart.resize()
-      return chart
-    }
-   
-  },
-
-  changeChartTheme(e){
-    if(e.detail.value){
-      try {
-        const customTheme = JSON.parse(e.detail.value)
-        this.ecComponent.init((canvas, width, height, dpr) => {
-          echarts.registerTheme('custom', customTheme)
-          chart = echarts.init(canvas, "custom", {
-            width: width,
-            height: height,
-            devicePixelRatio: dpr
+  refreshChart(isTheme = false) {
+    if (this.data.showChart) {
+      if (isTheme) {
+        try {
+          let theme = deepCopy(defaultTheme)
+          if (this.data.chartInfo.theme) {
+            theme = JSON.parse(this.data.chartInfo.theme)
+          }
+          this.ecComponent.init((canvas, width, height, dpr) => {
+            echarts.registerTheme('default', theme)
+            chart = echarts.init(canvas, "default", {
+              width: width,
+              height: height,
+              devicePixelRatio: dpr
+            })
+            let options = this.generateOption()
+            canvas.setChart(chart)
+            chart.setOption(options)
+            return chart
           })
-          let options = this.generateOption()
-          canvas.setChart(chart)
-          chart.setOption(options)
-          return chart
+        } catch (e) {
+          Toast({
+            type: 'fail',
+            message: '主题设置失败',
+            duration: 1000,
+          })
+        }
+      } else {
+        let options = this.generateOption()
+        chart.setOption(options, {
+          notMerge: true
         })
-      } catch (e) {
-        Toast({
-          type: 'fail',
-          message: '主题设置失败',
-          duration: 1000,
-        })
+        chart.resize()
       }
-    }
-    else{
-      this.initChart()
     }
   },
 
@@ -196,6 +200,9 @@ Page({
       icon: this.data.icon,
       color: this.data.color,
       show: this.data.show,
+      saveData: this.data.saveData,
+      showChart: this.data.showChart,
+      chartInfo: this.data.chartInfo,
     }
     if (this.data.type == 'edit') {
       data.id = this.data.id
@@ -219,18 +226,18 @@ Page({
     }
     option.series[0].data = data
     option.series[0].name = this.data.name
-    if (this.data.dataZoom) {
+    if (this.data.chartInfo.dataZoom) {
       delete option.grid.bottom
     } else {
       delete option.dataZoom
     }
     option.tooltip.valueFormatter = (value) => value.toFixed(2) + ` ${this.data.unit}`
-    option.yAxis.name = this.data.name + (this.data.unit ? `(${this.data.unit})`: '')
+    option.yAxis.name = this.data.name + (this.data.unit ? `(${this.data.unit})` : '')
     return option
   },
 
   handleSwitch(e) {
-    let field = e.currentTarget.dataset.value
+    let field = e.currentTarget.dataset.field
     let result = e.detail
     this.setData({
       [field]: result
@@ -241,10 +248,22 @@ Page({
       })
       this.initChart()
     }
-    if (field === 'dataZoom') {
+    if (field === 'chartInfo.dataZoom') {
       this.refreshChart()
 
     }
+  },
+
+  handleInput(e) {
+    // 此函数处理需要刷新图表预览效果的字段（数据双向绑定不支持多层）
+    // 普通字段不需要调用此函数，直接使用数据绑定
+    let field = e.currentTarget.dataset.field
+    let value = e.detail.value
+    this.setData({
+      [field]: value
+    })
+    let isTheme = (field === 'chartInfo.theme')
+    this.refreshChart(isTheme)
   },
 
   handleShowPopup(e) {
