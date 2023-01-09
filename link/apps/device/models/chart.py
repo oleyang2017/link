@@ -26,7 +26,7 @@ class Chart(BaseModel):
     )
     streams = models.ManyToManyField("device.Stream", related_name="charts", db_constraint=False)
     title = models.CharField(max_length=16, verbose_name="标题", null=True, blank=True)
-    name = models.CharField(max_length=16, verbose_name="名称")
+    name = models.CharField(max_length=16, verbose_name="名称", null=True, blank=True )
     theme = models.TextField(verbose_name="自定义主题", null=True, blank=True)
     option = models.JSONField(verbose_name="自定义配置", null=True, blank=True)
     sequence = models.IntegerField(verbose_name="顺序", default=0)

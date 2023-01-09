@@ -47,7 +47,6 @@ class ChartSerializer(BaseModelSerializer):
             },
             "streams": {
                 "write_only": True,
-                "required": True,
                 "error_messages": {"does_not_exist": "数据流不存在！"},
             },
         }
@@ -78,24 +77,3 @@ class ChartSerializer(BaseModelSerializer):
                     if stream.data_type == "char_data":
                         raise serializers.ValidationError("字符型的数据流不可以用于图表显示")
         return super(ChartSerializer, self).update(instance, validated_data)
-
-
-class ChartInfoSerializer(BaseModelSerializer):
-    class Meta:
-        model = Chart
-        read_only_fields = (
-            "id",
-            "name",
-            "created_time",
-            "create_user",
-            "last_update_user",
-            "update_time",
-            "theme",
-            "option",
-            "title",
-            "chart_id",
-        )
-        exclude = (
-            "device",
-            "streams",
-        )
