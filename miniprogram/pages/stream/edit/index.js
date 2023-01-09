@@ -262,8 +262,11 @@ Page({
     this.setData({
       [field]: value
     })
+    let needRefreshFields = ['chartInfo.theme', 'chartInfo.dataZoom', 'name', 'unit']
     let isTheme = (field === 'chartInfo.theme')
-    this.refreshChart(isTheme)
+    if (needRefreshFields.includes(field)){
+      this.refreshChart(isTheme)
+    }
   },
 
   handleShowPopup(e) {
