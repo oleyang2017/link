@@ -28,6 +28,7 @@
 .category-tab-active-class{
   padding: 0 16px 0 0!important;
   font-size: 60rpx !important;
+  font-weight: 600 !important;
 }
 .category-tab-class{
   padding: 0 16px 0 0!important;
