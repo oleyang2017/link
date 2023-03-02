@@ -4,6 +4,7 @@ from django.db.utils import IntegrityError
 from guardian.shortcuts import assign_perm
 from rest_framework.test import APITestCase
 
+from device.models.chart import Chart
 from device.models.device import Device
 from device.models.stream import Stream
 from user.models.user_profile import UserProfile
@@ -47,8 +48,10 @@ class StreamAPITestCase(APITestCase):
         response = self.client.post("/api/devices/", {"name": 1}, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         device_id = response.data.get("id")
+
         response = self.client.post("/api/streams/", {"name": "1", "device": device_id})
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
         response = self.client.post("/api/streams/", {"name": "1", "device": device_id})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["non_field_errors"][0], "同一设备数据流名称不能重复！")
@@ -64,6 +67,37 @@ class StreamAPITestCase(APITestCase):
         assign_perm("change_device", self.user2, device)
         response = self.client.post("/api/streams/", {"name": "12", "device": device_id})
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_stream_create_with_chart(self):
+        response = self.client.post("/api/devices/", {"name": 1}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        device_id = response.data.get("id")
+
+        response = self.client.post(
+            "/api/streams/", {"name": "1", "device": device_id, "show_chart": True}
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        stream_id = response.data.get("id")
+        self.assertTrue(response.data.get("save_data"))
+        chart = Chart.objects.filter(streams=stream_id).first()
+        self.assertIsNotNone(chart)
+
+        response = self.client.post(
+            "/api/streams/",
+            {
+                "name": "2",
+                "device": device_id,
+                "show_chart": True,
+                "chart_info": {"title": "test", "name": "test", "option": "test"},
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        stream_id = response.data.get("id")
+        chart = Chart.objects.filter(streams=stream_id).first()
+        self.assertIsNotNone(chart)
+        self.assertEqual(chart.title, "test")
+        self.assertEqual(chart.name, "test")
 
     def test_stream_update(self):
         response = self.client.post("/api/devices/", {"name": 1}, format="json")
@@ -91,3 +125,54 @@ class StreamAPITestCase(APITestCase):
         assign_perm("change_device", self.user2, device)
         response = self.client.put(f"/api/streams/{stream2.id}/", {"name": "cs"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_stream_update_with_chart(self):
+        response = self.client.post("/api/devices/", {"name": 1}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        device_id = response.data.get("id")
+        response = self.client.post(
+            "/api/streams/",
+            {
+                "name": "2",
+                "device": device_id,
+                "show_chart": True,
+                "chart_info": {"title": "test", "name": "test", "option": "test"},
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        stream_id = response.data.get("id")
+
+        response = self.client.put(
+            f"/api/streams/{stream_id}/",
+            {
+                "name": "3",
+                "device": device_id,
+                "show_chart": True,
+                "chart_info": {"title": "test1", "name": "test1", "option": "test"},
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        chart = Chart.objects.filter(streams=stream_id).first()
+        self.assertIsNotNone(chart)
+        self.assertEqual(chart.title, "test1")
+        self.assertEqual(chart.name, "test1")
+
+        response = self.client.put(
+            f"/api/streams/{stream_id}/",
+            {
+                "name": "3",
+                "device": device_id,
+                "save_data": False,
+                "show_chart": False,
+                "chart_info": {"title": "test2", "name": "test2", "option": "test"},
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("save_data"), False)
+        chart = Chart.objects.filter(streams=stream_id).first()
+        self.assertIsNotNone(chart)
+        self.assertNotEqual(chart.title, "test2")
+        self.assertNotEqual(chart.name, "test2")
