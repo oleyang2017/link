@@ -1,10 +1,10 @@
-from django.conf import settings
 from django.db import transaction
+from django.conf import settings
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from device.models.stream import Stream
 from device.models.chart import Chart
+from device.models.stream import Stream
 from base.base_serializers import BaseModelSerializer
 from device.serializers.chart import ChartSerializer
 
@@ -56,7 +56,7 @@ class StreamSerializer(BaseModelSerializer):
             "color",
             "save_data",
             "show_chart",
-            "chart_info"
+            "chart_info",
         )
         read_only_fields = ("id", "stream_id", "created_time", "update_time")
         validators = [
