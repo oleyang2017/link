@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     "user",
     "device",
     "invite",
-    # 'action'
+    "control",
 ]
 
 MIDDLEWARE = [
