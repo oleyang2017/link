@@ -1,7 +1,7 @@
 from django.db import models
-from shortuuid.django_fields import ShortUUIDField
 
 from base.base_model import BaseModel
+from utils.shortuuid import ShortUUIDField
 
 
 class Chart(BaseModel):
@@ -9,10 +9,7 @@ class Chart(BaseModel):
     历史数据图表
     """
 
-    chart_id = ShortUUIDField(
-        db_index=True,
-        unique=True,
-    )
+    chart_id = ShortUUIDField(verbose_name="图表ID")
     device = models.ForeignKey(
         "device.Device",
         related_name="charts",

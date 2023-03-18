@@ -1,20 +1,11 @@
 from django.db import models
 
 from base.base_model import BaseModel
+from utils.shortuuid import ShortUUIDField
 
 
 class Command(BaseModel):
     QOS_CHOICE = ((0, "0"), (1, "1"), (2, "2"))
-    device = models.ForeignKey(
-        "device.Device",
-        null=True,
-        blank=True,
-        related_name="commands",
-        verbose_name="所属设备",
-        on_delete=models.SET_NULL,
-        db_index=True,
-        db_constraint=False
-    )
     automation = models.ForeignKey(
         "control.Automation",
         null=True,
@@ -53,6 +44,7 @@ class Command(BaseModel):
         on_delete=models.SET_NULL,
         db_constraint=False,
     )
+    command_id = ShortUUIDField(verbose_name="指令ID")
     content = models.CharField(max_length=256, verbose_name="内容", blank=False, null=False)
     callback = models.BooleanField(default=False, verbose_name="是否需要等待回调后再执行next指令")
     sleep = models.IntegerField(default=0, verbose_name="执行下next指令的延时延时")

@@ -1,10 +1,10 @@
 from datetime import datetime
 
 from django.db import models
-from shortuuid.django_fields import ShortUUIDField
 from rest_framework.exceptions import ValidationError
 
 from base.base_model import BaseModel
+from utils.shortuuid import ShortUUIDField
 
 
 class InviteLink(BaseModel):
@@ -15,7 +15,7 @@ class InviteLink(BaseModel):
         ("group", "群组"),
     )
 
-    code = ShortUUIDField(length=8, verbose_name="邀请码", unique=True, db_index=True)
+    code = ShortUUIDField(length=8, verbose_name="邀请码")
     end_time = models.DateTimeField(verbose_name="邀请结束时间", null=True, blank=True)
     count = models.IntegerField(verbose_name="邀请人数", default=0)
     invite_type = models.CharField(choices=INVITE_TYPE_CHOICES, max_length=16, verbose_name="邀请类型")

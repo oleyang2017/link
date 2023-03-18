@@ -1,8 +1,9 @@
 from django.db import models
 from django.conf import settings
 from django.dispatch import receiver
-from shortuuid.django_fields import ShortUUIDField
 from django.db.models.signals import post_save, post_delete
+
+from utils.shortuuid import ShortUUIDField
 
 
 class EMQXUser(models.Model):
@@ -15,8 +16,8 @@ class EMQXUser(models.Model):
         on_delete=models.CASCADE,
         db_constraint=False,
     )
-    username = ShortUUIDField(length=12, db_index=True, unique=True)
-    password = ShortUUIDField(length=12)
+    username = ShortUUIDField()
+    password = ShortUUIDField()
 
     class Meta:
         db_table = "emqx_user"

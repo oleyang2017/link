@@ -1,7 +1,7 @@
 from django.db import models
-from shortuuid.django_fields import ShortUUIDField
 
 from base.base_model import BaseModel
+from utils.shortuuid import ShortUUIDField
 
 
 class Stream(BaseModel):
@@ -15,7 +15,7 @@ class Stream(BaseModel):
         (2, "2"),
     )
     DATA_TYPE_CHOICE = (("number", "数值"),)
-    stream_id = ShortUUIDField(db_index=True, unique=True, verbose_name="数据流ID")
+    stream_id = ShortUUIDField(verbose_name="数据流ID")
     name = models.CharField(max_length=16, verbose_name="名称")
     device = models.ForeignKey(
         "device.Device",
