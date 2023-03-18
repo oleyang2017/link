@@ -9,7 +9,7 @@ from utils.shortuuid import ShortUUIDField
 class EMQXUser(models.Model):
     # EMQX用户表
 
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         related_name="emqx_user",
         verbose_name="创建人",
@@ -25,13 +25,11 @@ class EMQXUser(models.Model):
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL, dispatch_uid="add_emqx_user")
-def add_acl_stream(sender, instance, **kwargs):
+def add_emqx_user(sender, instance, **kwargs):
     if kwargs.get("created"):
-        EMQXUser.objects.create(
-            user=instance,
-        )
+        EMQXUser.objects.create(user=instance)
 
 
 @receiver(post_delete, sender=settings.AUTH_USER_MODEL, dispatch_uid="remove_emqx_user")
-def remove_acl_stream(sender, instance, **kwargs):
+def add_emqx_user(sender, instance, **kwargs):
     EMQXUser.objects.filter(user=instance).delete()
