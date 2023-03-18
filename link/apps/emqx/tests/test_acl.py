@@ -1,13 +1,8 @@
-import time
-
-from django.test import TestCase
 from rest_framework import status
-from guardian.shortcuts import assign_perm, get_objects_for_user
+from guardian.shortcuts import assign_perm
 from rest_framework.test import APITestCase
 
 from device.models.device import Device
-from device.models.stream import Stream
-from device.models.category import DeviceCategory
 from user.models.user_profile import UserProfile
 
 
