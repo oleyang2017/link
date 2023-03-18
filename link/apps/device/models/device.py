@@ -37,8 +37,8 @@ class Device(BaseModel):
         verbose_name = "设备"
         verbose_name_plural = verbose_name
         permissions = (
-            ("control_device", "Can control device"),
-            ("subscribe_topic", "Other users can subscribe the device topic"),
+            ("control", "Can control device"),
+            ("sub", "Other users can subscribe the device topic"),
         )
 
     def __str__(self):
