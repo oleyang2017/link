@@ -31,7 +31,9 @@ def check_alc(request):
     if access == "1" and topic.startswith("$cmd"):
         return Response(status=HTTP_200_OK)
     if access == "1" and topic.startswith("$sub"):
-        sub_client_id = topic.split("/")[1]
+        sub_client_id = topic.split("/")[1] if len(topic.split("/")) > 1 else None
+        if not sub_client_id:
+            return Response(status=HTTP_403_FORBIDDEN)
         user = User.objects.filter(emqx_user__username=username).first()
         device = Device.objects.filter(client_id=sub_client_id).first()
         if user and device:
@@ -41,3 +43,4 @@ def check_alc(request):
                 return Response(status=HTTP_403_FORBIDDEN)
         else:
             return Response(status=HTTP_403_FORBIDDEN)
+    return Response(status=HTTP_403_FORBIDDEN)

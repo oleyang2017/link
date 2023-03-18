@@ -1,4 +1,4 @@
-from rest_framework.status import HTTP_200_OK, HTTP_403_FORBIDDEN
+from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 
@@ -27,4 +27,4 @@ def check_auth(request):
     if device:
         return Response(status=HTTP_200_OK)
     else:
-        return Response(status=HTTP_403_FORBIDDEN)
+        return Response(status=HTTP_401_UNAUTHORIZED)
