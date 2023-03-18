@@ -16,6 +16,12 @@ def check_alc(request):
     所有设备都通过 $save 主题上报数据，$cmd/[command_id] 主题接收命令，$resp/[command_id] 主题响应指令
     如果是设备订阅，那么主题为 $sub/[client_id]，其中 client_id 为被接收设备的 client_id
     需要校验用户是否有订阅权限
+    docker-compose emqx environment:
+      EMQX_AUTH__HTTP__ACL_REQ__METHOD: post
+      EMQX_AUTH__HTTP__ACL_REQ__CONTENT_TYPE: json
+      EMQX_AUTH__HTTP__ACL_REQ__PARAMS: access=%A,username=%u,topic=%t
+
+    access: 1 为订阅，2 为发布
     """
     access = request.data.get("access")
     topic = request.data.get("topic")
