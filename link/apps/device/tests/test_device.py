@@ -71,7 +71,7 @@ class DeviceAPITestCase(APITestCase):
         count = len(get_objects_for_user(self.user, perms=perms, klass=Device))
         self.assertEqual(len(response.data), count)
 
-        perms = ["subscribe_topic", "view_device"]
+        perms = ["sub", "view_device"]
         response = self.client.get("/api/devices/", {"perms": perms}, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         count = len(get_objects_for_user(self.user, perms=perms, klass=Device))
@@ -172,6 +172,7 @@ class DeviceAPITestCase(APITestCase):
         Stream.objects.create(create_user=self.user, device=device, name="2")
         response = self.client.get(f"/api/devices/{device_id}/streams/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
 
     def test_device_delete(self):
         response = self.client.post("/api/devices/", {"name": 1}, format="json")
