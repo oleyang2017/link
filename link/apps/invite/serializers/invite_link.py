@@ -64,9 +64,16 @@ class InviteLinkDetailSerializer(BaseModelSerializer):
         return []
 
     def validate(self, attrs):
+        # 验证权限
+        allowed_permissions = ["view_device", "change_device", "sub", "control"]
+        diff = set(attrs.get("permissions", [])).difference(set(allowed_permissions))
+        if diff:
+            raise ValidationError(f"权限不正确: {diff}")
+
+        # 如果不是设置订阅权限，则必须有查看设备权限
         if (
             attrs.get("invite_type") == "device"
-            and attrs.get("permissions", []) != ["subscribe_deivce"]
+            and attrs.get("permissions", []) != ["sub"]
             and "view_device" not in attrs.get("permissions", [])
         ):
             raise serializers.ValidationError("设备权限必须有可查看的权限")
