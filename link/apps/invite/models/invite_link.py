@@ -4,7 +4,7 @@ from django.db import models
 from rest_framework.exceptions import ValidationError
 
 from base.base_model import BaseModel
-from utils.shortuuid import ShortUUIDField
+from utils.fields import ShortUUIDField
 
 
 class InviteLink(BaseModel):

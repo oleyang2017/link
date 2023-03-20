@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-from utils.shortuuid import ShortUUIDField
+from utils.fields import ShortUUIDField
 
 
 class UserProfile(AbstractUser):

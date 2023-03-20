@@ -1,7 +1,7 @@
 from django.db import models
 
 from base.base_model import BaseModel
-from utils.shortuuid import ShortUUIDField
+from utils.fields import ShortUUIDField
 
 
 class Command(BaseModel):

@@ -3,7 +3,7 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 
-from utils.shortuuid import ShortUUIDField
+from utils.fields import ShortUUIDField
 
 
 class EMQXUser(models.Model):

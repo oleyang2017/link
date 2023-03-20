@@ -3,7 +3,7 @@ import re
 from django.db import models
 
 from base.base_model import BaseModel
-from utils.shortuuid import ShortUUIDField
+from utils.fields import ShortUUIDField
 from emqx.models.data import EMQXData
 from device.models.category import DeviceCategory
 
