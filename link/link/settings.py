@@ -167,8 +167,8 @@ AUTHENTICATION_BACKENDS = [
 
 # 默认设置JWT有效期为7天
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=7),
-    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=14),
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=7),
 }
 
 # 微信小程序appid和secret
@@ -180,12 +180,6 @@ MAX_DEVICE_NUM = None
 # 每个设备数量最多可绑定的数据流限制
 MAX_STREAM_NUM = None
 
-# 腾讯云cos配置，可选，当前端无法获取cos临时密钥时会直接保存到服务器里面
-
-T_CLOUD_SECRET_ID = "your cos Secret Id"
-T_CLOUD_SECRET_KEY = "your cos Secret Key"
-T_CLOUD_BUCKET = "your cos Bucket"
-T_CLOUD_REGION = "your cos region"
 
 CACHEOPS_REDIS = {
     "host": "localhost",
@@ -196,6 +190,37 @@ CACHEOPS_REDIS = {
 # CACHEOPS = {
 #     'device.*': {'ops': 'all', 'timeout': 60*15},
 # }
+
+
+# Celery settings
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+
+CELERY_RESULT_SERIALIZER = 'json'
+
+CELERY_TASK_RESULT_EXPIRES = 60 * 60
+
+CELERY_TASK_TIME_LIMIT = 5 * 60
+
+CELERY_TIMEZONE = 'Asia/Shanghai'
+
+CELERY_IMPORTS = (
+   'emqx.tasks',
+)
+
+
+# EMQX配置
+
+EMQX_HTTP_API_BASE_URL = "http://127.0.0.1:8081/api/v4"
+
+EMQX_HTTP_API_USERNAME = "admin"
+# 默认密码，首次登录修改密码后请修改此处
+EMQX_HTTP_API_PASSWORD = "public"
+
+EMQX_HTTP_API_CLIENT_ID = "$SYS"
+
 
 # debug模式下开启debug_toolbar显示
 if DEBUG:
