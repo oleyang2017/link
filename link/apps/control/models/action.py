@@ -19,6 +19,7 @@ class Action(BaseModel):
     style = models.JSONField(verbose_name="控件样式", null=True, blank=True)
 
     class Meta:
+        db_table = "action"
         verbose_name = "动作"
         verbose_name_plural = verbose_name
 
