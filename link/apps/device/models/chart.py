@@ -8,8 +8,6 @@ class Chart(BaseModel):
     """
     历史数据图表
     """
-
-    chart_id = ShortUUIDField(verbose_name="图表ID")
     device = models.ForeignKey(
         "device.Device",
         related_name="charts",

@@ -6,13 +6,13 @@ from rest_framework.exceptions import PermissionDenied
 from base.base_viewsets import BaseModelViewSet
 from device.models.device import Device
 from device.serializers.chart import ChartSerializer
-from device.serializers.device import DeviceSerializer, DeviceDetailSerializer
+from device.serializers.device import DeviceListSerializer, DeviceDetailSerializer
 from device.serializers.stream import StreamSerializer
 
 
 class DeviceViewSet(BaseModelViewSet):
     lookup_field = "id"
-    serializer_class = DeviceSerializer
+    serializer_class = DeviceListSerializer
     filterset_fields = [
         "category",
     ]
@@ -21,7 +21,7 @@ class DeviceViewSet(BaseModelViewSet):
 
     def get_serializer_class(self):
         if self.request.method == "GET":
-            return DeviceSerializer
+            return DeviceListSerializer
         else:
             return DeviceDetailSerializer
 

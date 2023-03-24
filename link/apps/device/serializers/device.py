@@ -1,6 +1,7 @@
 from django.db import transaction
 from django.conf import settings
 from rest_framework import serializers
+from drf_writable_nested.serializers import WritableNestedModelSerializer
 
 from device.models.device import Device
 from base.base_serializers import BaseModelSerializer
@@ -9,7 +10,7 @@ from device.serializers.chart import ChartSerializer
 from device.serializers.stream import StreamSerializer
 
 
-class DeviceSerializer(BaseModelSerializer):
+class DeviceListSerializer(BaseModelSerializer):
 
     display_custom_info = serializers.SerializerMethodField(read_only=True)
 
@@ -42,9 +43,9 @@ class DeviceSerializer(BaseModelSerializer):
         )
 
 
-class DeviceDetailSerializer(BaseModelSerializer):
-    streams = StreamSerializer(many=True, required=False, read_only=True)
-    charts = ChartSerializer(many=True, required=False, read_only=True)
+class DeviceDetailSerializer(WritableNestedModelSerializer):
+    streams = StreamSerializer(many=True, required=False)
+    charts = ChartSerializer(many=True, required=False)
     category_name = serializers.SerializerMethodField(read_only=True)
     display_custom_info = serializers.SerializerMethodField(read_only=True)
 
@@ -98,7 +99,7 @@ class DeviceDetailSerializer(BaseModelSerializer):
             ).first()
             if not category:
                 raise serializers.ValidationError("设备分类不存在！")
-        return super(DeviceDetailSerializer, self).is_valid()
+        return super(DeviceDetailSerializer, self).is_valid(raise_exception=True)
 
     def create(self, validated_data):
         if settings.MAX_DEVICE_NUM:
@@ -107,24 +108,5 @@ class DeviceDetailSerializer(BaseModelSerializer):
             ).count()
             if current_num >= settings.MAX_DEVICE_NUM:
                 raise serializers.ValidationError("超过最大创建数！")
-        try:
-            with transaction.atomic():
-                instance = super(DeviceDetailSerializer, self).create(validated_data)
-                # 这里不从validated_data，因为streams设置了read_only
-                # 如果不设置read_only会有嵌套创建的一系列问题，日后解决
-                # TODO 处理嵌套创建的问题：参考drf-writable-nested
-                if self.initial_data.get("streams"):
-                    stream_list = self.initial_data["streams"]
-                    if settings.MAX_STREAM_NUM and len(stream_list) > settings.MAX_STREAM_NUM:
-                        raise serializers.ValidationError("超过最大创建数！")
-                    if len(set([i["name"] for i in stream_list])) != len(stream_list):
-                        raise serializers.ValidationError("同一设备数据流名称不能重复！")
-                    self.context["need_prem"] = False
-                    for stream in stream_list:
-                        stream["device"] = instance.id
-                        stream_serializer = StreamSerializer(data=stream, context=self.context)
-                        stream_serializer.is_valid(raise_exception=True)
-                        stream_serializer.save(create_user=self.context["request"].user)
-                return instance
-        except Exception as e:
-            raise e
+        with transaction.atomic():
+            return super(DeviceDetailSerializer, self).create(validated_data)
