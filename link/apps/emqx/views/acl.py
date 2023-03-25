@@ -26,7 +26,7 @@ def check_alc(request):
     access = request.data.get("access")
     topic = request.data.get("topic")
     username = request.data.get("username")
-    if access == "2" and (topic.startswith("$save") or topic.startswith("$resp")):
+    if access == "2" and (topic == "$save" or topic.startswith("$resp")):
         return Response(status=HTTP_200_OK)
     if access == "1" and topic.startswith("$cmd"):
         return Response(status=HTTP_200_OK)

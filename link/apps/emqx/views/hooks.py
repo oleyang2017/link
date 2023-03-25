@@ -10,7 +10,7 @@ from emqx.tasks import *
 @permission_classes(())
 def hooks(request):
     """
-    文档地址：https://www.emqx.io/docs/zh/v4.4/advanced/webhook.htm
+    文档地址：https://www.emqx.io/docs/zh/v4.4/advanced/webhook.html
     EMQX WebHook
     处理设备上下线、消息发布、订阅、取消订阅等事件
     """
