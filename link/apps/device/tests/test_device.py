@@ -284,7 +284,9 @@ class DeviceAPITestCase(APITestCase):
         device_id = response.data.get("id")
         device = Device.objects.filter(id=device_id).first()
         # 只有 stream.show_chart = True 才会返回
-        stream = Stream.objects.create(create_user=self.user, device=device, name="1", show_chart=True)
+        stream = Stream.objects.create(
+            create_user=self.user, device=device, name="1", show_chart=True
+        )
         Chart.objects.create(create_user=self.user, stream=stream, name="1")
         response = self.client.get(f"/api/devices/{device.id}/charts/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -116,6 +116,9 @@ class DeviceCreateOrUpdateSerializer(WritableNestedModelSerializer):
         # 不嵌套更新数据流
         validated_data.pop("streams", None)
         # 不能修改共享设备的分类
-        if validated_data.get("category") and validated_data["category"].create_user != instance.create_user:
+        if (
+            validated_data.get("category")
+            and validated_data["category"].create_user != instance.create_user
+        ):
             raise serializers.ValidationError("不可修改设备分类！")
         return super(DeviceCreateOrUpdateSerializer, self).update(instance, validated_data)

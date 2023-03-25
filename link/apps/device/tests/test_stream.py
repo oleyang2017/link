@@ -130,7 +130,7 @@ class StreamAPITestCase(APITestCase):
                 "show_chart": True,
                 "chart": {"title": "test", "name": "test", "option": "test"},
             },
-            format = "json"
+            format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         stream_id = response.data.get("id")
@@ -148,16 +148,19 @@ class StreamAPITestCase(APITestCase):
         stream2 = Stream.objects.create(name="s2", device=device, create_user=self.user2)
 
         # 正常修改
-        response = self.client.put(f"/api/streams/{stream1.id}/", {
-            "name": "test",
-            "unit": "test",
-            "unit_name": "test",
-            "show": True,
-            "icon": "test",
-            "color": "test",
-            "save_data": True,
-            "show_chart": True,
-        }, )
+        response = self.client.put(
+            f"/api/streams/{stream1.id}/",
+            {
+                "name": "test",
+                "unit": "test",
+                "unit_name": "test",
+                "show": True,
+                "icon": "test",
+                "color": "test",
+                "save_data": True,
+                "show_chart": True,
+            },
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("name"), "test")
         self.assertEqual(response.data.get("unit"), "test")
@@ -169,11 +172,14 @@ class StreamAPITestCase(APITestCase):
         self.assertTrue(response.data.get("show_chart"))
 
         # 错误类型
-        response = self.client.put(f"/api/streams/{stream1.id}/", {
-            "show": "test",
-            "save_data": "test",
-            "show_chart": "test",
-        }, )
+        response = self.client.put(
+            f"/api/streams/{stream1.id}/",
+            {
+                "show": "test",
+                "save_data": "test",
+                "show_chart": "test",
+            },
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["show"][0], "Must be a valid boolean.")
         self.assertEqual(response.data["save_data"][0], "Must be a valid boolean.")
@@ -185,9 +191,11 @@ class StreamAPITestCase(APITestCase):
         self.assertEqual(response.data["non_field_errors"][0], "同一设备数据流名称不能重复！")
 
         # 修改设备、数据类型、图表
-        other_device =  Device.objects.first()
+        other_device = Device.objects.first()
         response = self.client.put(
-            f"/api/streams/{stream1.id}/", {"device": other_device.id, "chart": {"title": "test"}}, format="json"
+            f"/api/streams/{stream1.id}/",
+            {"device": other_device.id, "chart": {"title": "test"}},
+            format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("device"), device.id)
