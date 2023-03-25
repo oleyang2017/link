@@ -2,6 +2,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from device.models.device import Device
 from device.models.category import DeviceCategory
 from user.models.user_profile import UserProfile
 
@@ -11,8 +12,8 @@ class DeviceCategoryModelTestCase(TestCase):
         self.user = UserProfile.objects.create(username="test_category_user")
 
     def test_create_device_category(self):
-        categroy = DeviceCategory.objects.create(name="c", create_user=self.user)
-        categroy = DeviceCategory.objects.create(name="c", create_user=self.user)
+        DeviceCategory.objects.create(name="c", create_user=self.user)
+        DeviceCategory.objects.create(name="c", create_user=self.user)
 
 
 class DeviceCategoryAPITestCase(APITestCase):
@@ -53,3 +54,11 @@ class DeviceCategoryAPITestCase(APITestCase):
         categories = DeviceCategory.objects.filter(create_user=self.user).all()
         for category in categories:
             self.assertEqual(category.sequence, data[category.id])
+
+    def test_device_count(self):
+        category = DeviceCategory.objects.create(name="c", create_user=self.user)
+        Device.objects.create(name="d1", category=category, create_user=self.user)
+        Device.objects.create(name="d2", category=category, create_user=self.user)
+        response = self.client.get(f"/api/categories/{category.id}/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get("device_count"), 2)

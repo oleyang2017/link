@@ -4,24 +4,31 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
 
 from base.base_viewsets import BaseModelViewSet
+from device.models.chart import Chart
 from device.models.device import Device
-from device.serializers.chart import ChartSerializer
-from device.serializers.device import DeviceSerializer, DeviceDetailSerializer
-from device.serializers.stream import StreamSerializer
+from device.serializers.chart import ChartDetailSerializer
+from device.serializers.device import (
+    DeviceListSerializer,
+    DeviceDetailSerializer,
+    DeviceCreateOrUpdateSerializer,
+)
+from device.serializers.stream import StreamListSerializer
 
 
 class DeviceViewSet(BaseModelViewSet):
     lookup_field = "id"
-    serializer_class = DeviceSerializer
-    filterset_fields = ["category", ]
+    serializer_class = DeviceListSerializer
+    filterset_fields = [
+        "category",
+    ]
     ordering_fields = ["sequence", "created_time"]
     ordering = ["sequence", "-created_time"]
 
     def get_serializer_class(self):
         if self.request.method == "GET":
-            return DeviceSerializer
+            return DeviceListSerializer
         else:
-            return DeviceDetailSerializer
+            return DeviceCreateOrUpdateSerializer
 
     def get_queryset(self):
         perms = self.request.query_params.getlist("perms", ["view_device"])
@@ -34,7 +41,7 @@ class DeviceViewSet(BaseModelViewSet):
     def perform_create(self, serializer):
         current_user = self.request.user
         device = serializer.save(create_user=current_user)
-        assign_perm("control_device", current_user, device)
+        assign_perm("control", current_user, device)
         assign_perm("view_device", current_user, device)
         assign_perm("change_device", current_user, device)
         assign_perm("delete_device", current_user, device)
@@ -67,17 +74,18 @@ class DeviceViewSet(BaseModelViewSet):
     @action(methods=["get"], detail=True)
     def streams(self, request, *args, **kwargs):
         device = self.get_object()
-        serializer = StreamSerializer(device.streams, many=True)
+        serializer = StreamListSerializer(device.streams, many=True)
         return Response(serializer.data)
 
     @action(methods=["get"], detail=True)
     def charts(self, request, *args, **kwargs):
         device = self.get_object()
-        serializer = ChartSerializer(device.charts, many=True)
+        charts = Chart.objects.filter(stream__device=device, stream__show_chart=True).all()
+        serializer = ChartDetailSerializer(charts, many=True)
         return Response(serializer.data)
 
     @action(methods=["get"], detail=True)
     def perms(self, request, *args, **kwargs):
         device = self.get_object()
         perms = get_user_perms(request.user, device)
-        return Response(perms)
+        return Response(perms.all())

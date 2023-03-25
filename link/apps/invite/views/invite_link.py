@@ -32,7 +32,7 @@ class InviteLinkViewSet(BaseModelViewSet):
         return Response(serializer.data)
 
     @action(methods=["get"], detail=True)
-    def record_list(self, *args, **kwargs):
+    def records(self, *args, **kwargs):
         link = self.get_object()
         serializer = InviteRecordSerializer(link.invite_records, many=True)
         return Response(serializer.data)

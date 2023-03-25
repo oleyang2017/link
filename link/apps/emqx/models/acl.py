@@ -1,8 +1,4 @@
 from django.db import models
-from django.dispatch import receiver
-from django.db.models.signals import post_save, post_delete
-
-from device.models.stream import Stream
 
 
 class EMQXAcl(models.Model):
@@ -23,23 +19,3 @@ class EMQXAcl(models.Model):
         db_table = "emqx_acl"
         verbose_name = "EMQX权限控制表"
         verbose_name_plural = verbose_name
-
-
-@receiver(post_save, sender=Stream, dispatch_uid="add_acl_stream")
-def add_acl_stream(sender, instance, **kwargs):
-    if kwargs.get("created"):
-        emqx_username = instance.create_user.emqx_user.first().username
-        EMQXAcl.objects.create(
-            allow=1,
-            clientid=instance.device.client_id,
-            access=3,
-            topic=f"/{emqx_username}/{instance.device.client_id}/{instance.stream_id}",
-        )
-
-
-@receiver(post_delete, sender=Stream, dispatch_uid="remove_acl_stream")
-def remove_acl_stream(sender, instance, **kwargs):
-    emqx_username = instance.create_user.emqx_user.first().username
-    EMQXAcl.objects.filter(
-        topic=f"/{emqx_username}/{instance.device.client_id}/{instance.stream_id}"
-    ).delete()

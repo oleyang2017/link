@@ -1,6 +1,6 @@
 from django.db import models
-from shortuuid.django_fields import ShortUUIDField
 
+from utils.fields import ShortUUIDField
 from base.base_model import BaseModel
 
 
@@ -9,16 +9,12 @@ class Stream(BaseModel):
     数据流
     """
 
-    QOS_CHOICE = (
-        (0, "0"),
-        (1, "1"),
-        (2, "2"),
-    )
     DATA_TYPE_CHOICE = (("number", "数值"),)
-    stream_id = ShortUUIDField(db_index=True, unique=True, verbose_name="数据流ID")
     name = models.CharField(max_length=16, verbose_name="名称")
     device = models.ForeignKey(
         "device.Device",
+        null=True,
+        blank=True,
         related_name="streams",
         verbose_name="所属设备",
         on_delete=models.CASCADE,
@@ -26,7 +22,6 @@ class Stream(BaseModel):
     )
     unit_name = models.CharField(max_length=8, blank=True, default="", verbose_name="单位名称")
     unit = models.CharField(max_length=8, blank=True, default="", verbose_name="单位")
-    qos = models.IntegerField(choices=QOS_CHOICE, default=0, verbose_name="Qos")
     data_type = models.CharField(
         max_length=8, default="number", choices=DATA_TYPE_CHOICE, verbose_name="数据类型"
     )

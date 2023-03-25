@@ -5,8 +5,8 @@ from django.contrib.auth.models import Group
 from device.models.device import Device
 from base.base_serializers import BaseModelSerializer
 from user.models.group_extend import GroupExtend
+from device.serializers.device import DeviceListSerializer
 from invite.models.invite_link import InviteLink
-from device.serializers.device import DeviceSerializer
 from user.serializers.group_extend import GroupSerializer
 from invite.serializers.invite_record import InviteRecordSerializer
 
@@ -44,7 +44,7 @@ class InviteLinkDetailSerializer(BaseModelSerializer):
     def get_object_info(obj):
         if obj.invite_type == "device":
             device = Device.objects.filter(id=obj.object_id).first()
-            return DeviceSerializer(instance=device).data
+            return DeviceListSerializer(instance=device).data
         else:
             group = Group.objects.filter(id=obj.object_id).first()
             return GroupSerializer(instance=group).data
@@ -64,9 +64,16 @@ class InviteLinkDetailSerializer(BaseModelSerializer):
         return []
 
     def validate(self, attrs):
+        # 验证权限
+        allowed_permissions = ["view_device", "change_device", "sub", "control"]
+        diff = set(attrs.get("permissions", [])).difference(set(allowed_permissions))
+        if diff:
+            raise ValidationError(f"权限不正确: {diff}")
+
+        # 如果不是设置订阅权限，则必须有查看设备权限
         if (
             attrs.get("invite_type") == "device"
-            and attrs.get("permissions", []) != ["subscribe_deivce"]
+            and attrs.get("permissions", []) != ["sub"]
             and "view_device" not in attrs.get("permissions", [])
         ):
             raise serializers.ValidationError("设备权限必须有可查看的权限")

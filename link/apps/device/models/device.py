@@ -1,8 +1,8 @@
 import re
 
 from django.db import models
-from shortuuid.django_fields import ShortUUIDField
 
+from utils.fields import ShortUUIDField
 from base.base_model import BaseModel
 from emqx.models.data import EMQXData
 from device.models.category import DeviceCategory
@@ -11,7 +11,7 @@ from device.models.category import DeviceCategory
 class Device(BaseModel):
     """设备"""
 
-    client_id = ShortUUIDField(length=12, verbose_name="客户端ID", unique=True)
+    client_id = ShortUUIDField(verbose_name="客户端ID")
     category = models.ForeignKey(
         DeviceCategory,
         null=True,
@@ -25,7 +25,7 @@ class Device(BaseModel):
     desc = models.TextField(blank=True, null=True, verbose_name="说明")
     status = models.BooleanField(default=False, verbose_name="设备状态")
     image = models.ImageField(null=True, blank=True, verbose_name="图片", upload_to="images/device")
-    image_url = models.CharField(max_length=256, null=True, blank=True, verbose_name="图片链接")
+    image_url = models.CharField(max_length=256, null=True, blank=True, verbose_name="小程序图片路径")
     is_super = models.BooleanField(default=False, verbose_name="权限设备")
     sequence = models.IntegerField(default=0, verbose_name="序列")
     last_connect_time = models.DateTimeField(verbose_name="最近连接时间", null=True, blank=True)
@@ -37,8 +37,8 @@ class Device(BaseModel):
         verbose_name = "设备"
         verbose_name_plural = verbose_name
         permissions = (
-            ("control_device", "Can control device"),
-            ("subscribe_topic", "Other users can subscribe the device topic"),
+            ("control", "Can control device"),
+            ("sub", "Other users can subscribe the device topic"),
         )
 
     def __str__(self):

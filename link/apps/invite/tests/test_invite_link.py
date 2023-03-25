@@ -17,6 +17,7 @@ class InviteLinkModelTestCase(TestCase):
         self.user = UserProfile.objects.create(username="test_user")
 
     def test_invite_link_can_join(self):
+        # 邀请链接关闭
         unable_link = InviteLink.objects.create(
             create_user=self.user,
             enable=False,
@@ -28,6 +29,7 @@ class InviteLinkModelTestCase(TestCase):
         except ValidationError as e:
             self.assertEqual(e.args[0], "邀请链接已不可使用")
 
+        # 邀请链接创建人和被邀请人相同
         normal_link = InviteLink.objects.create(
             create_user=self.user,
             object_id=1,
@@ -38,6 +40,7 @@ class InviteLinkModelTestCase(TestCase):
         except ValidationError as e:
             self.assertEqual(e.args[0], "无法执行操作")
 
+        # 邀请链接已过期
         expired_link = InviteLink.objects.create(
             create_user=self.user,
             object_id=1,
@@ -49,6 +52,7 @@ class InviteLinkModelTestCase(TestCase):
         except ValidationError as e:
             self.assertEqual(e.args[0], "邀请链接已过期")
 
+        # 邀请链接已达上限
         count_link = InviteLink.objects.create(
             create_user=self.user,
             object_id=1,
@@ -121,7 +125,7 @@ class InviteLinkAPITestCase(APITestCase):
 
         response = self.client.post(
             "/api/invite_links/",
-            {"object_id": device.id, "invite_type": "device", "permissions": ["change_deivce"]},
+            {"object_id": device.id, "invite_type": "device", "permissions": ["change_device"]},
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -144,7 +148,7 @@ class InviteLinkAPITestCase(APITestCase):
 
         response = self.client.post(
             "/api/invite_links/",
-            {"object_id": device.id, "invite_type": "device", "permissions": ["subscribe_deivce"]},
+            {"object_id": device.id, "invite_type": "device", "permissions": ["sub"]},
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -154,7 +158,7 @@ class InviteLinkAPITestCase(APITestCase):
             {
                 "object_id": device.id,
                 "invite_type": "device",
-                "permissions": ["view_device", "subscribe_deivce"],
+                "permissions": ["view_device", "sub"],
             },
             format="json",
         )
@@ -165,11 +169,41 @@ class InviteLinkAPITestCase(APITestCase):
             {
                 "object_id": device.id,
                 "invite_type": "device",
-                "permissions": ["view_device", "change_deivce"],
+                "permissions": ["view_device", "change_device"],
             },
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_with_permission(self):
+        # 正常创建
+        device = Device.objects.create(name="device", create_user=self.user)
+        response = self.client.post(
+            "/api/invite_links/",
+            {
+                "object_id": device.id,
+                "invite_type": "device",
+                "permissions": ["view_device", "change_device", "sub", "control"],
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(
+            response.data["permissions"], ["view_device", "change_device", "sub", "control"]
+        )
+
+        # 无效的权限
+        response = self.client.post(
+            "/api/invite_links/",
+            {
+                "object_id": device.id,
+                "invite_type": "device",
+                "permissions": ["view_device", "change_device", "test", "delete_device"],
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assert_(response.data["non_field_errors"][0].startswith("权限不正确"))
 
     def test_update_invite_link(self):
         unable_link = InviteLink.objects.create(
@@ -226,3 +260,7 @@ class InviteLinkAPITestCase(APITestCase):
         response = self.client.get(f"/api/invite_links/{invite_link.id}/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data.get("records", [])), 2)
+
+        response = self.client.get(f"/api/invite_links/{invite_link.id}/records/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
