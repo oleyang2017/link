@@ -1,7 +1,8 @@
 from django.db import models
 
-from base.base_model import BaseModel
 from utils.fields import ShortUUIDField
+from base.base_model import BaseModel
+
 
 def handle_command_delete(collector, field, sub_objs, using):
     """
@@ -11,6 +12,7 @@ def handle_command_delete(collector, field, sub_objs, using):
     next_commands = sub_objs.all()
     if command.previous and next_commands:
         command.previous.next.set(next_commands)
+
 
 class Command(BaseModel):
     automation = models.ForeignKey(

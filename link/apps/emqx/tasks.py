@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from celery import shared_task
 from loguru import logger
 
+from celery import shared_task
 from device.models.device import Device
 from emqx.service.emqx_api import EMQXApi
 

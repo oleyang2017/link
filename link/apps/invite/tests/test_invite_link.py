@@ -188,7 +188,9 @@ class InviteLinkAPITestCase(APITestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["permissions"],  ["view_device", "change_device", "sub", "control"])
+        self.assertEqual(
+            response.data["permissions"], ["view_device", "change_device", "sub", "control"]
+        )
 
         # 无效的权限
         response = self.client.post(
@@ -202,7 +204,6 @@ class InviteLinkAPITestCase(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assert_(response.data["non_field_errors"][0].startswith("权限不正确"))
-
 
     def test_update_invite_link(self):
         unable_link = InviteLink.objects.create(

@@ -13,8 +13,12 @@ class EMQXApi:
     文档地址：https://www.emqx.io/docs/zh/v4.4/advanced/http-api.html
     """
 
-    def __int__(self, url: str = settings.EMQX_HTTP_API_BASE_URL, username: str = settings.EMQX_HTTP_API_USERNAME,
-                password: str = settings.EMQX_HTTP_API_PASSWORD):
+    def __int__(
+        self,
+        url: str = settings.EMQX_HTTP_API_BASE_URL,
+        username: str = settings.EMQX_HTTP_API_USERNAME,
+        password: str = settings.EMQX_HTTP_API_PASSWORD,
+    ):
         self.url = url
         self.username = username
         self.password = password
@@ -64,8 +68,15 @@ class EMQXApi:
         response = requests.post(url, data=data, auth=self._auth())
         return self._response(response)
 
-    def publish(self, clientid: str, payload: str, topic: str = None, topics: str = None, qos: int = 0,
-                properties: dict = None) -> bool:
+    def publish(
+        self,
+        clientid: str,
+        payload: str,
+        topic: str = None,
+        topics: str = None,
+        qos: int = 0,
+        properties: dict = None,
+    ) -> bool:
         """
         发布消息
         :param clientid: 客户端ID
@@ -78,8 +89,14 @@ class EMQXApi:
         if not topic and not topics:
             raise Exception("topic and topics can't be both None")
         url = f"{self.url}/api/v4/mqtt/publish"
-        data = {"clientid": clientid, "payload": payload, "topic": topic, topics: topics, "qos": qos,
-                "properties": properties}
+        data = {
+            "clientid": clientid,
+            "payload": payload,
+            "topic": topic,
+            topics: topics,
+            "qos": qos,
+            "properties": properties,
+        }
         response = requests.post(url, data=data, auth=self._auth())
         return self._response(response)
 

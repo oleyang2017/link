@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group
 from device.models.device import Device
 from base.base_serializers import BaseModelSerializer
 from user.models.group_extend import GroupExtend
-from device.serializers.device import DeviceSerializer
+from device.serializers.device import DeviceListSerializer
 from invite.models.invite_link import InviteLink
 from user.serializers.group_extend import GroupSerializer
 from invite.serializers.invite_record import InviteRecordSerializer
@@ -44,7 +44,7 @@ class InviteLinkDetailSerializer(BaseModelSerializer):
     def get_object_info(obj):
         if obj.invite_type == "device":
             device = Device.objects.filter(id=obj.object_id).first()
-            return DeviceSerializer(instance=device).data
+            return DeviceListSerializer(instance=device).data
         else:
             group = Group.objects.filter(id=obj.object_id).first()
             return GroupSerializer(instance=group).data
