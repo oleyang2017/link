@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 
 from base.base_viewsets import BaseModelViewSet
 from device.models.chart import Chart
-from device.serializers.chart import ChartSerializer
+from device.serializers.chart import ChartDetailSerializer
 
 
 class ChartViewSet(BaseModelViewSet):
@@ -13,7 +13,7 @@ class ChartViewSet(BaseModelViewSet):
     ordering_fields = ["sequence", "-created_time"]
     ordering = ["sequence", "-created_time"]
     queryset = Chart.objects
-    serializer_class = ChartSerializer
+    serializer_class = ChartDetailSerializer
 
     def perform_create(self, serializer):
         serializer.save(create_user=self.request.user)

@@ -1,21 +1,21 @@
 from django.db import models
 
 from base.base_model import BaseModel
-from utils.fields import ShortUUIDField
 
 
 class Chart(BaseModel):
     """
     历史数据图表
     """
-    device = models.ForeignKey(
-        "device.Device",
-        related_name="charts",
-        null=True,
+
+    stream = models.OneToOneField(
+        "device.Stream",
+        null=False,
+        blank=False,
+        related_name="chart",
         on_delete=models.CASCADE,
         db_constraint=False,
     )
-    streams = models.ManyToManyField("device.Stream", related_name="charts", db_constraint=False)
     title = models.CharField(max_length=16, verbose_name="标题", null=True, blank=True)
     name = models.CharField(max_length=16, verbose_name="名称", null=True, blank=True)
     theme = models.TextField(verbose_name="自定义主题", null=True, blank=True)

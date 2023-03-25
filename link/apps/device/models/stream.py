@@ -1,13 +1,14 @@
 from django.db import models
 
-from base.base_model import BaseModel
 from utils.fields import ShortUUIDField
+from base.base_model import BaseModel
 
 
 class Stream(BaseModel):
     """
     数据流
     """
+
     DATA_TYPE_CHOICE = (("number", "数值"),)
     name = models.CharField(max_length=16, verbose_name="名称")
     device = models.ForeignKey(
