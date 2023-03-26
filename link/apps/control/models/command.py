@@ -46,8 +46,6 @@ class Command(BaseModel):
     )
     device = models.ManyToManyField(
         "device.Device",
-        null=True,
-        blank=True,
         related_name="commands",
         verbose_name="指定的设备",
         db_constraint=False,
@@ -55,7 +53,6 @@ class Command(BaseModel):
     command_id = ShortUUIDField(verbose_name="指令ID")
     content = models.CharField(max_length=256, verbose_name="内容", blank=False, null=False)
     sleep = models.IntegerField(default=0, verbose_name="执行下next指令的延时延时")
-    topic = models.CharField(max_length=256, verbose_name="topic", blank=False, null=False)
 
     class Meta:
         db_table = "command"
