@@ -8,10 +8,10 @@ class Action(BaseModel):
     name = models.CharField(max_length=8, verbose_name="名称")
     device = models.ForeignKey(
         "device.Device",
-        related_name="actions",
-        verbose_name="所属设备",
         blank=True,
         null=True,
+        related_name="actions",
+        verbose_name="所属设备",
         on_delete=models.CASCADE,
         db_constraint=False,
     )

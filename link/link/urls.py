@@ -23,6 +23,7 @@ urlpatterns = [
     path("api/", include("device.urls")),
     path("api/", include("invite.urls")),
     path("api/", include("emqx.urls")),
+    path("api/", include("control.urls")),
 ]
 
 if settings.DEBUG:
