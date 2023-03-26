@@ -37,11 +37,12 @@ Page({
     themeInputStyle: {
       maxHeight: 100
     },
-    chartInfo: {},
+    chart: {},
     ec: {
       lazyLoad: true
     },
     windowWidth: 320,
+    chartDemoData: [],
   },
 
   onLoad(options) {
@@ -85,9 +86,9 @@ Page({
     this.ecComponent = this.selectComponent('#chart-demo')
     this.ecComponent.init((canvas, width, height, dpr) => {
       let theme = deepCopy(defaultTheme)
-      if (this.data.chartInfo.theme) {
+      if (this.data.chart.theme) {
         try {
-          theme = JSON.parse(this.data.chartInfo.theme)
+          theme = JSON.parse(this.data.chart.theme)
         } catch {
           console.log("theme dumps error")
         }
@@ -110,8 +111,8 @@ Page({
       if (isTheme) {
         try {
           let theme = deepCopy(defaultTheme)
-          if (this.data.chartInfo.theme) {
-            theme = JSON.parse(this.data.chartInfo.theme)
+          if (this.data.chart.theme) {
+            theme = JSON.parse(this.data.chart.theme)
           }
           this.ecComponent.init((canvas, width, height, dpr) => {
             echarts.registerTheme('default', theme)
@@ -202,7 +203,7 @@ Page({
       show: this.data.show,
       saveData: this.data.saveData,
       showChart: this.data.showChart,
-      chartInfo: this.data.chartInfo,
+      chart: this.data.chart,
     }
     if (this.data.type == 'edit') {
       data.id = this.data.id
@@ -213,20 +214,28 @@ Page({
     return data
   },
 
+  generateChartDemoData(){
+    let data = this.data.chartDemoData
+    if(data.length == 0){
+      let base = +new Date(2023, 1, 1)
+      let oneDay = 24 * 3600 * 1000
+      data = [
+        [base, Math.random() * 900]
+      ]
+      for (let i = 1; i < 200; i++) {
+        let now = new Date((base += oneDay))
+        data.push([+now, Math.round((Math.random() - 0.5) * 20 + data[i - 1][1])])
+      }
+      this.setData({chartDemoData: data})
+    }
+    return data
+  },
+
   generateOption() {
     let option = deepCopy(defaultOption)
-    let base = +new Date(2023, 1, 1)
-    let oneDay = 24 * 3600 * 1000
-    let data = [
-      [base, Math.random() * 900]
-    ]
-    for (let i = 1; i < 200; i++) {
-      let now = new Date((base += oneDay))
-      data.push([+now, Math.round((Math.random() - 0.5) * 20 + data[i - 1][1])])
-    }
-    option.series[0].data = data
+    option.series[0].data = this.generateChartDemoData()
     option.series[0].name = this.data.name
-    if (this.data.chartInfo.dataZoom) {
+    if (this.data.chart.dataZoom) {
       delete option.grid.bottom
     } else {
       delete option.dataZoom
@@ -248,7 +257,7 @@ Page({
       })
       this.initChart()
     }
-    if (field === 'chartInfo.dataZoom') {
+    if (field === 'chart.dataZoom') {
       this.refreshChart()
 
     }
@@ -262,8 +271,8 @@ Page({
     this.setData({
       [field]: value
     })
-    let needRefreshFields = ['chartInfo.theme', 'chartInfo.dataZoom', 'name', 'unit']
-    let isTheme = (field === 'chartInfo.theme')
+    let needRefreshFields = ['chart.theme', 'chart.dataZoom', 'name', 'unit']
+    let isTheme = (field === 'chart.theme')
     if (needRefreshFields.includes(field)){
       this.refreshChart(isTheme)
     }

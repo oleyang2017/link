@@ -63,19 +63,19 @@
       <view class="bg-white custom-cell">
         <view class="title">开启缩放</view>
         <view class="context">
-          <van-switch checked="{{ chartInfo.dataZoom }}" bind:change="handleSwitch" data-field="chartInfo.dataZoom" size="16px" />
+          <van-switch checked="{{ chart.dataZoom }}" bind:change="handleSwitch" data-field="chart.dataZoom" size="16px" />
         </view>
       </view>
-      <van-field value="{{chartInfo.name}}" data-field="chartInfo.name" bind:blur="handleInput" label="图表名称" placeholder="请输入图表名称" border="{{ false }}" />
-      <van-field value="{{chartInfo.title}}" data-field="chartInfo.title" bind:blur="handleInput" label="图表标题" placeholder="请输入图表标题" border="{{ false }}" />
-      <van-field value="{{chartInfo.theme}}" data-field="chartInfo.theme" bind:blur="handleInput" label="自定义主题" placeholder="请输入自定义主题" type="textarea" autosize="{{ themeInputStyle }}" border="{{ false }}" bind:blur="handleInput" />
+      <van-field value="{{chart.name}}" data-field="chart.name" bind:blur="handleInput" label="图表名称" placeholder="请输入图表名称" border="{{ false }}" />
+      <van-field value="{{chart.title}}" data-field="chart.title" bind:blur="handleInput" label="图表标题" placeholder="请输入图表标题" border="{{ false }}" />
+      <van-field value="{{chart.theme}}" data-field="chart.theme" bind:blur="handleInput" label="自定义主题" placeholder="请输入自定义主题" type="textarea" autosize="{{ themeInputStyle }}" border="{{ false }}" bind:blur="handleInput" />
       <view class="bg-white text-gray text-sm" style="padding-left: 115px;">可以通过echarts官网自定义主题，复制json格式</view>
       <view class="bg-white">
         <view class="bg-white custom-cell">效果预览</view>
         <view style="height: 200px; width: {{windowWidth}}px;">
           <ec-canvas id="chart-demo" canvas-id="chart-demo-canvas" ec="{{ ec }}"></ec-canvas>
         </view>
-        <view class="text-center text-gray padding-xs">{{ chartInfo.title }}</view>
+        <view class="text-center text-gray padding-xs">{{ chart.title }}</view>
       </view>
     </block>
   </van-cell-group>
