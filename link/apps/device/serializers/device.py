@@ -13,16 +13,21 @@ from device.serializers.stream import StreamListSerializer, StreamNestedCreateSe
 class DeviceListSerializer(BaseModelSerializer):
 
     display_custom_info = serializers.SerializerMethodField(read_only=True)
+    is_share = serializers.SerializerMethodField(read_only=True)
 
     @staticmethod
     def get_display_custom_info(obj):
         return obj.get_display_custom_info()
+
+    def get_is_share(self, obj):
+        return obj.create_user != self.context['request'].user
 
     class Meta:
         model = Device
         fields = (
             "id",
             "category",
+            "is_share",
             "name",
             "status",
             "image",
@@ -38,6 +43,9 @@ class DeviceDetailSerializer(BaseModelSerializer):
     streams = StreamListSerializer(many=True, required=False)
     category_name = serializers.SerializerMethodField(read_only=True)
     display_custom_info = serializers.SerializerMethodField(read_only=True)
+    is_share = serializers.SerializerMethodField(read_only=True)
+    def get_is_share(self, obj):
+        return obj.create_user != self.context['request'].user
 
     @staticmethod
     def get_display_custom_info(obj):
@@ -55,6 +63,7 @@ class DeviceDetailSerializer(BaseModelSerializer):
         fields = (
             "id",
             "client_id",
+            "is_share",
             "category",
             "category_name",
             "name",
