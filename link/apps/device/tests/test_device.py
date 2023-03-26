@@ -44,6 +44,10 @@ class DeviceAPITestCase(APITestCase):
         response = self.client.get("/api/devices/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 6)
+        for i in response.data:
+            if i.get("id") == self.share_device.id:
+                self.assertEqual(i.get("create_user"), self.user2.id)
+            self.assertEqual(i.get("is_share"), self.user.id != i.get("create_user"))
 
         # 按设备分类筛选
         category = DeviceCategory.objects.create(name="2", create_user=self.user)
@@ -192,6 +196,12 @@ class DeviceAPITestCase(APITestCase):
         self.client.force_authenticate(user=self.user2)
         response = self.client.get(f"/api/devices/{device_id}/")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        # 增加访问权限
+        device = Device.objects.filter(id=device_id).first()
+        assign_perm("view_device", self.user2, device)
+        response = self.client.get(f"/api/devices/{device_id}/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data.get("is_share"))
 
     def test_device_perms(self):
         response = self.client.post("/api/devices/", {"name": "1"}, format="json")
