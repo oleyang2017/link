@@ -7,9 +7,15 @@ services:
     container_name: "link_emqx"
     environment:
       EMQX_LOADED_PLUGINS: 'emqx_dashboard,emqx_auth_http,emqx_web_hook'
+      # 禁止匿名登录
       EMQX_ALLOW_ANONYMOUS: 'false'
       EMQX_ACL_NOMATCH: 'deny'
       EMQX_ACL_DENY_ACTION: 'disconnect'
+      # 客户端最大允许的Qos
+      EMQX_MQTT__MAX_QOS_ALLOWED: 0
+      EMQX_MQTT__MAX_QOS_ALLOWED: 0
+
+      EMQX_ZONE__EXTERNAL__RATE_LIMIT__CONN_MESSAGES_IN: '1,10s'
       # auth鉴权
       EMQX_AUTH__HTTP__AUTH_REQ__URL: 'http://localhost:8000/api/emqx/auth/'
       EMQX_AUTH__HTTP__AUTH_REQ__METHOD: 'post'
@@ -27,6 +33,9 @@ services:
       EMQX_WEB__HOOK__RULE__MESSAGE__PUBLISH__1: '{"action":"on_message_publish"}'
       EMQX_WEB__HOOK__RULE__SESSION__SUBSCRIBED__1: '{"action":"on_session_subscribed"}'
       EMQX_WEB__HOOK__RULE__SESSION__UNSUBSCRIBED__1: '{"action":"on_session_unsubscribed"}'
+      # emqx_management http api basic auth 配置
+      EMQX_MANAGEMENT__DEFAULT_APPLICATION__id: 'admin'
+      EMQX_MANAGEMENT__DEFAULT_APPLICATION__SECRET: 'admin'
 
   redis:
     network_mode: "host"
@@ -36,7 +45,7 @@ services:
 
   pgsql:
     network_mode: "host"
-    image: "postgres:12"
+    image: "timescale/timescaledb:latest-pg14"
     container_name: "link_pgsql"
     restart: always
     environment:
@@ -44,4 +53,4 @@ services:
       POSTGRES_USER: "admin"
       POSTGRES_DB: "link"
     volumes:
-      - "./data-dev/pg:/var/lib/postgresql/data"
+      - "/data/link_pgsql_dev:/var/lib/postgresql/data"
