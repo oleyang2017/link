@@ -1,6 +1,5 @@
 <van-cell-group title="基础信息">
   <van-field label="设备名称" model:value="{{ name }}" placeholder="请输入设备名称" border="{{ false }}" maxlength="{{7}}" required />
-  <van-field wx:if="{{type =='edit'}}" label="客户端ID" model:value="{{ clientId }}" placeholder="请输入设备名称" border="{{ false }}" required readonly />
   <view class="bg-white padding-left padding-bottom">
     <view>设备图片</view>
     <view class="text-gray text-sm padding-tb-xs">建议大小100x100</view>
@@ -12,7 +11,7 @@
 </van-cell-group>
 
 <van-cell-group title="高级信息">
-  <van-field label="所属分类" value="{{ categoryName }}" border="{{ false }}" bindtap="openPopup" placeholder="点击选择分类" data-type="category" readonly />
+  <van-field label="所属分类" wx:if="{{ isShare }}" value="{{ categoryName }}" border="{{ false }}" bindtap="openPopup" placeholder="点击选择分类" data-type="category" readonly />
   <view class="padding bg-white custom-cell" data-name='stream'>
     <view class="title">数据流</view>
     <view class="context" bindtap='toOtherPage' data-name="stream">
@@ -24,16 +23,6 @@
       </view>
       <view wx:if="{{type=='edit' && !streams.length}}" class="text-df" style="color:#c8c9cc" bindtap='createStream' data-source="edit_device">点击创建数据流</view>
       <view wx:if="{{type=='create'}}" class="text-df" style="color:#c8c9cc" bindtap='createStream' data-source="create_new_device">点击创建数据流</view>
-    </view>
-  </view>
-  <view class="padding bg-white custom-cell" bindtap="toOtherPage" data-name='trigger' wx:if="{{type=='edit'}}">
-    <view class="title">触发器</view>
-    <view class="context">
-      <view class="padding-bottom" wx:if="{{triggers.length != 0}}">
-        <view wx:for="{{triggers}}" data-id="{{item.id}}" data-index="{{index}}" data-name="{{item.name}}" wx:key="id" class="margin-right-xs custom-tag">
-          {{item.name}}</view>
-      </view>
-      <view wx:if="{{type == 'create'}}" class="text-sm text-blue ">点击创建触发器</view>
     </view>
   </view>
 </van-cell-group>

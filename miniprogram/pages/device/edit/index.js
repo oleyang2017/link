@@ -15,9 +15,7 @@ Page({
     popupType: "category",
     categoryList: [],
     categoryIndex: 0,
-    charts: [],
     streams: [],
-    triggers: [],
     filePath: null,
     deleteStreams: [],
     deviceImageList,
@@ -173,7 +171,6 @@ Page({
       id,
       name,
       streams,
-      charts,
       filePath,
       customInfo,
       desc,
@@ -184,7 +181,6 @@ Page({
     let data = {
       name,
       streams,
-      charts,
       filePath,
       customInfo,
       desc,
@@ -197,9 +193,6 @@ Page({
     }), {});
 
     if (this.data.type == 'create') {
-      if (charts.length == 0) {
-        delete data.charts
-      }
       if (streams.length == 0) {
         delete data.streams
       }
