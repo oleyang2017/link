@@ -1,8 +1,6 @@
-def string_convert_to_number(payload: str) -> str:
+def str_to_number(payload: str) -> float:
     try:
-        if payload.isdigit():
-            return payload
         payload = float(payload)
-        return str(round(payload, 2))
+        return round(payload, 2)
     except ValueError:
         raise ValueError("payload is not a number")

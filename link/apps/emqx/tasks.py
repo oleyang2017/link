@@ -66,7 +66,7 @@ def handle_save_data(request):
     client_id = request.get("from_client_id")
     payload = request.get("payload")
     node = request.get("node")
-    timestamp = request.get("timestamp")
+    timestamp = request.get("ts")
     try:
         payload = json.loads(payload)
         if not isinstance(payload, dict):
@@ -84,9 +84,9 @@ def handle_save_data(request):
                         EMQXData(
                             client_id=client_id,
                             stream_id=stream_map[k],
-                            payload=str_to_number(v),
+                            value=str_to_number(v),
                             node=node,
-                            timestamp=timestamp,
+                            time=datetime.fromtimestamp(timestamp / 1000),
                         )
                     )
             except ValueError as e:

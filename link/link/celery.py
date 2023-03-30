@@ -11,3 +11,5 @@ django.setup()
 celery_app = Celery("link")
 celery_app.config_from_object("django.conf:settings", namespace="CELERY")
 celery_app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+
+# celery -A link.celery_app worker -l INFO

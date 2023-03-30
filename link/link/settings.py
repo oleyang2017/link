@@ -90,7 +90,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "timescale.db.backends.postgresql",
         "NAME": "link",
         "USER": "admin",
         "PASSWORD": "admin",
@@ -194,21 +194,19 @@ CACHEOPS_REDIS = {
 
 # Celery settings
 
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/1"
 
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/1"
 
-CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = "json"
 
 CELERY_TASK_RESULT_EXPIRES = 60 * 60
 
 CELERY_TASK_TIME_LIMIT = 5 * 60
 
-CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERY_TIMEZONE = "Asia/Shanghai"
 
-CELERY_IMPORTS = (
-   'emqx.tasks',
-)
+CELERY_IMPORTS = ("emqx.tasks",)
 
 
 # EMQX配置

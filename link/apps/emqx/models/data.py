@@ -1,7 +1,8 @@
 from django.db import models
+from timescale.db.models.models import TimescaleModel
 
 
-class EMQXData(models.Model):
+class EMQXData(TimescaleModel):
     """
     历史消息
     """
@@ -9,10 +10,10 @@ class EMQXData(models.Model):
     node = models.CharField(max_length=32, verbose_name="节点")
     client_id = models.CharField(max_length=64, verbose_name="device client_id", db_index=True)
     stream_id = models.IntegerField(verbose_name="stream id", db_index=True)
-    payload = models.CharField(max_length=256, verbose_name="消息内容")
-    timestamp = models.DateTimeField(auto_now_add=True, verbose_name="上传时间")
+    value = models.FloatField(verbose_name="数据", null=False, blank=False)
 
     class Meta:
         db_table = "emqx_data"
         verbose_name = "MQTT消息"
         verbose_name_plural = verbose_name
+        index_together = ["stream_id", "time"]
