@@ -20,7 +20,10 @@ class DeviceListSerializer(BaseModelSerializer):
         return obj.get_display_custom_info()
 
     def get_is_share(self, obj):
-        return obj.create_user != self.context['request'].user
+        if self.context.get("request"):
+            return obj.create_user != self.context["request"].user
+        else:
+            return False
 
     class Meta:
         model = Device
@@ -44,8 +47,12 @@ class DeviceDetailSerializer(BaseModelSerializer):
     category_name = serializers.SerializerMethodField(read_only=True)
     display_custom_info = serializers.SerializerMethodField(read_only=True)
     is_share = serializers.SerializerMethodField(read_only=True)
+
     def get_is_share(self, obj):
-        return obj.create_user != self.context['request'].user
+        if self.context.get("request"):
+            return obj.create_user != self.context["request"].user
+        else:
+            return False
 
     @staticmethod
     def get_display_custom_info(obj):
