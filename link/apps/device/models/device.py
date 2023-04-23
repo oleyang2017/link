@@ -55,9 +55,9 @@ class Device(BaseModel):
                     last_data = (
                         EMQXData.objects.filter(
                             client_id=self.client_id,
-                            stream_id=stream.stream_id,
+                            stream_id=stream.id,
                         )
-                        .order_by("-timestamp")
+                        .order_by("-time")
                         .first()
                     )
                     if last_data:
